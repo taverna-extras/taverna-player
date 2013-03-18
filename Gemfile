@@ -7,6 +7,7 @@ gemspec
 
 # These gems are used by the dummy application
 gem "jquery-rails"
+gem "paperclip", "~> 3.4.1"
 gem "taverna-t2flow", "~> 0.4.5"
 
 # Declare any dependencies that are still in development here instead of in

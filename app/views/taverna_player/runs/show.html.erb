@@ -1,5 +1,7 @@
 <p id="notice"><%= notice %></p>
 
+<h1>Run</h1>
+
 <p>
   <b>Run:</b>
   <%= @run.run_id %>
@@ -24,3 +26,45 @@
   <b>Finish time:</b>
   <%= @run.finish_time %>
 </p>
+
+<% if @run.inputs.size > 0 %>
+  <h2>Inputs</h2>
+
+  <% @run.inputs.each do |input| %>
+    <p>
+      <b>Name:</b>
+      <%= input.name %>
+    </p>
+
+    <p>
+      <b>Value:</b>
+      <%= input.value %>
+    </p>
+
+    <p>
+      <b>File:</b>
+      <%= link_to input.file_file_name, input.file.url %>
+    </p>
+  <% end%>
+<% end %>
+
+<% if @run.outputs.size > 0 %>
+  <h2>Outputs</h2>
+
+  <% @run.outputs.each do |output| %>
+    <p>
+      <b>Name:</b>
+      <%= output.name %>
+    </p>
+
+    <p>
+      <b>Value:</b>
+      <%= output.value %>
+    </p>
+
+    <p>
+      <b>File:</b>
+      <%= link_to output.file_file_name, output.file.url %>
+    </p>
+  <% end%>
+<% end %>
