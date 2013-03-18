@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
 
-  mount TavernaPlayer::Engine => "/taverna_player"
+  resources :workflows, :only => :index
+
+  mount TavernaPlayer::Engine => "/"
 end

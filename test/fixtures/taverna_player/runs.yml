@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  run_id: MyString
+  state: MyString
+  create_time: 2013-03-13 10:55:46
+  start_time: 2013-03-13 10:55:46
+  finish_time: 2013-03-13 10:55:46
+
+two:
+  run_id: MyString
+  state: MyString
+  create_time: 2013-03-13 10:55:46
+  start_time: 2013-03-13 10:55:46
+  finish_time: 2013-03-13 10:55:46

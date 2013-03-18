@@ -1,0 +1,25 @@
+<h1>Workflows</h1>
+
+<table>
+  <tr>
+    <th>Workflow</th>
+    <th>Title</th>
+    <th>Author</th>
+    <th>Description</th>
+    <th>File</th>
+    <th>Action</th>
+  </tr>
+
+<% @workflows.each do |w| %>
+  <tr>
+    <td><%= w.id %></td>
+    <td><%= w.title%></td>
+    <td><%= w.author %></td>
+    <td><%= w.description %></td>
+    <td><%= w.file %></td>
+    <td><%= link_to "Run", taverna_player.new_run_path(:workflow_id => w.id) %></td>
+  </tr>
+
+<% end %>
+
+</table>

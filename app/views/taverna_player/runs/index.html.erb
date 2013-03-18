@@ -1,0 +1,25 @@
+<h1>Listing runs</h1>
+
+<table>
+  <tr>
+    <th>Run</th>
+    <th>State</th>
+    <th>Create time</th>
+    <th>Start time</th>
+    <th>Finish time</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @runs.each do |run| %>
+  <tr>
+    <td><%= run.run_id %></td>
+    <td><%= run.state %></td>
+    <td><%= run.create_time %></td>
+    <td><%= run.start_time %></td>
+    <td><%= run.finish_time %></td>
+    <td><%= link_to 'Show', run %></td>
+    <td><%= link_to 'Destroy', run, :method => :delete, :data => { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
