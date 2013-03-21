@@ -1,5 +1,6 @@
 require "taverna_player/engine"
 require "taverna_player/parser"
+require "taverna_player/worker"
 
 module TavernaPlayer
   mattr_accessor :workflow_class

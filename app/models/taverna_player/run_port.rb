@@ -4,7 +4,7 @@ module TavernaPlayer
 
     validates_presence_of :name
 
-    attr_accessible :file, :name, :value
+    attr_accessible :depth, :file, :name, :value
 
     has_attached_file :file,
       :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
@@ -16,5 +16,8 @@ module TavernaPlayer
   end
 
   class RunPort::Output < RunPort
+    attr_accessible :metadata
+
+    serialize :metadata
   end
 end

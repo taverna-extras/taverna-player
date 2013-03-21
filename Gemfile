@@ -9,6 +9,10 @@ gemspec
 gem "jquery-rails"
 gem "paperclip", "~> 3.4.1"
 gem "taverna-t2flow", "~> 0.4.5"
+gem "t2-server", "~> 1.0.0", :path => "/home/hainesr/work/taverna/src/t2-server-gem"
+gem "delayed_job_active_record", "~> 0.4.3"
+gem "daemons", "~> 1.1.9"
+gem "rubyzip", "~> 0.9.9", :require => "zip/zip"
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or

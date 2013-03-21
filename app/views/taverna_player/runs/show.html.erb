@@ -13,6 +13,11 @@
 </p>
 
 <p>
+  <b>Status message:</b>
+  <%= @run.status_message %>
+</p>
+
+<p>
   <b>Create time:</b>
   <%= @run.create_time %>
 </p>
@@ -59,12 +64,8 @@
 
     <p>
       <b>Value:</b>
-      <%= output.value %>
+      <%= show_output(output) %>
     </p>
 
-    <p>
-      <b>File:</b>
-      <%= link_to output.file_file_name, output.file.url %>
-    </p>
   <% end%>
 <% end %>

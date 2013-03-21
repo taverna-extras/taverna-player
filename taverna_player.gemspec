@@ -16,10 +16,15 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["LICENCE.rdoc", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency "rails", "~> 3.2.12"
+  # Rails 3.2.13 is a sickly child so stick to 3.2.12 for now.
+  s.add_dependency "rails", "3.2.12"
   #s.add_dependency "jquery-rails"
   s.add_dependency "paperclip", "~> 3.4.1"
   s.add_dependency "taverna-t2flow", "~> 0.4.5"
+  #s.add_dependency "t2-server", "~> 1.0.0"
+  s.add_dependency "delayed_job_active_record", "~> 0.4.3"
+  s.add_dependency "daemons", "~> 1.1.9"
+  s.add_dependency "rubyzip", "~> 0.9.9"
 
   s.add_development_dependency "sqlite3"
 end
