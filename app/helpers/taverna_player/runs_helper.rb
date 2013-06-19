@@ -52,7 +52,7 @@ module TavernaPlayer
             content += link_to("Error", run_path(output.run_id) +
               "/output/#{output.name}/#{path}")
           when /text/
-            zip_path = (index + [i]).map { |i| i += 1 }.join("/")
+            zip_path = (index + [i]).map { |j| j += 1 }.join("/")
             content += zip.read(zip_path)
           when /image/
             content += image_tag(run_path(output.run_id) +

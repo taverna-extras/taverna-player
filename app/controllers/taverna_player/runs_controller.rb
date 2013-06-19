@@ -4,6 +4,8 @@ require "zip/zip"
 
 module TavernaPlayer
   class RunsController < TavernaPlayer::ApplicationController
+    layout :choose_layout
+
     # GET /runs
     # GET /runs.json
     def index
@@ -31,6 +33,7 @@ module TavernaPlayer
     def new
       @run = Run.new
       @workflow = TavernaPlayer.workflow_class.find(params[:workflow_id])
+      session[:embedded] = params[:embedded].nil? ? "0" : "1"
 
       model = TavernaPlayer::Parser.parse(@workflow.file)
       @inputs = model.inputs
@@ -129,6 +132,14 @@ module TavernaPlayer
       return list if indexes.empty? || !list.is_a?(Array)
       i = indexes.shift
       return recurse_into_lists(list[i], indexes)
+    end
+
+    def choose_layout
+      if session[:embedded] == "1"
+        "taverna_player/embedded"
+      else
+        "application"
+      end
     end
 
   end

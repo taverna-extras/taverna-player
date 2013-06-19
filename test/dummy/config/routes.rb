@@ -2,5 +2,5 @@ Rails.application.routes.draw do
 
   resources :workflows, :only => :index
 
-  mount TavernaPlayer::Engine => "/"
+  mount TavernaPlayer::Engine, :at => "/"
 end
