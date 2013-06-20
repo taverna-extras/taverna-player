@@ -1,11 +1,35 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  name: MyString
-  value: MyString
-  file: MyString
+  id: 1
+  name: Message
+  value: Hello, World!
+  port_type: TavernaPlayer::RunPort::Output
+  run_id: 1
+  depth: 0
+  metadata: "---\n:size: 13\n:type: text/plain"
 
 two:
-  name: MyString
-  value: MyString
-  file: MyString
+  id: 2
+  name: OUT
+  port_type: TavernaPlayer::RunPort::Output
+  run_id: 2
+  depth: 1
+  metadata: "---\n:size:\n- 7\n- 7\n- 974\n- 974\n- 7\n:type:\n- text/plain\n- text/plain\n- application/x-error\n- application/x-error\n- text/plain"
+
+three:
+  id: 3
+  name: IN
+  value: Rob
+  port_type: TavernaPlayer::RunPort::Input
+  run_id: 3
+  depth: 0
+
+four:
+  id: 4
+  name: OUT
+  value: Rob
+  port_type: TavernaPlayer::RunPort::Output
+  run_id: 3
+  depth: 0
+  metadata: "---\n:size: 3\n:type: text/plain"

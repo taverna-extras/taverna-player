@@ -1,0 +1,22 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  id: 1
+  title: Hello, World!
+  author: Robert Haines
+  description: Say "Hello, World!"
+  file: test/workflows/hello.t2flow
+
+two:
+  id: 2
+  title: List of Fail
+  author: Robert Haines
+  description: Produce a list littered with errors
+  file: test/workflows/list_with_errors.t2flow
+
+three:
+  id: 3
+  title: Pass Through
+  author: Robert Haines
+  description: Pass the input straight through to the output
+  file: test/workflows/pass_through.t2flow

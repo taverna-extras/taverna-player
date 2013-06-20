@@ -1,15 +1,25 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  run_id: MyString
-  state: MyString
+  run_id: 9dcfbaf1-4c55-40f0-9853-baa7f8410879
+  state: :pending
   create_time: 2013-03-13 10:55:46
-  start_time: 2013-03-13 10:55:46
-  finish_time: 2013-03-13 10:55:46
+  start_time: 2013-03-13 10:56:00
+  finish_time: 2013-03-13 10:56:32
+  workflow_id: 1
 
 two:
-  run_id: MyString
-  state: MyString
+  run_id: 13246c77-ffa3-449f-9b18-0f085717f8eb
+  state: :running
   create_time: 2013-03-13 10:55:46
-  start_time: 2013-03-13 10:55:46
-  finish_time: 2013-03-13 10:55:46
+  start_time: 2013-03-13 10:55:55
+  finish_time: 2013-03-13 10:57:07
+  workflow_id: 2
+
+three:
+  run_id: f8250afc-09c1-4129-ab28-e889a284594f
+  state: :finished
+  create_time: 2013-03-13 10:55:46
+  start_time: 2013-03-13 10:55:48
+  finish_time: 2013-03-13 10:58:22
+  workflow_id: 3
