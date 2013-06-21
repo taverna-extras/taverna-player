@@ -8,11 +8,13 @@ module TavernaPlayer
     end
 
     test "should show text outputs" do
-      assert_equal("Hello, World!", @port1.value)
-      assert_equal("<p>Hello, World!</p>", show_output(@port1))
+      assert_equal "Hello, World!", @port1.value, "Unexpected workflow output"
+      assert_equal "<p>Hello, World!</p>", show_output(@port1),
+        "Workflow output not formatted correctly"
 
-      assert_equal("Rob", @port2.value)
-      assert_equal("<p>Rob</p>", show_output(@port2))
+      assert_equal "Rob", @port2.value, "Unexpected workflow output"
+      assert_equal "<p>Rob</p>", show_output(@port2),
+        "Workflow output not formatted correctly"
     end
   end
 end
