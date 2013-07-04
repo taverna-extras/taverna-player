@@ -3,34 +3,36 @@ require "zip/zip"
 module TavernaPlayer
   module RunsHelper
 
-    def show_output(output)
+    def show_output(run, output)
       if output.depth == 0
-        if output.file.blank?
-          simple_format(output.value)
-        else
+        if output.value.blank?
           case output.metadata[:type]
-          when /text/
-            File.open(output.file.path) do |file|
-              simple_format(file.read)
-            end
           when /image/
             image_tag(output.file.url)
           else
             link_to(output.file.url)
           end
+        else
+          if output.metadata[:size] < 255
+            simple_format(output.value)
+          else
+            Zip::ZipFile.open(run.results.path) do |zip|
+              simple_format(zip.read(output.name))
+            end
+          end
         end
       else
-        simple_format(parse_port_list(output))
+        simple_format(parse_port_list(run, output))
       end
     end
 
     private
 
-    def parse_port_list(output)
+    def parse_port_list(run, output)
       types = output.metadata[:type]
       content = ""
 
-      Zip::ZipFile.open(output.file.path) do |zip|
+      Zip::ZipFile.open(run.results.path) do |zip|
         content = deep_parse(types, output, zip)
       end
 
@@ -53,7 +55,7 @@ module TavernaPlayer
               "/output/#{output.name}/#{path}")
           when /text/
             zip_path = (index + [i]).map { |j| j += 1 }.join("/")
-            content += zip.read(zip_path)
+            content += zip.read("#{output.name}/#{zip_path}")
           when /image/
             content += image_tag(run_path(output.run_id) +
               "/output/#{output.name}/#{path}")

@@ -56,6 +56,8 @@
 <% if @run.outputs.size > 0 %>
   <h2>Outputs</h2>
 
+  <%= link_to "Download All", @run.results.url -%>
+
   <% @run.outputs.each do |output| %>
     <p>
       <b>Name:</b>
@@ -64,7 +66,7 @@
 
     <p>
       <b>Value:</b>
-      <%= show_output(output) %>
+      <%= show_output(@run, output) %>
     </p>
 
   <% end%>

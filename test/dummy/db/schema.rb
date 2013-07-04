@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130321161859) do
+ActiveRecord::Schema.define(:version => 20130704100146) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -48,14 +48,18 @@ ActiveRecord::Schema.define(:version => 20130321161859) do
 
   create_table "taverna_player_runs", :force => true do |t|
     t.string   "run_id"
-    t.string   "state",          :default => "pending", :null => false
+    t.string   "state",                :default => "pending", :null => false
     t.datetime "create_time"
     t.datetime "start_time"
     t.datetime "finish_time"
-    t.integer  "workflow_id",                           :null => false
-    t.datetime "created_at",                            :null => false
-    t.datetime "updated_at",                            :null => false
+    t.integer  "workflow_id",                                 :null => false
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
     t.string   "status_message"
+    t.string   "results_file_name"
+    t.string   "results_content_type"
+    t.integer  "results_file_size"
+    t.datetime "results_updated_at"
   end
 
   add_index "taverna_player_runs", ["run_id"], :name => "index_taverna_player_runs_on_run_id"

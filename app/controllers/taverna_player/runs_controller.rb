@@ -81,14 +81,14 @@ module TavernaPlayer
 
     # GET /runs/1/output/*
     def output
+      @run = Run.find(params[:id])
+
       path = []
       unless params[:path].nil?
         path = params[:path].split("/").map { |p| p.to_i }
       end
 
-      # There can be only 1.
-      output = RunPort::Output.where(:run_id => params[:id],
-        :name => params[:port]).first
+      output = RunPort::Output.find_by_run_id_and_name(@run.id, params[:port])
 
       # If there is no such output port or the path is the wrong depth then
       # return a 404.
@@ -100,15 +100,15 @@ module TavernaPlayer
       # file if it's bigger. If it's a value in the database then it'll always
       # be a text value.
       if output.depth == 0
-        if output.file.blank?
+        if output.value.blank?
+          send_data read_from_zip(output.name),
+            :disposition => "inline", :type => output.metadata[:type]
+        else
           send_data output.value, :disposition => "inline",
             :type => "text/plain"
-        else
-          send_data File.read(output.file.path), :disposition => "inline",
-            :type => output.file_content_type
         end
       else
-        file = path.map { |p| p += 1 }.join("/")
+        file = "#{output.name}/" + path.map { |p| p += 1 }.join("/")
         type = recurse_into_lists(output.metadata[:type], path)
 
         # If it's an error, then we need to further hack the file path and
@@ -118,14 +118,19 @@ module TavernaPlayer
           type = "text/plain"
         end
 
-        Zip::ZipFile.open(output.file.path) do |zip|
-          send_data zip.read("#{file}"), :type => type,
-            :disposition => "inline"
-        end
+        send_data read_from_zip(file), :type => type,
+          :disposition => "inline"
       end
     end
 
     private
+
+    # Read the data from the results zip file.
+    def read_from_zip(file)
+      Zip::ZipFile.open(@run.results.path) do |zip|
+        zip.read(file)
+      end
+    end
 
     # This is here because of Taverna's infinitely deep output ports :-(
     def recurse_into_lists(list, indexes)

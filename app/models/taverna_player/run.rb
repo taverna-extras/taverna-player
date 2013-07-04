@@ -1,7 +1,7 @@
 module TavernaPlayer
   class Run < ActiveRecord::Base
     attr_accessible :create_time, :finish_time, :run_id, :start_time,
-      :status_message, :workflow_id, :inputs_attributes
+      :results, :status_message, :workflow_id, :inputs_attributes
 
     has_many :inputs, :class_name => TavernaPlayer::RunPort::Input, :dependent => :destroy
     has_many :outputs, :class_name => TavernaPlayer::RunPort::Output, :dependent => :destroy
@@ -12,6 +12,11 @@ module TavernaPlayer
 
     validates :workflow_id, :presence => true
     validates :state, :inclusion => { :in => STATES }
+
+    has_attached_file :results,
+      :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
+      :url => "/system/:class/:attachment/:id/:filename",
+      :default_url => ""
 
     # Return state as a symbol.
     def state

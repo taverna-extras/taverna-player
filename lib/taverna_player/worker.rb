@@ -67,22 +67,21 @@ module TavernaPlayer
     def collect_outputs(run)
       outputs = []
 
-      Dir.mktmpdir(@run.run_id, Rails.root.join("tmp")) do |tmp_dir|
+      Dir.mktmpdir(run.id, Rails.root.join("tmp")) do |tmp_dir|
+        tmp_file_name = File.join(tmp_dir, "all.zip")
+        run.zip_output(tmp_file_name)
+        @run.results = File.new(tmp_file_name)
+
         run.output_ports.each_value do |port|
-          output = TavernaPlayer::RunPort::Output.new(:name => port.name, :depth => port.depth)
+          output = TavernaPlayer::RunPort::Output.new(:name => port.name,
+            :depth => port.depth)
 
-          tmp_file_name = File.join(tmp_dir, port.name)
-
-          if port.depth == 0
+          if port.depth == 0 && port.type =~ /text/
             if port.size < 255
               output.value = port.value
             else
-              port.write_value_to_file(tmp_file_name)
-              output.file = File.new(tmp_file_name)
+              output.value = port.value(0..255)
             end
-          else
-            port.zip(tmp_file_name)
-            output.file = File.new(tmp_file_name)
           end
 
           output.metadata = {
