@@ -12,11 +12,11 @@ module TavernaPlayer
 
     test "should show text outputs" do
       assert_equal "Hello, World!", @port1.value, "Unexpected workflow output"
-      assert_equal "<p>Hello, World!</p>", show_output(@run1, @port1),
+      assert show_output(@run1, @port1).include?("<pre>Hello, World!</pre>"),
         "Workflow output not formatted correctly"
 
       assert_equal "Rob", @port2.value, "Unexpected workflow output"
-      assert_equal "<p>Rob</p>", show_output(@run2, @port2),
+      assert show_output(@run2, @port2).include?("<pre>Rob</pre>"),
         "Workflow output not formatted correctly"
     end
   end

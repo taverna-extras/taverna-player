@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency "delayed_job_active_record", "~> 0.4.3"
   s.add_dependency "daemons", "~> 1.1.9"
   s.add_dependency "rubyzip", "~> 0.9.9"
+  s.add_dependency "coderay", "~> 1.0.9"
 
   s.add_development_dependency "sqlite3"
 end

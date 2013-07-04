@@ -14,23 +14,40 @@ module TavernaPlayer
           end
         else
           if output.metadata[:size] < 255
-            simple_format(output.value)
+            format_text_output(output.value, output.metadata[:type])
           else
             Zip::ZipFile.open(run.results.path) do |zip|
-              simple_format(zip.read(output.name))
+              format_text_output(zip.read(output.name), output.metadata[:type])
             end
           end
         end
       else
-        simple_format(parse_port_list(run, output))
+        parse_port_list(run, output)
       end
     end
 
     private
 
+    def format_text_output(content, type)
+      type = type.gsub(/.+\/(.+)/) do
+        %w(html xml json).include?($1) ? $1 : "text"
+      end.to_sym
+
+      content = format_xml(content) if type == :xml
+
+      raw(CodeRay.scan(content, type).div(:css => :class,
+        :line_numbers => :table))
+    end
+
+    def format_xml(xml)
+      out = String.new
+      REXML::Document.new(xml).write(out, 1)
+      out
+    end
+
     def parse_port_list(run, output)
       types = output.metadata[:type]
-      content = ""
+      content = String.new
 
       Zip::ZipFile.open(run.results.path) do |zip|
         content = deep_parse(types, output, zip)
@@ -55,7 +72,8 @@ module TavernaPlayer
               "/output/#{output.name}/#{path}")
           when /text/
             zip_path = (index + [i]).map { |j| j += 1 }.join("/")
-            content += zip.read("#{output.name}/#{zip_path}")
+            content += format_text_output(
+              zip.read("#{output.name}/#{zip_path}"), type)
           when /image/
             content += image_tag(run_path(output.run_id) +
               "/output/#{output.name}/#{path}")
@@ -68,8 +86,7 @@ module TavernaPlayer
         i += 1
       end
 
-      content += "</ul>"
-      content
+      raw(content += "</ul>")
     end
 
   end
