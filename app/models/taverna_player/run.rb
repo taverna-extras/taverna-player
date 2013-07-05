@@ -1,7 +1,7 @@
 module TavernaPlayer
   class Run < ActiveRecord::Base
-    attr_accessible :create_time, :finish_time, :run_id, :start_time,
-      :results, :status_message, :workflow_id, :inputs_attributes
+    attr_accessible :create_time, :embedded, :finish_time, :run_id,
+      :start_time, :results, :status_message, :workflow_id, :inputs_attributes
 
     has_many :inputs, :class_name => TavernaPlayer::RunPort::Input, :dependent => :destroy
     has_many :outputs, :class_name => TavernaPlayer::RunPort::Output, :dependent => :destroy

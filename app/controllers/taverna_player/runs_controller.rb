@@ -31,7 +31,7 @@ module TavernaPlayer
     def new
       @run = Run.new
       @workflow = TavernaPlayer.workflow_class.find(params[:workflow_id])
-      session[:embedded] = params[:embedded].nil? ? "0" : "1"
+      @run.embedded = true if params[:embedded] == "true"
 
       model = TavernaPlayer::Parser.parse(@workflow.file)
       @inputs = model.inputs
@@ -137,9 +137,11 @@ module TavernaPlayer
       return recurse_into_lists(list[i], indexes)
     end
 
+    # Choose a layout for the page depending on action and embedded status.
     def choose_layout
-      if session[:embedded] == "1"
-        "taverna_player/embedded"
+      case action_name
+      when "new", "show"
+        @run.embedded? ? "taverna_player/embedded" : "application"
       else
         "application"
       end
