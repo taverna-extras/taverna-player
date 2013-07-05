@@ -1,7 +1,5 @@
 require_dependency "taverna_player/application_controller"
 
-require "zip/zip"
-
 module TavernaPlayer
   class RunsController < TavernaPlayer::ApplicationController
     layout :choose_layout

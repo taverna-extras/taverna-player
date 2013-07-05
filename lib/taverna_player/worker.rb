@@ -1,5 +1,3 @@
-require "tmpdir"
-
 module TavernaPlayer
   class Worker
 

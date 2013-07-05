@@ -1,5 +1,3 @@
-require "zip/zip"
-
 module TavernaPlayer
   module RunsHelper
 
