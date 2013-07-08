@@ -26,3 +26,4 @@ three:
   start_time: 2013-03-13 10:55:48
   finish_time: 2013-03-13 10:58:22
   workflow_id: 3
+  embedded: true

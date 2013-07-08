@@ -3,7 +3,8 @@ require 'test_helper'
 module TavernaPlayer
   class RunsControllerTest < ActionController::TestCase
     setup do
-      @run = taverna_player_runs(:one)
+      @run1 = taverna_player_runs(:one)
+      @run2 = taverna_player_runs(:three)
       @routes = TavernaPlayer::Engine.routes
     end
 
@@ -46,7 +47,7 @@ module TavernaPlayer
     end
 
     test "should get new embedded" do
-      get :new, :workflow_id => 1, :embedded => 1,
+      get :new, :workflow_id => 1, :embedded => "true",
         :use_route => :taverna_player
       assert_response :success, "Response was not success"
       assert_template "taverna_player/embedded",
@@ -54,14 +55,13 @@ module TavernaPlayer
     end
 
     test "should show run" do
-      get :show, :id => @run, :use_route => :taverna_player
+      get :show, :id => @run1, :use_route => :taverna_player
       assert_response :success, "Response was not success"
       assert_template "application", "Did not render with the correct layout"
     end
 
     test "should show run embedded" do
-      session[:embedded] = "1"
-      get :show, :id => @run, :use_route => :taverna_player
+      get :show, :id => @run2, :use_route => :taverna_player
       assert_response :success, "Response was not success"
       assert_template "taverna_player/embedded",
         "Did not render with the correct layout"
@@ -81,7 +81,7 @@ module TavernaPlayer
 
     test "should destroy run" do
       assert_difference('Run.count', -1) do
-        delete :destroy, :id => @run, :use_route => :taverna_player
+        delete :destroy, :id => @run1, :use_route => :taverna_player
       end
 
       assert_redirected_to runs_path, "Did not redirect correctly"
