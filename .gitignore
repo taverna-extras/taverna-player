@@ -7,6 +7,7 @@ test/dummy/log/*.log
 test/dummy/tmp/
 test/dummy/.sass-cache
 test/dummy/public/system/
+test/dummy/config/initializers/taverna_player.rb
 
 *~
 html/
