@@ -11,7 +11,8 @@ require "taverna_player/parser"
 require "taverna_player/worker"
 
 module TavernaPlayer
-  mattr_accessor :workflow_class
+  mattr_accessor :server_address, :server_password, :server_poll_interval,
+    :server_username, :workflow_class
 
   class << self
     def workflow_class

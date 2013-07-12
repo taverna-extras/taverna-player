@@ -1,11 +1,6 @@
 module TavernaPlayer
   class Worker
 
-    # Constants until we decide how to manage server instances
-    SERVER_URI = URI.parse("http://localhost:8080/taverna242")
-    USER_CREDS = T2Server::HttpBasic.new("taverna", "taverna")
-    SERVER_POLL = 10
-
     def initialize(run)
       @run = run
       @workflow = Workflow.find(@run.workflow_id)
@@ -13,12 +8,17 @@ module TavernaPlayer
 
     def perform
       status_message "Connecting to Taverna Server"
-      T2Server::Server.new(SERVER_URI) do |server|
+
+      server_uri = URI.parse(TavernaPlayer.server_address)
+      credentials = T2Server::HttpBasic.new(TavernaPlayer.server_username,
+        TavernaPlayer.server_password)
+
+      T2Server::Server.new(server_uri) do |server|
         status_message "Creating new workflow run"
 
         wkf = File.read(@workflow.file)
 
-        server.create_run(wkf, USER_CREDS) do |run|
+        server.create_run(wkf, credentials) do |run|
           @run.run_id = run.id
           @run.state = run.status
           @run.create_time = run.create_time
@@ -43,7 +43,7 @@ module TavernaPlayer
 
           status_message "Running"
           until run.finished?
-            sleep(SERVER_POLL)
+            sleep(TavernaPlayer.server_poll_interval)
             status_message @run.status_message + "."
           end
 
