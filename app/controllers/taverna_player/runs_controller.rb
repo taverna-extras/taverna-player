@@ -19,6 +19,7 @@ module TavernaPlayer
     # GET /runs/1.json
     def show
       @run = Run.find(params[:id])
+      @interaction = Interaction.find_by_run_id_and_replied(@run.id, false)
 
       respond_to do |format|
         format.html # show.html.erb

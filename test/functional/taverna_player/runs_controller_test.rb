@@ -4,7 +4,8 @@ module TavernaPlayer
   class RunsControllerTest < ActionController::TestCase
     setup do
       @run1 = taverna_player_runs(:one)
-      @run2 = taverna_player_runs(:three)
+      @run2 = taverna_player_runs(:two)
+      @run3 = taverna_player_runs(:three)
       @routes = TavernaPlayer::Engine.routes
     end
 
@@ -61,7 +62,7 @@ module TavernaPlayer
     end
 
     test "should show run embedded" do
-      get :show, :id => @run2, :use_route => :taverna_player
+      get :show, :id => @run3, :use_route => :taverna_player
       assert_response :success, "Response was not success"
       assert_template "taverna_player/embedded",
         "Did not render with the correct layout"
@@ -79,9 +80,27 @@ module TavernaPlayer
       assert assigns(:run).valid?, "Created run was invalid"
     end
 
-    test "should destroy run" do
-      assert_difference('Run.count', -1) do
+    test "should destroy run and associated output port" do
+      assert_difference(["Run.count", "RunPort::Output.count"], -1) do
         delete :destroy, :id => @run1, :use_route => :taverna_player
+      end
+
+      assert_redirected_to runs_path, "Did not redirect correctly"
+    end
+
+    test "should destroy run and associated output port and interactions" do
+      assert_difference(["Run.count", "RunPort::Output.count",
+        "Interaction.count"], -1) do
+          delete :destroy, :id => @run2, :use_route => :taverna_player
+      end
+
+      assert_redirected_to runs_path, "Did not redirect correctly"
+    end
+
+    test "should destroy run and all associated ports and interactions" do
+      assert_difference(["Run.count", "RunPort::Input.count",
+        "RunPort::Output.count", "Interaction.count"], -1) do
+          delete :destroy, :id => @run3, :use_route => :taverna_player
       end
 
       assert_redirected_to runs_path, "Did not redirect correctly"

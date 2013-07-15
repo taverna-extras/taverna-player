@@ -44,7 +44,20 @@ module TavernaPlayer
           status_message "Running"
           until run.finished?
             sleep(TavernaPlayer.server_poll_interval)
-            status_message @run.status_message + "."
+            waiting = false
+
+            run.notifications(:requests).each do |note|
+              uri = note.uri.to_s
+              waiting = true unless note.has_reply?
+              int = Interaction.find_or_create_by_uri_and_run_id(uri, @run.id)
+
+              if note.has_reply?
+                int.replied = true
+                int.save
+              end
+            end
+
+            status_message(waiting ? "Waiting for user input" : "Running")
           end
 
           status_message "Gathering run outputs"
