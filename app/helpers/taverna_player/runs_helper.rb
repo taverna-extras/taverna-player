@@ -4,11 +4,15 @@ module TavernaPlayer
     def show_output(run, output)
       if output.depth == 0
         if output.value.blank?
+          full_path = run_path(output.run_id) + "/output/#{output.name}"
+
           case output.metadata[:type]
+          when /x-error/
+            link_to("Error", full_path)
           when /image/
-            image_tag(output.file.url)
+            image_tag(full_path)
           else
-            link_to(output.file.url)
+            link_to(full_path)
           end
         else
           if output.metadata[:size] < 255

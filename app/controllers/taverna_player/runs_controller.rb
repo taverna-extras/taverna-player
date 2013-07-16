@@ -81,6 +81,8 @@ module TavernaPlayer
     def output
       @run = Run.find(params[:id])
 
+      # We need to parse out the path into a list of numbers here so we have
+      # a list of indices into the file structure.
       path = []
       unless params[:path].nil?
         path = params[:path].split("/").map { |p| p.to_i }
@@ -96,17 +98,16 @@ module TavernaPlayer
 
       # A singleton should just return the value (if it's small enough) or the
       # file if it's bigger. If it's a value in the database then it'll always
-      # be a text value.
-      if output.depth == 0
-        if output.value.blank?
-          send_data read_from_zip(output.name),
-            :disposition => "inline", :type => output.metadata[:type]
-        else
-          send_data output.value, :disposition => "inline",
-            :type => "text/plain"
-        end
+      # be a text value, although not necessarily "plain".
+      if output.depth == 0 && !output.value.blank?
+        send_data output.value, :disposition => "inline",
+          :type => output.metadata[:type]
       else
-        file = "#{output.name}/" + path.map { |p| p += 1 }.join("/")
+        # We need to rebuild the path indices into a string here (and can't
+        # re-use the params[:path] variable directly) because files are
+        # indexed from one in the zip we get back from Server, not zero.
+        path_s = path.map { |p| p += 1 }.join("/")
+        file = path_s.blank? ? "#{output.name}" : "#{output.name}/#{path_s}"
         type = recurse_into_lists(output.metadata[:type], path)
 
         # If it's an error, then we need to further hack the file path and
