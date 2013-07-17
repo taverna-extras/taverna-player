@@ -2,13 +2,14 @@ require_dependency "taverna_player/application_controller"
 
 module TavernaPlayer
   class RunsController < TavernaPlayer::ApplicationController
+    before_filter :find_runs, :only => [ :index ]
+    before_filter :find_run, :except => [ :index, :new, :create ]
+
     layout :choose_layout
 
     # GET /runs
     # GET /runs.json
     def index
-      @runs = Run.all
-
       respond_to do |format|
         format.html # index.html.erb
         format.json { render :json => @runs }
@@ -18,8 +19,9 @@ module TavernaPlayer
     # GET /runs/1
     # GET /runs/1.json
     def show
-      @run = Run.find(params[:id])
-      @interaction = Interaction.find_by_run_id_and_replied(@run.id, false)
+      if @run.state == :running
+        @interaction = Interaction.find_by_run_id_and_replied(@run.id, false)
+      end
 
       respond_to do |format|
         format.html # show.html.erb
@@ -69,7 +71,6 @@ module TavernaPlayer
     # DELETE /runs/1
     # DELETE /runs/1.json
     def destroy
-      @run = Run.find(params[:id])
       @run.destroy
 
       respond_to do |format|
@@ -80,8 +81,6 @@ module TavernaPlayer
 
     # GET /runs/1/output/*
     def output
-      @run = Run.find(params[:id])
-
       # We need to parse out the path into a list of numbers here so we have
       # a list of indices into the file structure.
       path = []
@@ -123,7 +122,104 @@ module TavernaPlayer
       end
     end
 
+    # GET /runs/1/interaction/:name
+    def read_interaction
+      respond_to do |format|
+        name = "#{params[:name]}.#{params[:format]}"
+
+        format.html do
+          send_data proxy_read(name, :html), :type => "text/html",
+            :disposition => "inline"
+        end
+
+        format.js do
+          send_data proxy_read(name), :type => "text/javascript",
+            :disposition => "inline"
+        end
+
+        format.json do
+          send_data proxy_read(name),:type => "application/json",
+            :disposition => "inline"
+        end
+      end
+    end
+
+    # PUT /runs/1/interaction/:name
+    def save_interaction
+      respond_to do |format|
+        name = "#{params[:name]}.#{params[:format]}"
+
+        format.json do
+          proxy_write(name, request.body.read)
+          render :nothing => true, :status => 204
+        end
+      end
+    end
+
+    # POST /runs/1/notification
+    def notification
+      proxy_reply(request.body.read)
+
+      render :nothing => true, :status => 201
+    end
+
     private
+
+    def find_runs
+      @runs = Run.all
+    end
+
+    def find_run
+      @run = Run.find(params[:id])
+    end
+
+    # Read a resource from the interactions working directory of a run. If
+    # it's an html resource then rewrite the links within it to point back to
+    # this portal.
+    #
+    # This is a bit of a hack because we have to comply with Taverna Server's
+    # security model.
+    def proxy_read(name, type = :any)
+      credentials = T2Server::HttpBasic.new(TavernaPlayer.server_username,
+        TavernaPlayer.server_password)
+      server = T2Server::Server.new(TavernaPlayer.server_address)
+      uri = URI.parse("#{@run.proxy_interactions}/#{name}")
+
+      page = server.read(uri, "*/*", credentials)
+
+      if type == :html
+        page.gsub!(@run.proxy_interactions, run_url(@run) + "/proxy")
+        page.gsub!(@run.proxy_notifications, run_url(@run) + "/proxy")
+      end
+
+      page
+    end
+
+    # Write a resource to the interactions working directory of a run.
+    #
+    # This is a bit of a hack because we have to comply with Taverna Server's
+    # security model.
+    def proxy_write(name, data)
+      credentials = T2Server::HttpBasic.new(TavernaPlayer.server_username,
+        TavernaPlayer.server_password)
+      server = T2Server::Server.new(TavernaPlayer.server_address)
+      uri = URI.parse("#{@run.proxy_interactions}/#{name}")
+
+      server.update(uri, data, "*/*", credentials)
+    end
+
+    # Publish an interaction reply to the run's notification feed.
+    #
+    # This is a bit of a hack because we have to comply with Taverna Server's
+    # security model.
+    def proxy_reply(data)
+      credentials = T2Server::HttpBasic.new(TavernaPlayer.server_username,
+        TavernaPlayer.server_password)
+      server = T2Server::Server.new(TavernaPlayer.server_address)
+      uri = URI.parse(@run.proxy_notifications)
+
+      server.create(uri, data, "application/atom+xml", credentials)
+    end
 
     # Read the data from the results zip file.
     def read_from_zip(file)
