@@ -29,5 +29,13 @@ module TavernaPlayer
     def state=(state)
       self[:state] = state.to_s.downcase
     end
+
+    def running?
+      state == :running
+    end
+
+    def finished?
+      state == :finished
+    end
   end
 end

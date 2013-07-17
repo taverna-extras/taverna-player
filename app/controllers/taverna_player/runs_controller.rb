@@ -19,7 +19,7 @@ module TavernaPlayer
     # GET /runs/1
     # GET /runs/1.json
     def show
-      if @run.state == :running
+      if @run.running?
         @interaction = Interaction.find_by_run_id_and_replied(@run.id, false)
       end
 
