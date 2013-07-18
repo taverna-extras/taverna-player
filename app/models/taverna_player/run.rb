@@ -10,6 +10,10 @@ module TavernaPlayer
 
     accepts_nested_attributes_for :inputs
 
+    # There is a very good reason that we don't have a :cancelled state and
+    # use the stop flag instead: Race conditions. If we used a state for this
+    # it could be overwritten by the delayed job as it moves the run between
+    # states, thus losing the cancel request from the user.
     STATES = [:pending, :initialized, :running, :finished, :deleted]
 
     validates :workflow_id, :presence => true
@@ -20,8 +24,18 @@ module TavernaPlayer
       :url => "/system/:class/:attachment/:id/:filename",
       :default_url => ""
 
-    # Return state as a symbol.
+    # Cancel this run by setting the stop flag. This is done to allow the
+    # delayed job that is monitoring the run to delete it gracefully.
+    # See the note above about the (lack of a) :cancelled state.
+    def cancel
+      return if finished? || cancelled?
+      update_attribute(:stop, true)
+    end
+
+    # Return state as a symbol. See the note above about the (lack of a)
+    # :cancelled state.
     def state
+      return :cancelled if self[:stop]
       self[:state].to_sym
     end
 
@@ -36,6 +50,11 @@ module TavernaPlayer
 
     def finished?
       state == :finished
+    end
+
+    # See the note above about the (lack of a) :cancelled state.
+    def cancelled?
+      self[:stop]
     end
   end
 end

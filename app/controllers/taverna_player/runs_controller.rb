@@ -69,14 +69,22 @@ module TavernaPlayer
     end
 
     # DELETE /runs/1
-    # DELETE /runs/1.json
     def destroy
-      @run.destroy
-
-      respond_to do |format|
-        format.html { redirect_to runs_url }
-        format.json { head :no_content }
+      if @run.finished? || @run.cancelled?
+        @run.destroy
+        redirect_to runs_url
+      else
+        redirect_to :back
       end
+    end
+
+    # PUT /runs/1/cancel
+    def cancel
+      unless @run.finished?
+        @run.cancel
+      end
+
+      redirect_to :back
     end
 
     # GET /runs/1/output/*

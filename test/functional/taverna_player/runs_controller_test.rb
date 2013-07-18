@@ -34,6 +34,12 @@ module TavernaPlayer
         "Did not route correctly"
     end
 
+    test "should route to cancel on a run" do
+      assert_routing({ :method => "put", :path => "/runs/1/cancel" },
+        { :controller => "taverna_player/runs", :action => "cancel",
+          :id => "1" }, {}, {}, "Did not route correctly")
+    end
+
     test "should get index" do
       get :index, :use_route => :taverna_player
       assert_response :success, "Response was not success"
@@ -80,29 +86,41 @@ module TavernaPlayer
       assert assigns(:run).valid?, "Created run was invalid"
     end
 
-    test "should destroy run and associated output port" do
-      assert_difference(["Run.count", "RunPort::Output.count"], -1) do
-        delete :destroy, :id => @run1, :use_route => :taverna_player
+    test "should not destroy running run" do
+      @request.env["HTTP_REFERER"] = "/runs"
+      assert_no_difference(["Run.count", "RunPort::Output.count"],
+        "Run count and output port count changed") do
+          delete :destroy, :id => @run1, :use_route => :taverna_player
       end
 
+      assert_response :redirect, "Response was not a redirect"
       assert_redirected_to runs_path, "Did not redirect correctly"
     end
 
-    test "should destroy run and associated output port and interactions" do
-      assert_difference(["Run.count", "RunPort::Output.count",
-        "Interaction.count"], -1) do
-          delete :destroy, :id => @run2, :use_route => :taverna_player
-      end
+    test "should cancel run and redirect to index" do
+      @request.env["HTTP_REFERER"] = "/runs"
+      put :cancel, :id => @run1, :use_route => :taverna_player
 
+      assert_response :redirect, "Response was not a redirect"
       assert_redirected_to runs_path, "Did not redirect correctly"
+    end
+
+    test "should cancel run and redirect to show" do
+      @request.env["HTTP_REFERER"] = "/runs/2"
+      put :cancel, :id => @run2, :use_route => :taverna_player
+
+      assert_response :redirect, "Response was not a redirect"
+      assert_redirected_to run_path(@run2), "Did not redirect correctly"
     end
 
     test "should destroy run and all associated ports and interactions" do
       assert_difference(["Run.count", "RunPort::Input.count",
-        "RunPort::Output.count", "Interaction.count"], -1) do
+        "RunPort::Output.count", "Interaction.count"], -1,
+        "Counts of objects did not reduce by 1") do
           delete :destroy, :id => @run3, :use_route => :taverna_player
       end
 
+      assert_response :redirect, "Response was not a redirect"
       assert_redirected_to runs_path, "Did not redirect correctly"
     end
   end

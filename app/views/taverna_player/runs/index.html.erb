@@ -20,7 +20,11 @@
     <td><%= run.start_time %></td>
     <td><%= run.finish_time %></td>
     <td><%= link_to 'Show', run %></td>
-    <td><%= link_to 'Destroy', run, :method => :delete, :data => { confirm: 'Are you sure?' } %></td>
+    <% if run.finished? || run.cancelled? %>
+      <td><%= link_to 'Destroy', run, :method => :delete, :data => { confirm: 'Are you sure?' } %></td>
+    <% else %>
+      <td><%= link_to "Cancel", cancel_run_path(run.id), :method => :put, :data => { confirm: "Are you sure?" } %></td>
+    <% end %>
   </tr>
 <% end %>
 </table>
