@@ -37,11 +37,7 @@
   <%= @run.embedded %>
 </p>
 
-<% if @run.finished? || @run.cancelled? %>
-  <%= link_to "Destroy", @run, :method => :delete, :data => { confirm: "Are you sure?" } %>
-<% else %>
-  <%= link_to "Cancel", cancel_run_path(@run.id), :method => :put, :data => { confirm: "Are you sure?" } %>
-<% end %>
+<%= render :partial => "cancel_or_delete_button", :locals => { :run => @run } %>
 
 <% if @run.inputs.size > 0 %>
   <h2>Inputs</h2>
