@@ -1,9 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  uri: http://example.com/run1/path/to/interaction.html
+  uri: http://example.com/run4/path/to/interaction.html
   replied: false
-  run_id: 2
+  run_id: 4
 
 two:
   uri: http://example.com/run2/path/to/interaction.html

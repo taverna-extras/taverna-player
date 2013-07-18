@@ -6,6 +6,7 @@ module TavernaPlayer
       @run1 = taverna_player_runs(:one)
       @run2 = taverna_player_runs(:two)
       @run3 = taverna_player_runs(:three)
+      @run4 = taverna_player_runs(:four)
       @routes = TavernaPlayer::Engine.routes
     end
 
@@ -40,6 +41,26 @@ module TavernaPlayer
           :id => "1" }, {}, {}, "Did not route correctly")
     end
 
+    test "should route to notification feed proxy" do
+      assert_routing({ :method => "post", :path => "/runs/1/proxy" },
+        { :controller => "taverna_player/runs", :action => "notification",
+          :id => "1" }, {}, {}, "Did not route correctly")
+    end
+
+    test "should route to interaction resource read proxy" do
+      assert_routing "/runs/1/proxy/file.json",
+        { :controller => "taverna_player/runs", :action => "read_interaction",
+          :id => "1", :name => "file", :format => "json" }, {}, {},
+        "Did not route correctly"
+    end
+
+    test "should route to interaction resource write proxy" do
+      assert_routing({ :method => "put", :path => "/runs/1/proxy/file.json" },
+        { :controller => "taverna_player/runs", :action => "save_interaction",
+          :id => "1", :name => "file", :format => "json" }, {}, {},
+        "Did not route correctly")
+    end
+
     test "should get index" do
       get :index, :use_route => :taverna_player
       assert_response :success, "Response was not success"
@@ -61,15 +82,24 @@ module TavernaPlayer
         "Did not render with the correct layout"
     end
 
-    test "should show run" do
+    test "should show run with no interactions" do
       get :show, :id => @run1, :use_route => :taverna_player
       assert_response :success, "Response was not success"
+      refute assigns(:interaction), "No interactions for this run"
       assert_template "application", "Did not render with the correct layout"
     end
 
-    test "should show run embedded" do
+    test "should show run with an interaction" do
+      get :show, :id => @run4, :use_route => :taverna_player
+      assert_response :success, "Response was not success"
+      assert assigns(:interaction), "Should have an interaction for this run"
+      assert_template "application", "Did not render with the correct layout"
+    end
+
+    test "should show run embedded ignoring replied interaction" do
       get :show, :id => @run3, :use_route => :taverna_player
       assert_response :success, "Response was not success"
+      refute assigns(:interaction), "Should not show replied interaction"
       assert_template "taverna_player/embedded",
         "Did not render with the correct layout"
     end

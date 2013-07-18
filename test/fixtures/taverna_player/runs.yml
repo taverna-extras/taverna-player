@@ -27,3 +27,11 @@ three:
   finish_time: 2013-03-13 10:58:22
   workflow_id: 3
   embedded: true
+
+four:
+  id: 4
+  run_id: f8250afc-09c1-4129-ab28-e889a284594f
+  state: :running
+  create_time: 2013-03-13 10:55:46
+  start_time: 2013-03-13 10:55:48
+  workflow_id: 1
