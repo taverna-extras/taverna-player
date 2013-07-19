@@ -1,6 +1,7 @@
 require "coderay"
 require "delayed_job_active_record"
 require "paperclip"
+require "rails_autolink"
 require "t2-server"
 require "taverna-t2flow"
 require "tmpdir"

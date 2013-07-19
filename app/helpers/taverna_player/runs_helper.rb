@@ -36,7 +36,9 @@ module TavernaPlayer
       end.to_sym
 
       if type == :text
-        raw(CodeRay.scan(content, type).div(:css => :class))
+        content = CodeRay.scan(content, type).div(:css => :class)
+        raw(auto_link(content, :html => { :target => '_blank' },
+          :sanitize => false))
       else
         content = format_xml(content) if type == :xml
         raw(CodeRay.scan(content, type).div(:css => :class,
