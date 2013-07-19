@@ -35,10 +35,13 @@ module TavernaPlayer
         %w(html xml json).include?($1) ? $1 : "text"
       end.to_sym
 
-      content = format_xml(content) if type == :xml
-
-      raw(CodeRay.scan(content, type).div(:css => :class,
-        :line_numbers => :table))
+      if type == :text
+        raw(CodeRay.scan(content, type).div(:css => :class))
+      else
+        content = format_xml(content) if type == :xml
+        raw(CodeRay.scan(content, type).div(:css => :class,
+          :line_numbers => :table))
+      end
     end
 
     def format_xml(xml)
