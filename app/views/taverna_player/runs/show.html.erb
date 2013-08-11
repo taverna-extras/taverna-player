@@ -83,3 +83,10 @@
 
   <% end%>
 <% end %>
+
+<% unless @run.log.blank? %>
+  <p>
+    <b>Log:</b>
+    <%= link_to "Taverna Server log", @run.log.url -%>
+  </p>
+<% end %>

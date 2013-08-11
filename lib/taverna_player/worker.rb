@@ -67,11 +67,12 @@ module TavernaPlayer
             status_message(waiting ? "Waiting for user input" : "Running")
           end
 
-          status_message "Gathering run outputs"
+          status_message "Gathering run outputs and log"
           @run.state = run.status
           @run.finish_time = run.finish_time
 
           download_outputs(run)
+          download_log(run)
 
           @run.outputs = process_outputs(run)
           @run.save
@@ -83,6 +84,15 @@ module TavernaPlayer
     end
 
     private
+
+    def download_log(run)
+      Dir.mktmpdir(run.id, Rails.root.join("tmp")) do |tmp_dir|
+        tmp_file_name = File.join(tmp_dir, "log.txt")
+        run.log(tmp_file_name)
+        @run.log = File.new(tmp_file_name)
+        @run.save
+      end
+    end
 
     def download_outputs(run)
       Dir.mktmpdir(run.id, Rails.root.join("tmp")) do |tmp_dir|
@@ -126,6 +136,7 @@ module TavernaPlayer
 
     def cancel(run)
       status_message "Cancelled"
+      download_log(run)
       run.delete
       0
     end

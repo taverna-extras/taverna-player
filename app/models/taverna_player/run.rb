@@ -1,7 +1,7 @@
 module TavernaPlayer
   class Run < ActiveRecord::Base
     attr_accessible :create_time, :embedded, :finish_time, :inputs_attributes,
-      :proxy_interactions, :proxy_notifications, :results, :run_id,
+      :log, :proxy_interactions, :proxy_notifications, :results, :run_id,
       :start_time, :status_message, :workflow_id
 
     has_many :inputs, :class_name => TavernaPlayer::RunPort::Input, :dependent => :destroy
@@ -18,6 +18,11 @@ module TavernaPlayer
 
     validates :workflow_id, :presence => true
     validates :state, :inclusion => { :in => STATES }
+
+    has_attached_file :log,
+      :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
+      :url => "/system/:class/:attachment/:id/:filename",
+      :default_url => ""
 
     has_attached_file :results,
       :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
