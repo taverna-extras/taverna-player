@@ -14,10 +14,10 @@ module TavernaPlayer
     # use the stop flag instead: Race conditions. If we used a state for this
     # it could be overwritten by the delayed job as it moves the run between
     # states, thus losing the cancel request from the user.
-    STATES = [:pending, :initialized, :running, :finished, :deleted]
+    STATES = ["pending", "initialized", "running", "finished", "deleted"]
 
     validates :workflow_id, :presence => true
-    validates :state, :inclusion => { :in => STATES }
+    validates :saved_state, :inclusion => { :in => STATES }
 
     has_attached_file :log,
       :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
@@ -41,12 +41,12 @@ module TavernaPlayer
     # :cancelled state.
     def state
       return :cancelled if self[:stop]
-      self[:state].to_sym
+      self[:saved_state].to_sym
     end
 
     # Save state as a downcased string.
     def state=(state)
-      self[:state] = state.to_s.downcase
+      self[:saved_state] = state.to_s.downcase
     end
 
     def running?

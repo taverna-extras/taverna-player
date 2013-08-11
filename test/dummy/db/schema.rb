@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130811204449) do
+ActiveRecord::Schema.define(:version => 20130811212709) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(:version => 20130811204449) do
 
   create_table "taverna_player_runs", :force => true do |t|
     t.string   "run_id"
-    t.string   "state",                :default => "pending", :null => false
+    t.string   "saved_state",          :default => "pending", :null => false
     t.datetime "create_time"
     t.datetime "start_time"
     t.datetime "finish_time"
