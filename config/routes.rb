@@ -1,9 +1,11 @@
 TavernaPlayer::Engine.routes.draw do
   resources :runs, :except => [:edit, :update] do
-    put "cancel", :action => "cancel", :on => :member
-    get "output/:port(/*path)", :action => "output", :on => :member
-    get "proxy/:name", :action => "read_interaction", :on => :member
-    put "proxy/:name", :action => "save_interaction", :on => :member
-    post "proxy", :action => "notification", :on => :member
+    member do
+      put "cancel", :action => "cancel"
+      get "output/:port(/*path)", :action => "output"
+      get "proxy/:name", :action => "read_interaction"
+      put "proxy/:name", :action => "save_interaction"
+      post "proxy", :action => "notification"
+    end
   end
 end
