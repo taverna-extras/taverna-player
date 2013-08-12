@@ -38,6 +38,7 @@ module TavernaPlayer
           end
 
           status_message "Starting run"
+          run.name = @run.name
           run.start
           @run.state = run.status
           @run.start_time = run.start_time

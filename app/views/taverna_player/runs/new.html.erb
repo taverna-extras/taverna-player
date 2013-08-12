@@ -6,6 +6,11 @@
   <%= f.hidden_field :workflow_id, :value => @workflow.id %>
   <%= f.hidden_field :embedded %>
 
+  <div>
+    <%= f.label :name, "Run name:" %>
+    <%= f.text_field :name %>
+  </div>
+
   <% @inputs.each do |input| %>
     <div>Input: <%= input[:name] %></div>
 

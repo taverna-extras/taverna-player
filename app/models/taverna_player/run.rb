@@ -1,8 +1,8 @@
 module TavernaPlayer
   class Run < ActiveRecord::Base
     attr_accessible :create_time, :embedded, :finish_time, :inputs_attributes,
-      :log, :proxy_interactions, :proxy_notifications, :results, :run_id,
-      :start_time, :status_message, :workflow_id
+      :log, :name, :proxy_interactions, :proxy_notifications, :results,
+      :run_id, :start_time, :status_message, :workflow_id
 
     has_many :inputs, :class_name => TavernaPlayer::RunPort::Input, :dependent => :destroy
     has_many :outputs, :class_name => TavernaPlayer::RunPort::Output, :dependent => :destroy
@@ -17,6 +17,7 @@ module TavernaPlayer
     STATES = ["pending", "initialized", "running", "finished", "deleted"]
 
     validates :workflow_id, :presence => true
+    validates :name, :presence => true
     validates :saved_state, :inclusion => { :in => STATES }
 
     has_attached_file :log,

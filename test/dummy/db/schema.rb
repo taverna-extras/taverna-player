@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130811212709) do
+ActiveRecord::Schema.define(:version => 20130812161152) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(:version => 20130811212709) do
     t.string   "log_content_type"
     t.integer  "log_file_size"
     t.datetime "log_updated_at"
+    t.string   "name",                 :default => "None"
   end
 
   add_index "taverna_player_runs", ["run_id"], :name => "index_taverna_player_runs_on_run_id"

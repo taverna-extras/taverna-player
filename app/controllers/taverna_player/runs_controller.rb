@@ -34,6 +34,7 @@ module TavernaPlayer
     def new
       @run = Run.new
       @workflow = TavernaPlayer.workflow_class.find(params[:workflow_id])
+      @run.name = @workflow.title unless @workflow.title.empty?
       @run.embedded = true if params[:embedded] == "true"
 
       model = TavernaPlayer::Parser.parse(@workflow.file)

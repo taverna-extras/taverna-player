@@ -3,6 +3,7 @@
 <table>
   <tr>
     <th>Run</th>
+    <th>Name</th>
     <th>Id on Taverna Server</th>
     <th>State</th>
     <th>Create time</th>
@@ -14,6 +15,7 @@
 <% @runs.each do |run| %>
   <tr>
     <td><%= run.id %></td>
+    <td><%= run.name %></td>
     <td><%= run.run_id %></td>
     <td><%= run.state %></td>
     <td><%= run.create_time %></td>

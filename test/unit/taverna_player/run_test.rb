@@ -30,5 +30,24 @@ module TavernaPlayer
       assert run.cancelled?, "Run was not cancelled"
       assert_equal :cancelled, run.state, "Run's state was not cancelled"
     end
+
+    test "should create run with a default name" do
+      run = Run.new
+      assert_not_nil run.name, "Default run name is not set."
+      assert_not_equal "", run.name, "Default run name is blank ('')."
+      assert_equal "None", run.name, "Default run name is not 'None'."
+    end
+
+    test "should not save run with nil name" do
+      run = Run.new
+      run.name = nil
+      refute run.save, "Saved the run with a nil name."
+    end
+
+    test "should not save run with an empty name" do
+      run = Run.new
+      run.name = ""
+      refute run.save, "Saved the run with an empty name."
+    end
   end
 end

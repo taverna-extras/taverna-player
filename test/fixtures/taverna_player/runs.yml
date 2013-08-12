@@ -3,6 +3,7 @@
 one:
   id: 1
   run_id: 9dcfbaf1-4c55-40f0-9853-baa7f8410879
+  name: Test run 1
   saved_state: pending
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:56:00
@@ -12,6 +13,7 @@ one:
 two:
   id: 2
   run_id: 13246c77-ffa3-449f-9b18-0f085717f8eb
+  name: Test run 2
   saved_state: running
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:55
@@ -21,6 +23,7 @@ two:
 three:
   id: 3
   run_id: f8250afc-09c1-4129-ab28-e889a284594f
+  name: Test run 3
   saved_state: finished
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
@@ -31,6 +34,7 @@ three:
 four:
   id: 4
   run_id: f8250afc-09c1-4129-ab28-e889a284594f
+  name: Test run 4
   saved_state: running
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
