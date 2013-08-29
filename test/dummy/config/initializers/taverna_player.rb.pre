@@ -1,8 +1,0 @@
-# This should be set to the name of the workflow model class in the main app.
-TavernaPlayer.workflow_class = "Workflow"
-
-# Taverna Server configuration information. The poll interval is in seconds.
-TavernaPlayer.server_address = "http://localhost:8080/taverna"
-TavernaPlayer.server_username = "taverna"
-TavernaPlayer.server_password = "taverna"
-TavernaPlayer.server_poll_interval = 5

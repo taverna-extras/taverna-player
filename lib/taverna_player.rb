@@ -12,18 +12,29 @@ require "taverna_player/parser"
 require "taverna_player/worker"
 
 module TavernaPlayer
-  mattr_accessor :server_address, :server_password, :server_poll_interval,
-    :server_username, :workflow_class
+  # Configuration without defaults
+  mattr_accessor :server_address, :server_password, :server_username
 
-  class << self
-    def workflow_class
-      if @@workflow_class.is_a?(String)
-        begin
-          Object.const_get(@@workflow_class)
-        rescue NameError
-          @@workflow_class.constantize
-        end
+  # This should be set to the name of the workflow model class in the main app.
+  mattr_accessor :workflow_class
+  @@workflow_class = "Workflow"
+
+  # Taverna server polling interval (in seconds)
+  mattr_accessor :server_poll_interval
+  @@server_poll_interval = 5
+
+  def self.setup
+    yield self
+  end
+
+  def self.workflow_class
+    if @@workflow_class.is_a?(String)
+      begin
+        Object.const_get(@@workflow_class)
+      rescue NameError
+        @@workflow_class.constantize
       end
     end
   end
+
 end
