@@ -8,9 +8,21 @@
 </head>
 <body>
 
-	DUMMY PORTAL
+	<p>
+		DUMMY PORTAL HEADER
+
+		<br />
+
+		<%= link_to "Home", main_app.root_path %> |
+		<%= link_to "Workflows", main_app.workflows_path %> |
+		<%= link_to "Runs", taverna_player.runs_path %>
+	</p>
 
 	<%= yield %>
+
+	<p>
+		DUMMY PORTAL FOOTER
+	</p>
 
 </body>
 </html>

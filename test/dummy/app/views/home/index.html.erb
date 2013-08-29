@@ -1,12 +1,6 @@
 <h1>Home#index</h1>
 
-<h2>Workflows</h2>
-<%= link_to "Workflows", workflows_path -%>
-
 <h2>An embedded workflow</h2>
 <div>
   <iframe src="http://localhost:3000/runs/new?workflow_id=2&embedded=true" width="100%" height="500px"></iframe>
 </div>
-
-<h2>More runs</h2>
-<%= link_to "Runs", taverna_player.runs_path -%>
