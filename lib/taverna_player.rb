@@ -23,6 +23,10 @@ module TavernaPlayer
   mattr_accessor :server_poll_interval
   @@server_poll_interval = 5
 
+  # Post run callback
+  mattr_accessor :post_run_callback
+  @@post_run_callback = nil
+
   def self.setup
     yield self
   end

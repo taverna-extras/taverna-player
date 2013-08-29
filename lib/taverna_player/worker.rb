@@ -79,12 +79,26 @@ module TavernaPlayer
           @run.save
 
           run.delete
+
+          unless TavernaPlayer.post_run_callback.nil?
+            status_message "Running post-run tasks"
+            run_callback(TavernaPlayer.post_run_callback, @run)
+          end
+
           status_message "Finished"
         end
       end
     end
 
     private
+
+    def run_callback(callback, *params)
+      if callback.is_a? Proc
+        callback.call(*params)
+      else
+        method(callback).call(*params)
+      end
+    end
 
     def download_log(run)
       Dir.mktmpdir(run.id, Rails.root.join("tmp")) do |tmp_dir|
