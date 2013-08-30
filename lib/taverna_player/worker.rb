@@ -7,6 +7,11 @@ module TavernaPlayer
     end
 
     def perform
+      unless TavernaPlayer.pre_run_callback.nil?
+        status_message "Running pre-run tasks"
+        run_callback(TavernaPlayer.pre_run_callback, @run)
+      end
+
       status_message "Connecting to Taverna Server"
 
       server_uri = URI.parse(TavernaPlayer.server_address)

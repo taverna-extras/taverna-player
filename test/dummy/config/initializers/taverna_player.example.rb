@@ -19,6 +19,13 @@ TavernaPlayer.setup do |config|
   # file as usual (if they are not pulled in by some other code).
   #require "callbacks" # See lib/callbacks.rb for these examples.
 
+  # The pre-run callback is called before the run has started (before Taverna
+  # Server is contacted, in fact).
+  # It takes the run model object as its parameter.
+  #config.pre_run_callback = Proc.new { |run| puts "Starting: #{run.name}" }
+  #config.pre_run_callback = "player_pre_run_callback"
+  #config.pre_run_callback = :player_pre_run_callback
+
   # The post-run callback is called after the run has completed normally.
   # It takes the run model object as its parameter.
   #config.post_run_callback = Proc.new { |run| puts "Finished: #{run.name}" }
@@ -33,6 +40,10 @@ TavernaPlayer.setup do |config|
 end
 
 # Example callbacks defined in the initializer.
+
+#def player_pre_run_callback(run)
+#  puts "Starting: #{run.name}"
+#end
 
 #def player_post_run_callback(run)
 #  puts "Finished: #{run.name}"
