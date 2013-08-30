@@ -150,9 +150,16 @@ module TavernaPlayer
     end
 
     def cancel(run)
-      status_message "Cancelled"
+      status_message "Cancelling"
       download_log(run)
       run.delete
+
+      unless TavernaPlayer.run_cancelled_callback.nil?
+        status_message "Running post-cancel tasks"
+        run_callback(TavernaPlayer.run_cancelled_callback, @run)
+      end
+
+      status_message "Cancelled"
       0
     end
 

@@ -24,10 +24,20 @@ TavernaPlayer.setup do |config|
   #config.post_run_callback = Proc.new { |run| puts "Finished: #{run.name}" }
   #config.post_run_callback = "player_post_run_callback"
   #config.post_run_callback = :player_post_run_callback
+
+  # The run-cancelled callback is called if the run is cancelled by the user.
+  # It takes the run model object as its parameter.
+  #config.run_cancelled_callback = Proc.new { |run| puts "Cancelled: #{run.name}" }
+  #config.run_cancelled_callback = "player_run_cancelled_callback"
+  #config.run_cancelled_callback = :player_run_cancelled_callback
 end
 
 # Example callbacks defined in the initializer.
 
 #def player_post_run_callback(run)
 #  puts "Finished: #{run.name}"
+#end
+
+#def player_run_cancelled_callback(run)
+#  puts "Cancelled: #{run.name}"
 #end
