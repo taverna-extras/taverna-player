@@ -33,11 +33,11 @@ module TavernaPlayer
     # GET /runs/new.json
     def new
       @run = Run.new
-      @workflow = TavernaPlayer.workflow_class.find(params[:workflow_id])
-      @run.name = @workflow.title unless @workflow.title.empty?
+      @workflow = TavernaPlayer.workflow_proxy.class_name.find(params[:workflow_id])
+      @run.name = TavernaPlayer.workflow_proxy.title(@workflow)
       @run.embedded = true if params[:embedded] == "true"
 
-      model = TavernaPlayer::Parser.parse(@workflow.file)
+      model = TavernaPlayer::Parser.parse(TavernaPlayer.workflow_proxy.file(@workflow))
       @inputs = model.inputs
       @inputs.each do |i|
         i[:model] = RunPort::Input.new(:name => i[:name], :value => i[:example])

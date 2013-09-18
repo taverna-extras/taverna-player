@@ -1,8 +1,18 @@
 # Taverna Player configuration
 
 TavernaPlayer.setup do |config|
-  # This should be set to the name of the workflow model class in the main app.
-  #config.workflow_class = "Workflow"
+  # This should be set to the name of the workflow model class in the main
+  # application and the listed methods should also be mapped if necessary.
+  config.workflow_model_proxy("Workflow")
+  #config.workflow_model_proxy("Workflow") do |proxy|
+    # This is the method that returns the name of the workflow file. Your
+    # model MUST provide this otherwise a workflow cannot be run.
+    #proxy.file_method_name = :file
+
+    # This is the method that returns the title of the workflow. This can be
+    # set to nil if your model does not have this field.
+    #proxy.title_method_name = :title
+  #end
 
   # Taverna Server configuration information. The poll interval is in seconds.
   config.server_address = "http://localhost:8080/taverna"
