@@ -8,4 +8,6 @@ TavernaPlayer::Engine.routes.draw do
       post "proxy", :action => "notification"
     end
   end
+
+  resources :service_credentials
 end

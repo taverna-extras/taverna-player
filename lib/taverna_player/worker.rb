@@ -42,6 +42,11 @@ module TavernaPlayer
             end
           end
 
+          # Just add in all service credentials right now
+          TavernaPlayer::ServiceCredential.all.each do |cred|
+            run.add_password_credential(cred.uri, cred.login, cred.password)
+          end
+
           status_message "Starting run"
           run.name = @run.name
           run.start

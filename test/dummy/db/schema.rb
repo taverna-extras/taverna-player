@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130812161152) do
+ActiveRecord::Schema.define(:version => 20130918155525) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -82,6 +82,18 @@ ActiveRecord::Schema.define(:version => 20130812161152) do
   end
 
   add_index "taverna_player_runs", ["run_id"], :name => "index_taverna_player_runs_on_run_id"
+
+  create_table "taverna_player_service_credentials", :force => true do |t|
+    t.string   "uri",         :null => false
+    t.string   "name"
+    t.text     "description"
+    t.string   "login"
+    t.string   "password"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "taverna_player_service_credentials", ["uri"], :name => "index_taverna_player_service_credentials_on_uri"
 
   create_table "workflows", :force => true do |t|
     t.string   "title"
