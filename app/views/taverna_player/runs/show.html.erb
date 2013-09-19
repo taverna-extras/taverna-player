@@ -14,3 +14,8 @@
   { :run => @run, :interaction => @interaction } %>
 
 <%= render :partial => "outputs", :locals => { :run => @run } %>
+
+<% unless @run.finished? || @run.cancelled? %>
+  <%= render :partial => "poll", :locals =>
+    { :run => @run, :interaction => !@interaction.nil? } %>
+<% end %>

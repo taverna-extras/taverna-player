@@ -7,6 +7,7 @@ module TavernaPlayer
       @run2 = taverna_player_runs(:two)
       @run3 = taverna_player_runs(:three)
       @run4 = taverna_player_runs(:four)
+      @run5 = taverna_player_runs(:five)
       @routes = TavernaPlayer::Engine.routes
     end
 
@@ -89,10 +90,19 @@ module TavernaPlayer
       assert_template "application", "Did not render with the correct layout"
     end
 
-    test "should show run with an interaction" do
+    test "should show run with an undisplayed interaction" do
       get :show, :id => @run4, :use_route => :taverna_player
       assert_response :success, "Response was not success"
       assert assigns(:interaction), "Should have an interaction for this run"
+      assert assigns(:new_interaction), "Should have new interaction flag"
+      assert_template "application", "Did not render with the correct layout"
+    end
+
+    test "should show run with a displayed interaction" do
+      get :show, :id => @run5, :use_route => :taverna_player
+      assert_response :success, "Response was not success"
+      assert assigns(:interaction), "Should have an interaction for this run"
+      refute assigns(:new_interaction), "Should not have new interaction flag"
       assert_template "application", "Did not render with the correct layout"
     end
 
@@ -100,6 +110,7 @@ module TavernaPlayer
       get :show, :id => @run3, :use_route => :taverna_player
       assert_response :success, "Response was not success"
       refute assigns(:interaction), "Should not show replied interaction"
+      refute assigns(:new_interaction), "Should not have new interaction flag"
       assert_template "taverna_player/embedded",
         "Did not render with the correct layout"
     end

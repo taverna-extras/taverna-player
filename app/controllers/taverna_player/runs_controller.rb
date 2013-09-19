@@ -21,10 +21,18 @@ module TavernaPlayer
     def show
       if @run.running?
         @interaction = Interaction.find_by_run_id_and_replied(@run.id, false)
+        unless @interaction.nil?
+          unless @interaction.displayed
+            @new_interaction = true
+            @interaction.displayed = true
+            @interaction.save
+          end
+        end
       end
 
       respond_to do |format|
         format.html # show.html.erb
+        format.js # show.js.erb
         format.json { render :json => @run }
       end
     end

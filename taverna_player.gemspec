@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "3.2.14"
-  #s.add_dependency "jquery-rails"
+  s.add_dependency "jquery-rails", "~> 3.0.4"
   s.add_dependency "paperclip", "~> 3.4.1"
   s.add_dependency "taverna-t2flow", "~> 0.4.5"
   #s.add_dependency "t2-server", "~> 1.0.0"

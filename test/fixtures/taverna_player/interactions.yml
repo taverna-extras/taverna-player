@@ -3,9 +3,17 @@
 one:
   uri: http://example.com/run4/path/to/interaction.html
   replied: false
+  displayed: false
   run_id: 4
 
 two:
   uri: http://example.com/run2/path/to/interaction.html
   replied: true
+  displayed: true
   run_id: 3
+
+three:
+  uri: http://example.com/run3/path/to/interaction.html
+  replied: false
+  displayed: true
+  run_id: 5
