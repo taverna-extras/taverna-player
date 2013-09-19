@@ -79,13 +79,11 @@ module TavernaPlayer
           end
 
           status_message "Gathering run outputs and log"
-          @run.state = run.status
-          @run.finish_time = run.finish_time
-
           download_outputs(run)
           download_log(run)
 
           @run.outputs = process_outputs(run)
+          @run.finish_time = run.finish_time
           @run.save
 
           run.delete
@@ -95,6 +93,7 @@ module TavernaPlayer
             run_callback(TavernaPlayer.post_run_callback, @run)
           end
 
+          @run.state = :finished
           status_message "Finished"
         end
       end
