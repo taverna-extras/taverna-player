@@ -2,96 +2,15 @@
 
 <h1>Run</h1>
 
-<p>
-  <b>Run:</b>
-  <%= @run.run_id %>
-</p>
-
-<p>
-  <b>Name:</b>
-  <%= @run.name %>
-</p>
-
-<p>
-  <b>State:</b>
-  <%= @run.state %>
-</p>
-
-<p>
-  <b>Status message:</b>
-  <%= @run.status_message %>
-</p>
-
-<p>
-  <b>Create time:</b>
-  <%= @run.create_time %>
-</p>
-
-<p>
-  <b>Start time:</b>
-  <%= @run.start_time %>
-</p>
-
-<p>
-  <b>Finish time:</b>
-  <%= @run.finish_time %>
-</p>
-
-<p>
-  <b>Embedded:</b>
-  <%= @run.embedded %>
-</p>
+<%= render :partial => "info", :locals => { :run => @run } %>
 
 <%= render :partial => "cancel_or_delete_button", :locals => { :run => @run } %>
 
 <% if @run.inputs.size > 0 %>
-  <h2>Inputs</h2>
-
-  <% @run.inputs.each do |input| %>
-    <p>
-      <b>Name:</b>
-      <%= input.name %>
-    </p>
-
-    <p>
-      <b>Value:</b>
-      <%= input.value %>
-    </p>
-
-    <p>
-      <b>File:</b>
-      <%= link_to input.file_file_name, input.file.url %>
-    </p>
-  <% end%>
+  <%= render :partial => "inputs", :locals => { :run => @run } %>
 <% end %>
 
-<% unless @interaction.nil? %>
-  <%= content_tag(:iframe, "", {:width => "100%", :height => "500px",
-   	:src => run_path(@run) + "/proxy/#{@interaction.uri}"}) -%>
-<% end %>
+<%= render :partial => "interaction", :locals =>
+  { :run => @run, :interaction => @interaction } %>
 
-<% if @run.outputs.size > 0 %>
-  <h2>Outputs</h2>
-
-  <%= link_to "Download All", @run.results.url -%>
-
-  <% @run.outputs.each do |output| %>
-    <p>
-      <b>Name:</b>
-      <%= output.name %>
-    </p>
-
-    <p>
-      <b>Value:</b>
-      <%= show_output(@run, output) %>
-    </p>
-
-  <% end%>
-<% end %>
-
-<% unless @run.log.blank? %>
-  <p>
-    <b>Log:</b>
-    <%= link_to "Taverna Server log", @run.log.url -%>
-  </p>
-<% end %>
+<%= render :partial => "outputs", :locals => { :run => @run } %>
