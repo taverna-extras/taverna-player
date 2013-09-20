@@ -62,16 +62,18 @@ module TavernaPlayer
         "Did not route correctly")
     end
 
-    test "should get index" do
+    test "should get index and be overridden" do
       get :index, :use_route => :taverna_player
       assert_response :success, "Response was not success"
       assert_not_nil assigns(:runs), "Did not assign a valid runs instance"
+      assert_not_nil assigns(:override)
       assert_template "application", "Did not render with the correct layout"
     end
 
-    test "should get new" do
+    test "should get new and not be overridden" do
       get :new, :workflow_id => 1, :use_route => :taverna_player
       assert_response :success, "Response was not success"
+      refute assigns(:override)
       assert_template "application", "Did not render with the correct layout"
     end
 
