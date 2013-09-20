@@ -1,3 +1,4 @@
+require "require_all"
 require "coderay"
 require "delayed_job_active_record"
 require "paperclip"
@@ -7,10 +8,8 @@ require "taverna-t2flow"
 require "tmpdir"
 require "zip/zip"
 
-require "taverna_player/engine"
-require "taverna_player/parser"
-require "taverna_player/worker"
-require "taverna_player/model_proxy"
+# Grab everything in the taverna_player directory using the require_all gem.
+require_rel "taverna_player"
 
 module TavernaPlayer
   # Configuration without defaults
