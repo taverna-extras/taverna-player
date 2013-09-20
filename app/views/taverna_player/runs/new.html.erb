@@ -37,4 +37,6 @@
 
   <div><%= f.submit 'Start Run' %></div>
 <% end %>
-<%= link_to 'Cancel', :back %>
+<% unless @run.embedded? %>
+  <%= link_to 'Cancel', :back %>
+<% end %>
