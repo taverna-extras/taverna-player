@@ -20,10 +20,11 @@ module TavernaPlayer
           :action => "show", :id => "1" }, {}, {}, "Did not route correctly"
     end
 
-    test "should get index" do
+    test "should get index and be overridden" do
       get :index
       assert_response :success
       assert_not_nil assigns(:service_credentials)
+      assert_not_nil assigns(:override)
       assert_template "application", "Did not render with the correct layout"
     end
 
@@ -48,9 +49,10 @@ module TavernaPlayer
       assert_redirected_to service_credential_path(assigns(:service_credential))
     end
 
-    test "should show service_credential" do
+    test "should show service_credential and not be overridden" do
       get :show, :id => @sc1
       assert_response :success
+      refute assigns(:override)
       assert_template "application", "Did not render with the correct layout"
     end
 
