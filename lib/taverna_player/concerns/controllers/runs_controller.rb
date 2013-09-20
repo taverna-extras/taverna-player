@@ -174,7 +174,12 @@ module TavernaPlayer
         def cancel
           @run.cancel unless @run.finished?
 
-          redirect_to :back
+          if @run.embedded?
+            redirect_to new_run_path(:workflow_id => @run.workflow_id,
+              :embedded => true)
+          else
+            redirect_to :back
+          end
         end
 
         # GET /runs/1/output/*
