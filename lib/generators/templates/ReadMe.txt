@@ -21,4 +21,12 @@ There is also some manual setup to do, if you haven't already done it:
        <p class="notice"><%= notice %></p>
        <p class="alert"><%= alert %></p>
 
+  4. If you want to use pre- and post-run callbacks you can setup some basic
+     stubs with:
+
+       rails generate taverna_player:callbacks
+
+     Don't forget to then require and register them in the Taverna Player
+     initializer.
+
 ==============================================================================
