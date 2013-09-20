@@ -21,7 +21,17 @@ There is also some manual setup to do, if you haven't already done it:
        <p class="notice"><%= notice %></p>
        <p class="alert"><%= alert %></p>
 
-  4. If you want to use pre- and post-run callbacks you can setup some basic
+  4. If you need to override the Taverna Player controllers, to implement user
+     authorization for example, you can copy some customizable stubs with:
+
+       rails generate taverna_player:controllers
+
+     The stubs are copied to the app/controllers/taverna_player directory so
+     that they take precedence over the default ones. You can delete any that
+     you do not need to customize but there are no penalties for leaving them
+     there.
+
+  5. If you want to use pre- and post-run callbacks you can setup some basic
      stubs with:
 
        rails generate taverna_player:callbacks
