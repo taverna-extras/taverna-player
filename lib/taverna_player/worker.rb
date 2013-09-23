@@ -59,10 +59,10 @@ module TavernaPlayer
             sleep(TavernaPlayer.server_poll_interval)
             waiting = false
 
-            # Need to poll for updates as the run instance may have been
-            # changed in the Rails app.
-            @run.reload
-            return cancel(run) if @run.cancelled?
+            if cancelled?
+              cancel(run)
+              return
+            end
 
             run.notifications(:requests).each do |note|
               uri = T2Server::Util.get_path_leaf_from_uri(note.uri)
@@ -162,6 +162,13 @@ module TavernaPlayer
       @run.save!
     end
 
+    def cancelled?
+      # Need to poll for updates as the run instance may have been
+      # changed in the Rails app.
+      @run.reload
+      @run.cancelled?
+    end
+
     def cancel(run)
       status_message "Cancelling"
       download_log(run)
@@ -173,7 +180,6 @@ module TavernaPlayer
       end
 
       status_message "Cancelled"
-      0
     end
 
   end
