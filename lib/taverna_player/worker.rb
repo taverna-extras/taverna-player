@@ -112,9 +112,13 @@ module TavernaPlayer
     def download_log(run)
       Dir.mktmpdir(run.id, Rails.root.join("tmp")) do |tmp_dir|
         tmp_file_name = File.join(tmp_dir, "log.txt")
-        run.log(tmp_file_name)
-        @run.log = File.new(tmp_file_name)
-        @run.save
+        begin
+          run.log(tmp_file_name)
+          @run.log = File.new(tmp_file_name)
+          @run.save
+        rescue T2Server::AttributeNotFoundError
+          # We don't care if there's no log but we do want to catch the error!
+        end
       end
     end
 
