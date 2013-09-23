@@ -151,6 +151,8 @@ module TavernaPlayer
             if @run.save
               worker = TavernaPlayer::Worker.new(@run)
               Delayed::Job.enqueue worker, :queue => "player"
+              @run.status_message = "Queued"
+              @run.save
 
               format.html { redirect_to @run, :notice => 'Run was successfully created.' }
             else
