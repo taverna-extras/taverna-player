@@ -118,13 +118,13 @@ module TavernaPlayer
           end
 
           respond_to do |format|
-            format.html # show.html.erb
-            format.js # show.js.erb
+            # Render show.{html|js}.erb unless the run is embedded.
+            format.html { render "taverna_player/runs/embedded/show" if @run.embedded }
+            format.js { render "taverna_player/runs/embedded/show" if @run.embedded }
           end
         end
 
         # GET /runs/new
-        # GET /runs/new.json
         def new
           @run = Run.new
           @workflow = TavernaPlayer.workflow_proxy.class_name.find(params[:workflow_id])
@@ -139,7 +139,8 @@ module TavernaPlayer
           end
 
           respond_to do |format|
-            format.html # new.html.erb
+            # Render new.html.erb unless the run is embedded.
+            format.html { render "taverna_player/runs/embedded/new" if @run.embedded }
           end
         end
 
