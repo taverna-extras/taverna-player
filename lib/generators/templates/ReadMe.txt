@@ -21,9 +21,9 @@ There is also some manual setup to do, if you haven't already done it:
        <p class="notice"><%= notice %></p>
        <p class="alert"><%= alert %></p>
 
-  4. Taverna Player comes with some very simple, unstyled views. If you wish
-     to override these with your own customized views you can copy them into
-     you application with:
+  4. Taverna Player comes with some very simple, unstyled views and layouts.
+     If you wish to override these with your own customized views you can copy
+     them into your application with:
 
        rails generate taverna_player:views
 
