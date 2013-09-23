@@ -2,7 +2,7 @@
 
 <%= render :partial => "info", :locals => { :run => @run } %>
 
-<%= render :partial => "cancel_or_delete_button", :locals => { :run => @run } %>
+<%= render :partial => "button", :locals => { :run => @run } %>
 
 <% if @run.inputs.size > 0 %>
   <%= render :partial => "inputs", :locals => { :run => @run } %>
