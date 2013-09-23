@@ -176,7 +176,7 @@ module TavernaPlayer
           @run.cancel unless @run.finished?
 
           if @run.embedded?
-            redirect_to view_context.new_embedded_run_path(@run.workflow_id)
+            redirect_to view_context.new_embedded_run_path(@run)
           else
             redirect_to :back
           end
