@@ -13,6 +13,7 @@ module TavernaPlayer
           layout :choose_layout
 
           private
+
           def find_runs
             @runs = Run.all
           end
@@ -96,7 +97,6 @@ module TavernaPlayer
         end # included
 
         # GET /runs
-        # GET /runs.json
         def index
           respond_to do |format|
             format.html # index.html.erb
@@ -104,15 +104,14 @@ module TavernaPlayer
         end
 
         # GET /runs/1
-        # GET /runs/1.json
         def show
           if @run.running?
             @interaction = Interaction.find_by_run_id_and_replied(@run.id, false)
             unless @interaction.nil?
               unless @interaction.displayed
                 @new_interaction = true
-              @interaction.displayed = true
-              @interaction.save
+                @interaction.displayed = true
+                @interaction.save
               end
             end
           end
@@ -145,7 +144,6 @@ module TavernaPlayer
         end
 
         # POST /runs
-        # POST /runs.json
         def create
           @run = Run.new(params[:run])
 
