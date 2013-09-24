@@ -3,7 +3,7 @@ module TavernaPlayer
 
     def initialize(run)
       @run = run
-      @workflow = Workflow.find(@run.workflow_id)
+      @workflow = TavernaPlayer.workflow_proxy.class_name.find(@run.workflow_id)
     end
 
     def perform
@@ -21,7 +21,7 @@ module TavernaPlayer
       T2Server::Server.new(server_uri) do |server|
         status_message "Creating new workflow run"
 
-        wkf = File.read(@workflow.file)
+        wkf = File.read(TavernaPlayer.workflow_proxy.file(@workflow))
 
         server.create_run(wkf, credentials) do |run|
           @run.run_id = run.id
