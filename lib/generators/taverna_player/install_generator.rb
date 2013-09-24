@@ -7,7 +7,8 @@ module TavernaPlayer
       desc "Creates a Taverna Player initializer"
 
       def copy_initializer
-        copy_file "initializer.rb", "config/initializers/taverna_player.rb"
+        copy_file "initializer.rb",
+          "config/initializers/taverna_player.rb.example"
       end
 
       def show_readme
