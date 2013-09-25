@@ -64,15 +64,15 @@ module TavernaPlayer
     end
 
     def deep_parse(types, output, zip, index = [])
-      content = "<ul>"
+      content = "<ol>"
       i = 0
       types.each do |type|
         if type.is_a?(Array)
-          content += "<li>List #{i}" +
+          content += "<li><br />" +
             deep_parse(type, output, zip, index + [i]) + "</li>"
         else
           path = (index + [i]).join("/")
-          content += "<li>"
+          content += "<li><br /><p>"
           case type
           when /x-error/
             content += link_to("Error", run_path(output.run_id) +
@@ -88,12 +88,12 @@ module TavernaPlayer
            content += link_to(index, run_path(output.run_id) +
             "/output/#{output.name}/#{path}")
           end
-          content += "</li>"
+          content += "</p></li>"
         end
         i += 1
       end
 
-      raw(content += "</ul>")
+      raw(content += "</ol>")
     end
 
   end
