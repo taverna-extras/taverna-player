@@ -61,7 +61,7 @@ There is also some manual setup to do, if you haven't already done it:
 
        rails generate taverna_player:callbacks
 
-     Don't forget to then require and register them in the Taverna Player
-     initializer.
+     They will be saved to "lib/taverna_player_callbacks.rb". Don't forget to
+     then require and register them in the Taverna Player initializer.
 
 ==============================================================================

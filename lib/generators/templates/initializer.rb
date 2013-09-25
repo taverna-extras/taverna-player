@@ -26,8 +26,11 @@ TavernaPlayer.setup do |config|
   # Be careful! If a callback fails then the worker running the job will fail!
   #
   # Add callbacks in this initializer or define them elsewhere and require the
-  # file as usual (if they are not pulled in by some other code).
-  #require "callbacks" # See lib/callbacks.rb for these examples.
+  # file as usual (if they are not pulled in by some other code). You can
+  # create example stub callbacks using:
+  #   "rails generate taverna_player:callbacks"
+  # which will put them in "lib/taverna_player_callbacks.rb".
+  #require "taverna_player_callbacks"
 
   # The pre-run callback is called before the run has started (before Taverna
   # Server is contacted, in fact).
