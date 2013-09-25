@@ -72,7 +72,7 @@ module TavernaPlayer
             deep_parse(type, output, zip, index + [i]) + "</li>"
         else
           path = (index + [i]).join("/")
-          content += "<li><br /><p>"
+          content += "<li>(#{type})<p>"
           case type
           when /x-error/
             content += link_to("Error", run_path(output.run_id) +

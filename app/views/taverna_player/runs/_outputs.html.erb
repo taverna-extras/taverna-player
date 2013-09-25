@@ -13,6 +13,7 @@
 
       <p>
         <b>Value:</b>
+        <%= "(#{output.metadata[:type]})" if output.depth == 0 %>
         <%= show_output(run, output) %>
       </p>
 
