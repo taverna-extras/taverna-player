@@ -29,5 +29,5 @@
 %>
 <% unless @run.finished? || @run.cancelled? %>
   <%= render :partial => "poll",
-    :locals => { :run => @run, :interaction => !@interaction.nil? } %>
+    :locals => { :reload => run_path(@run) } %>
 <% end %>
