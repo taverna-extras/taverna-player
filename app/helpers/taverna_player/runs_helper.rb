@@ -4,53 +4,23 @@ module TavernaPlayer
     def show_output(run, output)
       if output.depth == 0
         if output.value.blank?
-          full_path = run_path(output.run_id) + "/output/#{output.name}"
-
-          case output.metadata[:type]
-          when /x-error/
-            link_to("Error", full_path)
-          when /image/
-            image_tag(full_path)
-          else
-            link_to(full_path)
-          end
+          content = run_path(output.run_id) + "/output/#{output.name}"
         else
           if output.metadata[:size] < 255
-            format_text_output(output.value, output.metadata[:type])
+            content = output.value
           else
             Zip::ZipFile.open(run.results.path) do |zip|
-              format_text_output(zip.read(output.name), output.metadata[:type])
+              content = zip.read(output.name)
             end
           end
         end
+        TavernaPlayer.output_renderer.render(content, output.metadata[:type])
       else
         parse_port_list(run, output)
       end
     end
 
     private
-
-    def format_text_output(content, type)
-      type = type.gsub(/.+\/(.+)/) do
-        %w(html xml json).include?($1) ? $1 : "text"
-      end.to_sym
-
-      if type == :text
-        content = CodeRay.scan(content, type).div(:css => :class)
-        raw(auto_link(content, :html => { :target => '_blank' },
-          :sanitize => false))
-      else
-        content = format_xml(content) if type == :xml
-        raw(CodeRay.scan(content, type).div(:css => :class,
-          :line_numbers => :table))
-      end
-    end
-
-    def format_xml(xml)
-      out = String.new
-      REXML::Document.new(xml).write(out, 1)
-      out
-    end
 
     def parse_port_list(run, output)
       types = output.metadata[:type]
@@ -71,23 +41,17 @@ module TavernaPlayer
           content += "<li><br />" +
             deep_parse(type, output, zip, index + [i]) + "</li>"
         else
-          path = (index + [i]).join("/")
+          # Text outputs are inlined here by us. Other types are linked and
+          # inlined by the browser.
           content += "<li>(#{type})<p>"
-          case type
-          when /x-error/
-            content += link_to("Error", run_path(output.run_id) +
-              "/output/#{output.name}/#{path}")
-          when /text/
-            zip_path = (index + [i]).map { |j| j += 1 }.join("/")
-            content += format_text_output(
-              zip.read("#{output.name}/#{zip_path}"), type)
-          when /image/
-            content += image_tag(run_path(output.run_id) +
-              "/output/#{output.name}/#{path}")
+          if type.starts_with?("text")
+            path = (index + [i]).map { |j| j += 1 }.join("/")
+            data = zip.read("#{output.name}/#{path}")
           else
-           content += link_to(index, run_path(output.run_id) +
-            "/output/#{output.name}/#{path}")
+            path = (index + [i]).join("/")
+            data = run_path(output.run_id) + "/output/#{output.name}/#{path}"
           end
+          content += TavernaPlayer.output_renderer.render(data, type)
           content += "</p></li>"
         end
         i += 1

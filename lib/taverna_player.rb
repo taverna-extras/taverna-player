@@ -1,6 +1,7 @@
 require "require_all"
 require "coderay"
 require "delayed_job_active_record"
+require 'mime/types'
 require "paperclip"
 require "rails_autolink"
 require "t2-server"
@@ -21,6 +22,21 @@ module TavernaPlayer
   def self.workflow_model_proxy(workflow_class)
     @@workflow_proxy = ModelProxy.new(workflow_class, [:file, :title])
     yield @@workflow_proxy if block_given?
+  end
+
+  # Setup default output render callbacks.
+  mattr_reader :output_renderer
+  @@output_renderer = OutputRenderer.new
+  @@output_renderer.default(:cannot_inline)
+  @@output_renderer.add("text/plain", :format_text, true)
+  @@output_renderer.add("text/xml", :format_xml)
+  @@output_renderer.add("image/jpeg", :show_image)
+  @@output_renderer.add("image/png", :show_image)
+  @@output_renderer.add("image/gif", :show_image)
+  @@output_renderer.add("application/x-error", :workflow_error)
+
+  def self.output_renderers
+    yield @@output_renderer if block_given?
   end
 
   # Taverna server polling interval (in seconds)

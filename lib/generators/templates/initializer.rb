@@ -50,9 +50,47 @@ TavernaPlayer.setup do |config|
   #config.run_cancelled_callback = Proc.new { |run| puts "Cancelled: #{run.name}" }
   #config.run_cancelled_callback = "player_run_cancelled_callback"
   #config.run_cancelled_callback = :player_run_cancelled_callback
+
+  # Callbacks to be run to render various types of workflow output. These can
+  # be defined as Proc objects or as methods and referenced by name.
+  #
+  # Be careful! If a callback fails then users will see an Internal Server
+  # Error (HTTP status code 500) instead of their run outputs!
+  #
+  # Add callbacks in this initializer or define them elsewhere and require the
+  # file as usual (if they are not pulled in by some other code). You can
+  # create example stub callbacks using:
+  #   "rails generate taverna_player:renderers"
+  # which will put them in "lib/taverna_player_renderers.rb".
+  #require "taverna_player_renderers"
+
+  # Renderers for each type of output (referenced by MIME type) must then be
+  # registered. All the renderers shown below are supplied as defaults.
+  #config.output_renderers do |renderers|
+    # Set a default renderer for if there is a workflow type that browsers
+    # can't otherwise handle.
+    #renderers.default(:cannot_inline)
+
+    # You can set a renderer to also be a default for the whole media-type. In
+    # this case the below renderer is to be used for ALL text/* types that
+    # aren't otherwise registered.
+    #renderers.add("text/plain", :format_text, true)
+
+    # This renderer overrides the default text/* renderer for text/xml outputs.
+    #renderers.add("text/xml", :format_xml)
+
+    # Browsers can't show all image types.
+    #renderers.add("image/jpeg", :show_image)
+    #renderers.add("image/png", :show_image)
+    #renderers.add("image/gif", :show_image)
+
+    # This is the workflow error type and you should have a special renderer
+    # for it.
+    #renderers.add("application/x-error", :workflow_error)
+  #end
 end
 
-# Example callbacks defined in the initializer.
+# Example workflow run callbacks defined in the initializer.
 
 #def player_pre_run_callback(run)
 #  puts "Starting: #{run.name}"
