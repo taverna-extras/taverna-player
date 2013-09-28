@@ -64,4 +64,13 @@ There is also some manual setup to do, if you haven't already done it:
      They will be saved to "lib/taverna_player_callbacks.rb". Don't forget to
      then require and register them in the Taverna Player initializer.
 
+  7. You can add to, or change, the workflow run outputs render methods to
+     better suit your particular application. To copy the defaults that
+     Taverna Player ships with into your application for customization run:
+
+       rails generate taverna_player:renderers
+
+     They will be saved to "lib/taverna_player_renderers.rb". Don't forget to
+     then require and register them in the Taverna Player initializer.
+
 ==============================================================================
