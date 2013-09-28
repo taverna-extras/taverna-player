@@ -33,6 +33,7 @@ module TavernaPlayer
   @@output_renderer.add("image/jpeg", :show_image)
   @@output_renderer.add("image/png", :show_image)
   @@output_renderer.add("image/gif", :show_image)
+  @@output_renderer.add("image/bmp", :show_image)
   @@output_renderer.add("application/x-error", :workflow_error)
 
   def self.output_renderers

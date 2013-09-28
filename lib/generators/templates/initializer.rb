@@ -79,10 +79,11 @@ TavernaPlayer.setup do |config|
     # This renderer overrides the default text/* renderer for text/xml outputs.
     #renderers.add("text/xml", :format_xml)
 
-    # Browsers can't show all image types.
+    # Browsers can't show all image types so just register very common ones.
     #renderers.add("image/jpeg", :show_image)
     #renderers.add("image/png", :show_image)
     #renderers.add("image/gif", :show_image)
+    #renderers.add("image/bmp", :show_image)
 
     # This is the workflow error type and you should have a special renderer
     # for it.
