@@ -27,14 +27,14 @@ module TavernaPlayer
   # Setup default output render callbacks.
   mattr_reader :output_renderer
   @@output_renderer = OutputRenderer.new
-  @@output_renderer.default(:cannot_inline)
-  @@output_renderer.add("text/plain", :format_text, true)
-  @@output_renderer.add("text/xml", :format_xml)
-  @@output_renderer.add("image/jpeg", :show_image)
-  @@output_renderer.add("image/png", :show_image)
-  @@output_renderer.add("image/gif", :show_image)
-  @@output_renderer.add("image/bmp", :show_image)
-  @@output_renderer.add("application/x-error", :workflow_error)
+  @@output_renderer.default(:cannot_inline_tp_default)
+  @@output_renderer.add("text/plain", :format_text_tp_default, true)
+  @@output_renderer.add("text/xml", :format_xml_tp_default)
+  @@output_renderer.add("image/jpeg", :show_image_tp_default)
+  @@output_renderer.add("image/png", :show_image_tp_default)
+  @@output_renderer.add("image/gif", :show_image_tp_default)
+  @@output_renderer.add("image/bmp", :show_image_tp_default)
+  @@output_renderer.add("application/x-error", :workflow_error_tp_default)
 
   def self.output_renderers
     yield @@output_renderer if block_given?
