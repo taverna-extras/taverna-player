@@ -150,7 +150,8 @@ module TavernaPlayer
           respond_to do |format|
             if @run.save
               worker = TavernaPlayer::Worker.new(@run)
-              Delayed::Job.enqueue worker, :queue => "player"
+              job = Delayed::Job.enqueue worker, :queue => "player"
+              @run.delayed_job = job
               @run.status_message = "Queued"
               @run.save
 

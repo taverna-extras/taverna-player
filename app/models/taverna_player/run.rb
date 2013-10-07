@@ -1,12 +1,14 @@
 module TavernaPlayer
   class Run < ActiveRecord::Base
-    attr_accessible :create_time, :embedded, :finish_time, :inputs_attributes,
-      :log, :name, :proxy_interactions, :proxy_notifications, :results,
-      :run_id, :start_time, :status_message, :workflow_id
+    attr_accessible :create_time, :delayed_job_id, :embedded, :finish_time,
+      :inputs_attributes, :log, :name, :proxy_interactions,
+      :proxy_notifications, :results, :run_id, :start_time, :status_message,
+      :workflow_id
 
     has_many :inputs, :class_name => TavernaPlayer::RunPort::Input, :dependent => :destroy
     has_many :outputs, :class_name => TavernaPlayer::RunPort::Output, :dependent => :destroy
     has_many :interactions, :class_name => TavernaPlayer::Interaction, :dependent => :destroy
+    belongs_to :delayed_job, :class_name => Delayed::Job
 
     accepts_nested_attributes_for :inputs
 
@@ -30,11 +32,30 @@ module TavernaPlayer
       :url => "/system/:class/:attachment/:id/:filename",
       :default_url => ""
 
-    # Cancel this run by setting the stop flag. This is done to allow the
-    # delayed job that is monitoring the run to delete it gracefully.
+    # There are two courses of action here:
+    #
+    # * If the run is already running then cancel this run by setting the stop
+    #   flag. This is done to allow the delayed job that is monitoring the run
+    #   to delete it and clean up Taverna Server gracefully.
+    # * If the run is still in the queue, destroy the queue object. This is
+    #   checked in a transaction so that we don't get hit with a race
+    #   condition between checking the queued status of the run and actually
+    #   removing it from the queue.
+    #
+    # In both cases the stop flag is set to mark the run as cancelled
+    # internally.
+    #
     # See the note above about the (lack of a) :cancelled state.
     def cancel
       return if finished? || cancelled?
+
+      Delayed::Job.transaction do
+        if delayed_job.locked_by.nil?
+          delayed_job.destroy
+          update_attribute(:status_message, "Cancelled")
+        end
+      end
+
       update_attribute(:stop, true)
     end
 
