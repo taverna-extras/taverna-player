@@ -44,6 +44,10 @@ module TavernaPlayer
   mattr_accessor :server_poll_interval
   @@server_poll_interval = 5
 
+  # Taverna server retry interval (in seconds)
+  mattr_accessor :server_retry_interval
+  @@server_retry_interval = 10
+
   # Pre run callback
   mattr_accessor :pre_run_callback
   @@pre_run_callback = nil

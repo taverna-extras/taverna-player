@@ -49,7 +49,20 @@ module TavernaPlayer
 
           status_message "Starting run"
           run.name = @run.name
-          run.start
+
+          # Try and start the run bearing in mind that the server might be at
+          # the limit of runs that it can run at once.
+          while !run.start
+            status_message "Server busy - please wait; run will start soon"
+
+            if cancelled?
+              cancel(run)
+              return
+            end
+
+            sleep(TavernaPlayer.server_retry_interval)
+          end
+
           @run.state = run.status
           @run.start_time = run.start_time
           @run.save
