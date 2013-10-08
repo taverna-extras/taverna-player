@@ -19,11 +19,25 @@ module TavernaPlayer
         TavernaPlayer.server_password)
 
       T2Server::Server.new(server_uri) do |server|
-        status_message "Creating new workflow run"
-
         wkf = File.read(TavernaPlayer.workflow_proxy.file(@workflow))
 
-        run = server.create_run(wkf, credentials)
+        # Try and create the run bearing in mind that the server might be at
+        # the limit of runs that it can hold at once.
+        begin
+          run = server.create_run(wkf, credentials)
+        rescue T2Server::ServerAtCapacityError
+          status_message "Server full - please wait; run will start soon"
+
+          if cancelled?
+            cancel
+            return
+          end
+
+          sleep(TavernaPlayer.server_retry_interval)
+          retry
+        end
+
+        status_message "Initializing new workflow run"
 
         @run.run_id = run.id
         @run.state = run.status
@@ -182,10 +196,13 @@ module TavernaPlayer
       @run.cancelled?
     end
 
-    def cancel(run)
+    def cancel(run = nil)
       status_message "Cancelling"
-      download_log(run)
-      run.delete
+
+      unless run.nil?
+        download_log(run)
+        run.delete
+      end
 
       unless TavernaPlayer.run_cancelled_callback.nil?
         status_message "Running post-cancel tasks"
