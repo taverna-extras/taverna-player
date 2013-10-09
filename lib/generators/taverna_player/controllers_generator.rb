@@ -2,9 +2,10 @@
 module TavernaPlayer
   module Generators
     class ControllersGenerator < Rails::Generators::Base
-      source_root File.expand_path("../../templates", __FILE__)
+      source_root File.expand_path("../../templates/controllers", __FILE__)
 
-      desc "Copy the Taverna Player controllers into the main app for customization."
+      desc "Copy the Taverna Player controllers into the main app for "\
+        "customization."
 
       def copy_controllers
         copy_file "runs_controller.rb",
