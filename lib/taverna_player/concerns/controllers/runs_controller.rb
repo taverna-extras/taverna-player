@@ -149,12 +149,6 @@ module TavernaPlayer
 
           respond_to do |format|
             if @run.save
-              worker = TavernaPlayer::Worker.new(@run)
-              job = Delayed::Job.enqueue worker, :queue => "player"
-              @run.delayed_job = job
-              @run.status_message = "Queued"
-              @run.save
-
               format.html { redirect_to @run, :notice => 'Run was successfully created.' }
             else
               format.html { render :action => "new" }

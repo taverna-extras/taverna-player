@@ -7,8 +7,8 @@ module TavernaPlayer
         extend ActiveSupport::Concern
 
         included do
-          attr_accessible :create_time, :delayed_job_id, :embedded,
-            :finish_time, :inputs_attributes, :log, :name, :proxy_interactions,
+          attr_accessible :create_time, :delayed_job, :embedded, :finish_time,
+            :inputs_attributes, :log, :name, :proxy_interactions,
             :proxy_notifications, :results, :run_id, :start_time,
             :status_message, :workflow_id
 
@@ -42,7 +42,18 @@ module TavernaPlayer
             :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
             :url => "/system/:class/:attachment/:id/:filename",
             :default_url => ""
-        end
+
+          after_create :enqueue
+
+          private
+
+          def enqueue
+            worker = TavernaPlayer::Worker.new(self)
+            job = Delayed::Job.enqueue worker, :queue => "player"
+            update_attributes(:delayed_job => job, :status_message => "Queued")
+          end
+
+        end # included
 
         # There are two courses of action here:
         #
