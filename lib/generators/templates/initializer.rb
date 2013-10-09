@@ -24,6 +24,16 @@ TavernaPlayer.setup do |config|
   config.server_poll_interval = 5
   config.server_retry_interval = 10
 
+  # Taverna Server connection configuration.
+  #config.server_connection[:verify_peer] = true
+  #config.server_connection[:ca_file] = "/etc/certs/my-cert.crt"
+  #config.server_connection[:ca_path] = "/etc/certs/"
+  #config.server_connection[:client_certificate] = "client-cert.crt"
+  #config.server_connection[:client_password] = "P@5$w0Rd!"
+  #config.server_connection[:ssl_version] = :TLSv1
+  #config.server_connection[:open_timeout] = 10
+  #config.server_connection[:read_timeout] = 10
+
   # Callbacks to be run at various points during a workflow run. These can be
   # defined as Proc objects or as methods and referenced by name.
   #

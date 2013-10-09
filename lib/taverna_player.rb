@@ -48,6 +48,10 @@ module TavernaPlayer
   mattr_accessor :server_retry_interval
   @@server_retry_interval = 10
 
+  # Taverna Server connection parameters
+  mattr_accessor :server_connection
+  @@server_connection = T2Server::DefaultConnectionParameters.new
+
   # Pre run callback
   mattr_accessor :pre_run_callback
   @@pre_run_callback = nil

@@ -17,8 +17,9 @@ module TavernaPlayer
       server_uri = URI.parse(TavernaPlayer.server_address)
       credentials = T2Server::HttpBasic.new(TavernaPlayer.server_username,
         TavernaPlayer.server_password)
+      conn_params = TavernaPlayer.server_connection
 
-      T2Server::Server.new(server_uri) do |server|
+      T2Server::Server.new(server_uri, conn_params) do |server|
         wkf = File.read(TavernaPlayer.workflow_proxy.file(@workflow))
 
         # Try and create the run bearing in mind that the server might be at
