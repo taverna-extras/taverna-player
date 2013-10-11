@@ -16,4 +16,4 @@ gem "jquery-rails"
 # To use debugger
 # gem 'debugger'
 
-gem "t2-server", "~> 1.0.0", :path => "/home/hainesr/work/taverna/src/t2-server-gem"
+gem "t2-server", :git => "git://github.com/myGrid/t2-server-gem", :branch => "next"
