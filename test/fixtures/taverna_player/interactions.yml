@@ -1,19 +1,19 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  uri: http://example.com/run4/path/to/interaction.html
+  unique_id: b6d0dad1-ef0a-436a-bd16-62f3fe767801
   replied: false
   displayed: false
   run_id: 4
 
 two:
-  uri: http://example.com/run2/path/to/interaction.html
+  unique_id: 602f98fc-f1b7-4fbd-9ee3-d4aa001492bb
   replied: true
   displayed: true
   run_id: 3
 
 three:
-  uri: http://example.com/run3/path/to/interaction.html
+  unique_id: 101d727f-31cf-4601-8c3c-9d936b9e6c5e
   replied: false
   displayed: true
   run_id: 5

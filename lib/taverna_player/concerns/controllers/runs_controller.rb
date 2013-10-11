@@ -10,6 +10,7 @@ module TavernaPlayer
           before_filter :find_runs, :only => [ :index ]
           before_filter :find_run, :except => [ :index, :new, :create ]
           before_filter :find_workflow, :only => [ :new ]
+          before_filter :find_interaction, :only => [ :notification, :read_interaction, :save_interaction ]
 
           layout :choose_layout
 
@@ -27,12 +28,16 @@ module TavernaPlayer
             @workflow = TavernaPlayer.workflow_proxy.class_name.find(params[:workflow_id])
           end
 
-          # Read a resource from the interactions working directory of a run. If
-          # it's an html resource then rewrite the links within it to point back to
-          # this portal.
+          def find_interaction
+            @interaction = Interaction.find_by_unique_id(params[:int_id])
+          end
+
+          # Read a resource from the interactions working directory of a run.
+          # If it's an html resource then rewrite the links within it to point
+          # back to this portal.
           #
-          # This is a bit of a hack because we have to comply with Taverna Server's
-          # security model.
+          # This is a bit of a hack because we have to comply with Taverna
+          # Server's security model.
           def proxy_read(name, type = :any)
             credentials = T2Server::HttpBasic.new(TavernaPlayer.server_username,
             TavernaPlayer.server_password)
@@ -42,37 +47,13 @@ module TavernaPlayer
             page = server.read(uri, "*/*", credentials)
 
             if type == :html
-              page.gsub!(@run.proxy_interactions, run_url(@run) + "/proxy")
-              page.gsub!(@run.proxy_notifications, run_url(@run) + "/proxy")
+              page.gsub!(@run.proxy_interactions, run_url(@run) +
+                "/proxy/#{@interaction.unique_id}")
+              page.gsub!(@run.proxy_notifications, run_url(@run) +
+                "/proxy/#{@interaction.unique_id}")
             end
 
             page
-          end
-
-          # Write a resource to the interactions working directory of a run.
-          #
-          # This is a bit of a hack because we have to comply with Taverna Server's
-          # security model.
-          def proxy_write(name, data)
-            credentials = T2Server::HttpBasic.new(TavernaPlayer.server_username,
-            TavernaPlayer.server_password)
-            server = T2Server::Server.new(TavernaPlayer.server_address)
-            uri = URI.parse("#{@run.proxy_interactions}/#{name}")
-
-            server.update(uri, data, "*/*", credentials)
-          end
-
-          # Publish an interaction reply to the run's notification feed.
-          #
-          # This is a bit of a hack because we have to comply with Taverna Server's
-          # security model.
-          def proxy_reply(data)
-            credentials = T2Server::HttpBasic.new(TavernaPlayer.server_username,
-            TavernaPlayer.server_password)
-            server = T2Server::Server.new(TavernaPlayer.server_address)
-            uri = URI.parse(@run.proxy_notifications)
-
-            server.create(uri, data, "application/atom+xml", credentials)
           end
 
           # Read the data from the results zip file.
@@ -215,14 +196,19 @@ module TavernaPlayer
           end
         end
 
-        # GET /runs/1/interaction/:name
+        # GET /runs/1/proxy/:int_id/:name
         def read_interaction
           respond_to do |format|
             name = "#{params[:name]}.#{params[:format]}"
 
             format.html do
-              send_data proxy_read(name, :html), :type => "text/html",
-                :disposition => "inline"
+              if name == "page.html"
+                send_data @interaction.page, :type => "text/html",
+                  :disposition => "inline"
+              else
+                send_data proxy_read(name, :html), :type => "text/html",
+                  :disposition => "inline"
+              end
             end
 
             format.js do
@@ -237,21 +223,19 @@ module TavernaPlayer
           end
         end
 
-        # PUT /runs/1/interaction/:name
+        # PUT /runs/1/proxy/:int_id/:name
         def save_interaction
-          respond_to do |format|
-            name = "#{params[:name]}.#{params[:format]}"
+          @interaction.output_value = request.body.read
+          @interaction.save
 
-            format.json do
-              proxy_write(name, request.body.read)
-              render :nothing => true, :status => 204
-            end
-          end
+          render :nothing => true, :status => 204
         end
 
-        # POST /runs/1/notification
+        # POST /runs/1/proxy/:int_id
         def notification
-          proxy_reply(request.body.read)
+          reply = Hash.from_xml(request.body.read)
+          @interaction.feed_reply = reply["entry"]["result_status"]
+          @interaction.save
 
           render :nothing => true, :status => 201
         end
