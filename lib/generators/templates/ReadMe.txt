@@ -56,7 +56,15 @@ There is also some manual setup to do, if you haven't already done it:
      you do not need to customize but there are no penalties for leaving them
      there.
 
-  6. If you want to use pre- and post-run callbacks you can setup some basic
+  6. If you need to override the Taverna Player Run model, to add columns to
+     the table for example, you can copy a customizable stub with:
+
+       rails generate taverna_player:models
+
+     The stub is copied to the app/models/taverna_player directory so that it
+     takes precedence over the default one.
+
+  7. If you want to use pre- and post-run callbacks you can setup some basic
      stubs with:
 
        rails generate taverna_player:callbacks
@@ -64,7 +72,7 @@ There is also some manual setup to do, if you haven't already done it:
      They will be saved to "lib/taverna_player_callbacks.rb". Don't forget to
      then require and register them in the Taverna Player initializer.
 
-  7. You can add to, or change, the workflow run outputs render methods to
+  8. You can add to, or change, the workflow run outputs render methods to
      better suit your particular application. To copy the defaults that
      Taverna Player ships with into your application for customization run:
 
