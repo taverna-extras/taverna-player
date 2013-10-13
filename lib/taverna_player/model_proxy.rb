@@ -26,8 +26,7 @@ module TavernaPlayer
       (class << self; self; end).instance_eval do
         # Define the method to use the mapped method on the object.
         define_method name do |object|
-          result = mapper.nil? ? "" : object.send(mapper)
-          result.empty? ? "" : result
+          mapper.nil? ? nil : object.send(mapper)
         end
 
         # Define the method used to set the mapped method's name.

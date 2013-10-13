@@ -20,7 +20,7 @@ module TavernaPlayer
   # application via the workflow_model_proxy method below.
   mattr_reader :workflow_proxy
   def self.workflow_model_proxy(workflow_class)
-    @@workflow_proxy = ModelProxy.new(workflow_class, [:file, :title])
+    @@workflow_proxy = ModelProxy.new(workflow_class, [:file, :title, :inputs])
     yield @@workflow_proxy if block_given?
   end
 

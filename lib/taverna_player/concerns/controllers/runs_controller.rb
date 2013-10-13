@@ -127,15 +127,7 @@ module TavernaPlayer
         def new
           @run = Run.new
           @workflow = TavernaPlayer.workflow_proxy.class_name.find(params[:workflow_id])
-          @run.name = TavernaPlayer.workflow_proxy.title(@workflow)
           @run.embedded = true if params[:embedded] == "true"
-
-          model = TavernaPlayer::Parser.parse(TavernaPlayer.workflow_proxy.file(@workflow))
-          @inputs = model.inputs
-          @inputs.each do |i|
-            i[:model] = RunPort::Input.new(:name => i[:name], :value => i[:example])
-            @run.inputs << i[:model]
-          end
 
           respond_to do |format|
             # Render new.html.erb unless the run is embedded.

@@ -10,8 +10,22 @@ TavernaPlayer.setup do |config|
     #proxy.file_method_name = :file
 
     # This is the method that returns the title of the workflow. This can be
-    # set to nil if your model does not have this field.
+    # left unset if your model does not have this field but if you want to
+    # set a run name at the time of run creation then you will need to
+    # provide one or override the new run view.
     #proxy.title_method_name = :title
+
+    # This is a method that returns a list of descriptions of the workflow
+    # inputs. Each description should be of the form:
+    #  {
+    #    :name => "<input_name>",
+    #    :description => "<input_description>",
+    #    :example => "<input_example_value>"
+    #  }
+    #
+    # If you don't provide this method you will have to override the new run
+    # view to create and initialize the inputs to a workflow.
+    #proxy.inputs_method_name = :inputs
   #end
 
   # Taverna Server configuration information. The poll interval is in seconds
