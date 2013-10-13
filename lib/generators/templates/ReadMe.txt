@@ -11,7 +11,7 @@ configure the Taverna Server URI and login information copy this file to:
   config/initializers/taverna_player.rb
 
 Then check the example file into your repository, add the non-example file to
-your version control ignore file (e.g. .gitnore) and then configure the
+your version control ignore file (e.g. .gitignore) and then configure the
 sensitive Taverna Server information. This allows you to check in most of the
 Taverna Player configuration, leaving the sensitive parts out.
 
