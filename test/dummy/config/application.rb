@@ -3,7 +3,6 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 
 Bundler.require
-require "taverna_player"
 
 module Dummy
   class Application < Rails::Application
