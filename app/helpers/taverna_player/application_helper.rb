@@ -4,13 +4,13 @@ module TavernaPlayer
     def new_embedded_run_path(id_or_model)
       id = workflow_id(id_or_model)
 
-      taverna_player.new_run_path(:workflow_id => id, :embedded => true)
+      raw(taverna_player.new_run_path(:workflow_id => id, :embedded => true))
     end
 
     def new_embedded_run_url(id_or_model)
       id = workflow_id(id_or_model)
 
-      taverna_player.new_run_url(:workflow_id => id, :embedded => true)
+      raw(taverna_player.new_run_url(:workflow_id => id, :embedded => true))
     end
 
     private
