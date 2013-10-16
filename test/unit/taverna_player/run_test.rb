@@ -4,7 +4,7 @@ module TavernaPlayer
   class RunTest < ActiveSupport::TestCase
     test "should not save run with an illegal state" do
       run = Run.new
-      run.workflow_id = 1
+      run.workflow = workflows(:one)
       run.state = :not_a_state
       assert !run.save, "Saved the run with an illegal state"
     end
@@ -24,7 +24,7 @@ module TavernaPlayer
 
     test "should cancel run" do
       run = Run.new
-      run.workflow_id = 1
+      run.workflow = workflows(:one)
       refute run.cancelled?, "Run's stop flag was set upon creation"
       run.cancel
       assert run.cancelled?, "Run was not cancelled"

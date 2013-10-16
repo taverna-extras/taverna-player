@@ -9,6 +9,7 @@ module TavernaPlayer
       @run4 = taverna_player_runs(:four)
       @run5 = taverna_player_runs(:five)
       @int = taverna_player_interactions(:one)
+      @workflow = workflows(:one)
       @routes = TavernaPlayer::Engine.routes
     end
 
@@ -125,7 +126,7 @@ module TavernaPlayer
 
     test "should create run" do
       assert_difference("Run.count") do
-        post :create, :run => { :workflow_id => 1 }
+        post :create, :run => { :workflow_id => @workflow }
       end
 
       assert_redirected_to run_path(assigns(:run)),
