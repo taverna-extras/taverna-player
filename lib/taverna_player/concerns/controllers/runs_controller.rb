@@ -86,11 +86,10 @@ module TavernaPlayer
 
           # Choose a layout for the page depending on action and embedded status.
           def choose_layout
-            case action_name
-            when "new", "show"
-              @run.embedded? ? "taverna_player/embedded" : "application"
+            if (action_name == "new" || action_name == "show") && @run.embedded?
+              "taverna_player/embedded"
             else
-            "application"
+              ApplicationController.new.send(:_layout).virtual_path
             end
           end
 
