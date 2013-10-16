@@ -1,5 +1,6 @@
 module TavernaPlayer
   class Worker
+    include TavernaPlayer::Engine.routes.url_helpers
 
     def initialize(run)
       @run = run
@@ -94,14 +95,38 @@ module TavernaPlayer
           end
 
           run.notifications(:requests).each do |note|
-            uri = T2Server::Util.get_path_leaf_from_uri(note.uri)
             waiting = true unless note.has_reply?
-            int = Interaction.find_or_create_by_uri_and_run_id(uri, @run.id)
+            int = Interaction.find_or_create_by_run_id_and_unique_id(@run.id, note.id)
 
+            # Need to catch this here in case some other process has replied.
             if note.has_reply? && !int.replied?
               int.replied = true
               int.save
             end
+
+            unless int.replied?
+              if int.page.blank?
+                page = server.read(note.uri, "text/html", credentials)
+                page.gsub!(@run.proxy_interactions,
+                  run_url(@run, :protocol => TavernaPlayer.hostname[:scheme],
+                    :host => TavernaPlayer.hostname[:host]) +
+                  "/proxy/#{int.unique_id}")
+                page.gsub!(@run.proxy_notifications,
+                  run_url(@run, :protocol => TavernaPlayer.hostname[:scheme],
+                    :host => TavernaPlayer.hostname[:host]) +
+                  "/proxy/#{int.unique_id}")
+                int.page = page
+              end
+
+              if !int.feed_reply.blank? && !int.output_value.blank?
+                note.reply(int.feed_reply, int.output_value)
+
+                int.replied = true
+              end
+
+              int.save
+            end
+
           end
 
           status_message(waiting ? "Waiting for user input" : "Running")

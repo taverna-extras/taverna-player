@@ -52,6 +52,18 @@ module TavernaPlayer
   mattr_accessor :server_connection
   @@server_connection = T2Server::DefaultConnectionParameters.new
 
+  def self.player_hostname=(hostname)
+    uri = URI.parse(hostname)
+    scheme = uri.scheme.nil? ? "http" : uri.scheme
+    host = uri.port.nil? ? uri.host : "#{uri.host}:#{uri.port}"
+    host = uri.path.blank? ? host : "#{host}#{uri.path}"
+    @@hostname = { :scheme => scheme, :host => host }
+  end
+
+  # Hostname of server where Taverna Player resides
+  mattr_reader :hostname
+  TavernaPlayer.player_hostname = "http://localhost:3000"
+
   # Pre run callback
   mattr_accessor :pre_run_callback
   @@pre_run_callback = nil

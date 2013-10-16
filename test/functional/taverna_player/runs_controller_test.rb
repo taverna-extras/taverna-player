@@ -8,6 +8,7 @@ module TavernaPlayer
       @run3 = taverna_player_runs(:three)
       @run4 = taverna_player_runs(:four)
       @run5 = taverna_player_runs(:five)
+      @int = taverna_player_interactions(:one)
       @routes = TavernaPlayer::Engine.routes
     end
 
@@ -43,22 +44,27 @@ module TavernaPlayer
     end
 
     test "should route to notification feed proxy" do
-      assert_routing({ :method => "post", :path => "/runs/1/proxy" },
+      assert_routing({ :method => "post",
+        :path => "/runs/1/proxy/#{@int.unique_id}" },
         { :controller => "taverna_player/runs", :action => "notification",
-          :id => "1" }, {}, {}, "Did not route correctly")
+          :id => "1", :int_id => @int.unique_id }, {}, {},
+        "Did not route correctly")
     end
 
     test "should route to interaction resource read proxy" do
-      assert_routing "/runs/1/proxy/file.json",
+      assert_routing "/runs/1/proxy/#{@int.unique_id}/file.json",
         { :controller => "taverna_player/runs", :action => "read_interaction",
-          :id => "1", :name => "file", :format => "json" }, {}, {},
+          :id => "1", :name => "file", :int_id => @int.unique_id,
+          :format => "json" }, {}, {},
         "Did not route correctly"
     end
 
     test "should route to interaction resource write proxy" do
-      assert_routing({ :method => "put", :path => "/runs/1/proxy/file.json" },
+      assert_routing({ :method => "put",
+        :path => "/runs/1/proxy/#{@int.unique_id}/file.json" },
         { :controller => "taverna_player/runs", :action => "save_interaction",
-          :id => "1", :name => "file", :format => "json" }, {}, {},
+          :id => "1", :name => "file", :int_id => @int.unique_id,
+          :format => "json" }, {}, {},
         "Did not route correctly")
     end
 
