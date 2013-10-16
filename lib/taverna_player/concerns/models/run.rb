@@ -12,13 +12,13 @@ module TavernaPlayer
             :proxy_notifications, :results, :run_id, :start_time,
             :status_message, :workflow_id
 
-          has_many :inputs, :class_name => TavernaPlayer::RunPort::Input,
+          has_many :inputs, :class_name => "TavernaPlayer::RunPort::Input",
             :dependent => :destroy
-          has_many :outputs, :class_name => TavernaPlayer::RunPort::Output,
+          has_many :outputs, :class_name => "TavernaPlayer::RunPort::Output",
             :dependent => :destroy
-          has_many :interactions, :class_name => TavernaPlayer::Interaction,
+          has_many :interactions, :class_name => "TavernaPlayer::Interaction",
             :dependent => :destroy
-          belongs_to :delayed_job, :class_name => Delayed::Job
+          belongs_to :delayed_job, :class_name => "::Delayed::Job"
 
           accepts_nested_attributes_for :inputs
 
