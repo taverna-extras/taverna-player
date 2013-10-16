@@ -9,6 +9,7 @@ module TavernaPlayer
         included do
           before_filter :find_runs, :only => [ :index ]
           before_filter :find_run, :except => [ :index, :new, :create ]
+          before_filter :find_workflow, :only => [ :new ]
 
           layout :choose_layout
 
@@ -20,6 +21,10 @@ module TavernaPlayer
 
           def find_run
             @run = Run.find(params[:id])
+          end
+
+          def find_workflow
+            @workflow = TavernaPlayer.workflow_proxy.class_name.find(params[:workflow_id])
           end
 
           # Read a resource from the interactions working directory of a run. If
@@ -125,7 +130,6 @@ module TavernaPlayer
         # GET /runs/new
         def new
           @run = Run.new
-          @workflow = TavernaPlayer.workflow_proxy.class_name.find(params[:workflow_id])
           @run.embedded = true if params[:embedded] == "true"
 
           respond_to do |format|
