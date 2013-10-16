@@ -2,6 +2,8 @@ module TavernaPlayer
   class RunPort < ActiveRecord::Base
     self.inheritance_column = "port_type"
 
+    belongs_to :run, :class_name => "TavernaPlayer::Run"
+
     validates_presence_of :name
 
     attr_accessible :depth, :name, :value
