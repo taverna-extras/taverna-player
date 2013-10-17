@@ -242,7 +242,7 @@ module TavernaPlayer
       # Need to poll for updates as the run instance may have been
       # changed in the Rails app.
       @run.reload
-      @run.cancelled?
+      @run.stop
     end
 
     def cancel(run = nil)
@@ -258,6 +258,7 @@ module TavernaPlayer
         run_callback(TavernaPlayer.run_cancelled_callback, @run)
       end
 
+      @run.state = :cancelled
       status_message "Cancelled"
     end
 

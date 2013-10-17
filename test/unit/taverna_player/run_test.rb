@@ -15,18 +15,28 @@ module TavernaPlayer
       assert !run.save, "Saved the run without a workflow id"
     end
 
-    test "should not be able to set state to cancelled" do
+    test "should not be able to set state to cancelled if run not stopped" do
       run = Run.new
-      run.state = "cancelled"
-      refute run.save, "Saved the run with a cancelled state. See the note "\
-        "in the run model file for why this is bad."
+      run.state = :cancelled
+      assert_not_equal :cancelled, run.state, "The run status was set to "\
+        "cancelled without being marked as stopped first. See the note in "\
+        "the run model file for why this is not allowed."
     end
 
-    test "should cancel run" do
+    test "should not save run with cancelled state if not marked as stopped" do
       run = Run.new
       run.workflow = workflows(:one)
-      refute run.cancelled?, "Run's stop flag was set upon creation"
+      run.saved_state = "cancelled"
+      run.stop = false
+      refute run.save, "Saved run with cancelled state when not stopped first"
+    end
+
+    test "should cancel run if run set to stop first" do
+      run = Run.new
+      run.workflow = workflows(:one)
+      refute run.stop, "Run's stop flag was set upon creation"
       run.cancel
+      run.state = :cancelled
       assert run.cancelled?, "Run was not cancelled"
       assert run.complete?, "Run not showing as complete when cancelled"
       assert_equal :cancelled, run.state, "Run's state was not cancelled"

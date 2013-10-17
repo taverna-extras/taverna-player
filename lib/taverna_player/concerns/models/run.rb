@@ -26,16 +26,18 @@ module TavernaPlayer
 
           accepts_nested_attributes_for :inputs
 
-          # There is a very good reason that we don't have a :cancelled state
-          # and use the stop flag instead: Race conditions. If we used a state
-          # for this it could be overwritten by the delayed job as it moves
-          # the run between states, thus losing the cancel request from the
-          # user.
-          STATES = ["pending", "initialized", "running", "finished", "failed"]
+          STATES = ["pending", "initialized", "running", "finished", "cancelled", "failed"]
 
           validates :workflow_id, :presence => true
           validates :name, :presence => true
+
+          # There is a :cancelled state but it can only be set if the run has
+          # previously had its stop flag set. This is to avoid race conditions.
+          # If we used a state to tell the delayed job worker to cancel a run
+          # it could be overwritten when the worker itself moves the run
+          # between states, thus losing the cancel request from the user.
           validates :saved_state, :inclusion => { :in => STATES }
+          validates :stop, :presence => true, :if => :cancelled?
 
           has_attached_file :log,
             :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
@@ -73,7 +75,7 @@ module TavernaPlayer
         # In both cases the stop flag is set to mark the run as cancelled
         # internally.
         #
-        # See the note above about the (lack of a) :cancelled state.
+        # See the note above about the :cancelled state.
         def cancel
           return if complete?
 
@@ -89,16 +91,17 @@ module TavernaPlayer
           update_attribute(:stop, true)
         end
 
-        # Return state as a symbol. See the note above about the (lack of a)
-        # :cancelled state.
+        # Return state as a symbol.
         def state
-          return :cancelled if self[:stop]
           self[:saved_state].to_sym
         end
 
-        # Save state as a downcased string.
+        # Save state as a downcased string. See the note above about why a
+        # state cannot be used to actually cancel a run.
         def state=(state)
-          self[:saved_state] = state.to_s.downcase
+          s = state.to_s.downcase
+          return if s == "cancelled" && !stop
+          self[:saved_state] = s
         end
 
         def running?
@@ -109,9 +112,8 @@ module TavernaPlayer
           state == :finished
         end
 
-        # See the note above about the (lack of a) :cancelled state.
         def cancelled?
-          self[:stop]
+          state == :cancelled
         end
 
         def failed?
