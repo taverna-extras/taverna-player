@@ -173,5 +173,14 @@ module TavernaPlayer
       assert_response :redirect, "Response was not a redirect"
       assert_redirected_to runs_path, "Did not redirect correctly"
     end
+
+    test "should only return runs from workflow id 1" do
+      get :index, :workflow_id => @workflow
+      assert_response :success, "Response was not success"
+      assert_not_nil assigns(:runs), "Did not assign a valid runs instance"
+      assert_not_nil assigns(:override)
+      assert_not_equal Run.count, assigns(:runs).count, "Returned all runs"
+      assert_template "application", "Did not render with the correct layout"
+    end
   end
 end

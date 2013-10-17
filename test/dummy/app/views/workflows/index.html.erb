@@ -6,8 +6,7 @@
     <th>Title</th>
     <th>Author</th>
     <th>Description</th>
-    <th>File</th>
-    <th>Action</th>
+    <th colspan="2">Action</th>
   </tr>
 
 <% @workflows.each do |w| %>
@@ -16,10 +15,9 @@
     <td><%= w.title%></td>
     <td><%= w.author %></td>
     <td><%= w.description %></td>
-    <td><%= w.file %></td>
-    <td><%= link_to "Run", taverna_player.new_run_path(:workflow_id => w.id) %></td>
+    <td><%= link_to "List runs of this workflow", workflow_runs_path(w)%></td>
+    <td><%= link_to "Run this workflow", new_workflow_run_path(w) %></td>
   </tr>
-
 <% end %>
 
 </table>

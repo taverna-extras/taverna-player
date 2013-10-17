@@ -17,7 +17,8 @@ module TavernaPlayer
           private
 
           def find_runs
-            @runs = Run.all
+            select = params[:workflow_id] ? { :workflow_id => params[:workflow_id] } : {}
+            @runs = Run.where(select).all
           end
 
           def find_run
