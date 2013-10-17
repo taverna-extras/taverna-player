@@ -82,6 +82,12 @@ TavernaPlayer.setup do |config|
   #config.run_cancelled_callback = "player_run_cancelled_callback"
   #config.run_cancelled_callback = :player_run_cancelled_callback
 
+  # The run-failed callback is called if the run fails for any reason.
+  # It takes the run model object as its parameter.
+  #config.run_failed_callback = Proc.new { |run| puts "Failed: #{run.name}" }
+  #config.run_failed_callback = "player_run_failed_callback"
+  #config.run_failed_callback = :player_run_failed_callback
+
   # Callbacks to be run to render various types of workflow output. These can
   # be defined as Proc objects or as methods and referenced by name.
   #

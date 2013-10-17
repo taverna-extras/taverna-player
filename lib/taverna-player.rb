@@ -76,6 +76,10 @@ module TavernaPlayer
   mattr_accessor :run_cancelled_callback
   @@run_cancelled_callback = nil
 
+  # Run failed callback
+  mattr_accessor :run_failed_callback
+  @@run_failed_callback = nil
+
   def self.setup
     yield self
   end
