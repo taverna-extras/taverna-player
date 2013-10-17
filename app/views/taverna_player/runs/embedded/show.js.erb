@@ -21,6 +21,6 @@ $("#run-button").replaceWith('<%= escape_javascript(render(:partial => "taverna_
   # override it in the embedded directory if you wish but you will need to
   # change the file name below AND in embedded/show.html.erb.
 %>
-<% unless @run.finished? || @run.cancelled? %>
+<% unless @run.complete? %>
   $("#run-poll").replaceWith('<%= escape_javascript(render(:partial => "poll", :locals => { :reload => run_path(@run) })) %>');
 <% end %>

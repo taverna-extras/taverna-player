@@ -31,7 +31,7 @@ module TavernaPlayer
           # for this it could be overwritten by the delayed job as it moves
           # the run between states, thus losing the cancel request from the
           # user.
-          STATES = ["pending", "initialized", "running", "finished", "deleted"]
+          STATES = ["pending", "initialized", "running", "finished", "failed"]
 
           validates :workflow_id, :presence => true
           validates :name, :presence => true
@@ -75,7 +75,7 @@ module TavernaPlayer
         #
         # See the note above about the (lack of a) :cancelled state.
         def cancel
-          return if finished? || cancelled?
+          return if complete?
 
           unless delayed_job.nil?
             Delayed::Job.transaction do
@@ -114,6 +114,14 @@ module TavernaPlayer
           self[:stop]
         end
 
+        def failed?
+          state == :failed
+        end
+
+        # This is used as a catch-all for finished, cancelled and failed
+        def complete?
+          finished? || cancelled? || failed?
+        end
       end
     end
   end

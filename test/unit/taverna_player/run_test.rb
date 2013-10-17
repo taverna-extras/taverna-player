@@ -28,6 +28,7 @@ module TavernaPlayer
       refute run.cancelled?, "Run's stop flag was set upon creation"
       run.cancel
       assert run.cancelled?, "Run was not cancelled"
+      assert run.complete?, "Run not showing as complete when cancelled"
       assert_equal :cancelled, run.state, "Run's state was not cancelled"
     end
 
@@ -48,6 +49,15 @@ module TavernaPlayer
       run = Run.new
       run.name = ""
       refute run.save, "Saved the run with an empty name."
+    end
+
+    test "complete run states" do
+      refute taverna_player_runs(:one).complete?, "Run not complete"
+      refute taverna_player_runs(:two).complete?, "Run not complete"
+      assert taverna_player_runs(:three).complete?, "Run is complete"
+      refute taverna_player_runs(:four).complete?, "Run not complete"
+      refute taverna_player_runs(:five).complete?, "Run not complete"
+      assert taverna_player_runs(:six).complete?, "Run is complete"
     end
   end
 end

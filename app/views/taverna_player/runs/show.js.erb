@@ -11,6 +11,6 @@ $("#run-button").replaceWith('<%= escape_javascript(render(:partial => "button",
   $("#run-outputs").replaceWith('<%= escape_javascript(render(:partial => "outputs", :locals => { :run => @run })) %>');
 <% end %>
 
-<% unless @run.finished? || @run.cancelled? %>
+<% unless @run.complete? %>
   $("#run-poll").replaceWith('<%= escape_javascript(render(:partial => "poll", :locals => { :reload => run_path(@run) })) %>');
 <% end %>

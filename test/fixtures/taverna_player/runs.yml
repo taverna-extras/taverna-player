@@ -48,3 +48,12 @@ five:
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
   workflow_id: 1
+
+six:
+  id: 6
+  run_id: f8250afc-09c1-4129-ab28-e889a284594f
+  name: Test run 6
+  saved_state: failed
+  create_time: 2013-03-13 10:55:46
+  start_time: 2013-03-13 10:55:48
+  workflow_id: 1

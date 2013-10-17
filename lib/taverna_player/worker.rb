@@ -20,7 +20,8 @@ module TavernaPlayer
         TavernaPlayer.server_password)
       conn_params = TavernaPlayer.server_connection
 
-      T2Server::Server.new(server_uri, conn_params) do |server|
+      begin
+        server = T2Server::Server.new(server_uri, conn_params)
         wkf = File.read(TavernaPlayer.workflow_proxy.file(@workflow))
 
         # Try and create the run bearing in mind that the server might be at
@@ -141,15 +142,29 @@ module TavernaPlayer
         @run.save
 
         run.delete
-
-        unless TavernaPlayer.post_run_callback.nil?
-          status_message "Running post-run tasks"
-          run_callback(TavernaPlayer.post_run_callback, @run)
+      rescue Exception => exception
+        begin
+          unless run.nil?
+            download_log(run)
+            run.delete
+          end
+        rescue
+          # Try and grab the log then delete the run from Taverna Server here,
+          # but at this point we don't care if we fail...
         end
 
-        @run.state = :finished
-        status_message "Finished"
+        @run.state = :failed
+        status_message "Failed"
+        return
       end
+
+      unless TavernaPlayer.post_run_callback.nil?
+        status_message "Running post-run tasks"
+        run_callback(TavernaPlayer.post_run_callback, @run)
+      end
+
+      @run.state = :finished
+      status_message "Finished"
     end
 
     private

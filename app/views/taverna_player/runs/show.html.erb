@@ -13,6 +13,6 @@
 
 <%= render :partial => "outputs", :locals => { :run => @run } %>
 
-<% unless @run.finished? || @run.cancelled? %>
+<% unless @run.complete? %>
   <%= render :partial => "poll", :locals => { :reload => run_path(@run) } %>
 <% end %>

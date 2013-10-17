@@ -27,7 +27,7 @@
   # override it in the embedded directory if you wish but you will need to
   # change the file name below AND in embedded/show.js.erb.
 %>
-<% unless @run.finished? || @run.cancelled? %>
+<% unless @run.complete? %>
   <%= render :partial => "poll",
     :locals => { :reload => run_path(@run) } %>
 <% end %>

@@ -135,7 +135,7 @@ module TavernaPlayer
 
         # DELETE /runs/1
         def destroy
-          if @run.finished? || @run.cancelled?
+          if @run.complete?
             @run.destroy
             redirect_to runs_url
           else
@@ -145,7 +145,7 @@ module TavernaPlayer
 
         # PUT /runs/1/cancel
         def cancel
-          @run.cancel unless @run.finished?
+          @run.cancel unless @run.complete?
 
           if @run.embedded?
             redirect_to view_context.new_embedded_run_path(@run)
