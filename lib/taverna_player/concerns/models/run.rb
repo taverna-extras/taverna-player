@@ -78,7 +78,7 @@ module TavernaPlayer
           return if complete?
 
           unless delayed_job.nil?
-            Delayed::Job.transaction do
+            delayed_job.with_lock do
               if delayed_job.locked_by.nil?
                 delayed_job.destroy
                 update_attribute(:status_message, "Cancelled")
