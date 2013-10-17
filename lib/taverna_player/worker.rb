@@ -153,6 +153,9 @@ module TavernaPlayer
           # but at this point we don't care if we fail...
         end
 
+        backtrace = exception.backtrace.join("\n")
+        @run.failure_message = "#{exception.message}\n#{backtrace}"
+
         @run.state = :failed
         status_message "Failed"
         return
