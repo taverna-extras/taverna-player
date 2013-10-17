@@ -12,15 +12,13 @@ $("#run-button").replaceWith('<%= escape_javascript(render(:partial => "taverna_
   $("#run-interaction").replaceWith('<%= escape_javascript(render(:partial => "interaction", :locals => { :run => @run, :interaction => @interaction })) %>');
 <% end %>
 
-<% if @run.outputs.size > 0 %>
+<% if @run.complete? %>
   $("#run-outputs").replaceWith('<%= escape_javascript(render(:partial => "taverna_player/runs/embedded/outputs", :locals => { :run => @run })) %>');
-<% end %>
-
-<%
-  # Note that the base run/poll partial is used here. You can still
-  # override it in the embedded directory if you wish but you will need to
-  # change the file name below AND in embedded/show.html.erb.
-%>
-<% unless @run.complete? %>
+<% else %>
+  <%
+    # Note that the base run/poll partial is used here. You can still
+    # override it in the embedded directory if you wish but you will need to
+    # change the file name below AND in embedded/show.html.erb.
+  %>
   $("#run-poll").replaceWith('<%= escape_javascript(render(:partial => "poll", :locals => { :reload => run_path(@run) })) %>');
 <% end %>

@@ -7,10 +7,8 @@ $("#run-button").replaceWith('<%= escape_javascript(render(:partial => "button",
   $("#run-interaction").replaceWith('<%= escape_javascript(render(:partial => "interaction", :locals => { :run => @run, :interaction => @interaction })) %>');
 <% end %>
 
-<% if @run.outputs.size > 0 %>
+<% if @run.complete? %>
   $("#run-outputs").replaceWith('<%= escape_javascript(render(:partial => "outputs", :locals => { :run => @run })) %>');
-<% end %>
-
-<% unless @run.complete? %>
+<% else %>
   $("#run-poll").replaceWith('<%= escape_javascript(render(:partial => "poll", :locals => { :reload => run_path(@run) })) %>');
 <% end %>
