@@ -79,10 +79,14 @@ module TavernaPlayer
         def cancel
           return if complete?
 
+          # If the run has a delayed job (still) and it hasn't been locked yet
+          # then we just remove it from the queue directly and mark the run as
+          # cancelled.
           unless delayed_job.nil?
             delayed_job.with_lock do
               if delayed_job.locked_by.nil?
                 delayed_job.destroy
+                update_attribute(:saved_state, "cancelled")
                 update_attribute(:status_message, "Cancelled")
               end
             end
