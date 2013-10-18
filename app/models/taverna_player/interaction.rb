@@ -7,5 +7,8 @@ module TavernaPlayer
 
     validates_presence_of :unique_id
     validates_uniqueness_of :unique_id
+    validates_presence_of :serial
+    validates_uniqueness_of :serial, :scope => :run_id,
+      :message => "Interaction serial number should be unique for a run"
   end
 end

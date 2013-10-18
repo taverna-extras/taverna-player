@@ -2,18 +2,21 @@
 
 one:
   unique_id: b6d0dad1-ef0a-436a-bd16-62f3fe767801
+  serial: ask0
   replied: false
   displayed: false
   run_id: 4
 
 two:
   unique_id: 602f98fc-f1b7-4fbd-9ee3-d4aa001492bb
+  serial: Nested_workflow:Interaction0
   replied: true
   displayed: true
   run_id: 3
 
 three:
   unique_id: 101d727f-31cf-4601-8c3c-9d936b9e6c5e
+  serial: Nested_workflow:Interaction0
   replied: false
   displayed: true
   run_id: 5
