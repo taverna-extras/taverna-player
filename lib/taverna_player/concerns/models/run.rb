@@ -24,6 +24,12 @@ module TavernaPlayer
             :dependent => :destroy
           belongs_to :delayed_job, :class_name => "::Delayed::Job"
 
+          # A run can have children, which are runs.
+          # A run can have a parent, which is another run.
+          has_many :children, :class_name => "TavernaPlayer::Run",
+            :foreign_key => "parent_id"
+          belongs_to :parent, :class_name => "TavernaPlayer::Run"
+
           accepts_nested_attributes_for :inputs
 
           STATES = ["pending", "initialized", "running", "finished", "cancelled", "failed"]
@@ -38,6 +44,13 @@ module TavernaPlayer
           # between states, thus losing the cancel request from the user.
           validates :saved_state, :inclusion => { :in => STATES }
           validates :stop, :presence => true, :if => :cancelled?
+
+          # A parent must have an "older" run id than its children. This only
+          # needs to be checked on update because on create we don't have an
+          # id for ourself.
+          validates :parent_id, :numericality => { :less_than => :id,
+              :message => "Parents must have lower ids than children" },
+            :allow_nil => true, :on => :update
 
           has_attached_file :log,
             :path => ":rails_root/public/system/:class/:attachment/:id/:filename",

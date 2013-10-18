@@ -69,5 +69,20 @@ module TavernaPlayer
       refute taverna_player_runs(:five).complete?, "Run not complete"
       assert taverna_player_runs(:six).complete?, "Run is complete"
     end
+
+    test "a parent cannot be younger than its child" do
+      older = Run.create(:workflow_id => 1)
+      young = Run.create(:workflow_id => 1)
+      older.parent = young
+      refute older.save, "Run saved with a younger parent"
+    end
+
+    test "parent/child graph should be acyclic" do
+      parent = Run.create(:workflow_id => 1)
+      child = Run.create(:workflow_id => 1)
+      parent.children << child
+      parent.parent = child
+      refute parent.save, "Run saved with child as its parent"
+    end
   end
 end
