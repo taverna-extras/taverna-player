@@ -8,7 +8,7 @@ module TavernaPlayer
 
         included do
           attr_accessible :create_time, :delayed_job, :embedded, :finish_time,
-            :inputs_attributes, :log, :name, :proxy_interactions,
+            :inputs_attributes, :log, :name, :parent_id, :proxy_interactions,
             :proxy_notifications, :results, :run_id, :start_time,
             :status_message, :workflow_id
 
@@ -63,6 +63,23 @@ module TavernaPlayer
             :default_url => ""
 
           after_create :enqueue
+
+          class << self
+            def new_from_run(run, attributes = {}, options = {})
+              unless run.instance_of? TavernaPlayer::Run
+                run = find(run)
+              end
+
+              attributes[:parent_id] = run.id
+              attributes[:workflow_id] = run.workflow_id
+
+              new(attributes, options)
+            end
+
+            def create_from_run(run, attributes = {})
+              new_from_run(run, attributes).tap { |resource| resource.save }
+            end
+          end
 
           private
 

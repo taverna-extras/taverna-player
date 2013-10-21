@@ -118,5 +118,16 @@ module TavernaPlayer
       assert_same one, four.root_ancestor, "Child run does not have parent as its root"
       assert_equal 2, one.children.count, "Parent should have two children"
     end
+
+    test "should create run from another run" do
+      run = Run.create_from_run(taverna_player_runs(:one))
+      assert run.valid?, "Run is invalid"
+      refute run.new_record?, "Run was not saved"
+    end
+
+    test "new run from another run" do
+      run = Run.new_from_run(taverna_player_runs(:one))
+      assert run.save, "Run was not saved"
+    end
   end
 end
