@@ -125,6 +125,7 @@ module TavernaPlayer
         run = Run.create_from_run(parent)
         assert run.valid?, "Run is invalid"
         refute run.new_record?, "Run was not saved"
+        assert run.has_parent?, "Run should have a parent"
         assert_equal 1, run.inputs.count, "Run should have 1 input"
         refute_same parent.inputs.first, run.inputs.first, "Input was linked, not copied"
       end
@@ -135,6 +136,7 @@ module TavernaPlayer
         parent = taverna_player_runs(:three)
         run = Run.new_from_run(parent)
         assert run.save, "Run was not saved"
+        assert run.has_parent?, "Run should have a parent"
         assert_equal 1, run.inputs.count, "Run should have 1 input"
         refute_same parent.inputs.first, run.inputs.first, "Input was linked, not copied"
       end

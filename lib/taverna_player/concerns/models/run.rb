@@ -62,7 +62,7 @@ module TavernaPlayer
             :url => "/system/:class/:attachment/:id/:filename",
             :default_url => ""
 
-          after_create :populate_child_inputs, :if => :parent_id
+          after_create :populate_child_inputs, :if => :has_parent?
           after_create :enqueue
 
           class << self
@@ -109,11 +109,7 @@ module TavernaPlayer
         # Get the original ancestor of this run. In practice this is the first
         # run in the chain without a parent.
         def root_ancestor
-          if parent_id.nil?
-            self
-          else
-            parent.root_ancestor
-          end
+          has_parent? ? parent.root_ancestor : self
         end
 
         # There are two courses of action here:
@@ -182,6 +178,10 @@ module TavernaPlayer
         # This is used as a catch-all for finished, cancelled and failed
         def complete?
           finished? || cancelled? || failed?
+        end
+
+        def has_parent?
+          !parent_id.nil?
         end
       end
     end
