@@ -74,6 +74,16 @@ module TavernaPlayer
 
         end # included
 
+        # Get the original ancestor of this run. In practice this is the first
+        # run in the chain without a parent.
+        def root_ancestor
+          if parent_id.nil?
+            self
+          else
+            parent.root_ancestor
+          end
+        end
+
         # There are two courses of action here:
         #
         # * If the run is already running then cancel this run by setting the

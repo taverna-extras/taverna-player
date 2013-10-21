@@ -84,5 +84,39 @@ module TavernaPlayer
       parent.parent = child
       refute parent.save, "Run saved with child as its parent"
     end
+
+    test "finding root ancestor of a run" do
+      one = Run.create(:workflow_id => 1)
+      assert_same one, one.root_ancestor, "Single run is not its own root"
+      assert_equal 0, one.children.count, "Not a parent, should not have children"
+
+      two = Run.create(:workflow_id => 1)
+      assert_same two, two.root_ancestor, "Single run is not its own root"
+
+      two.parent = one
+      two.save
+      assert_same one, one.root_ancestor, "Parent run is not its own root"
+      assert_same one, two.root_ancestor, "Child run does not have parent as its root"
+      assert_equal 1, one.children.count, "Parent should have one child"
+
+      three = Run.create(:workflow_id => 1)
+      assert_same three, three.root_ancestor, "Single run is not its own root"
+
+      three.parent = two
+      three.save
+      assert_same one, one.root_ancestor, "Parent run is not its own root"
+      assert_same one, two.root_ancestor, "Child run does not have parent as its root"
+      assert_same one, three.root_ancestor, "Grandchild run does not have grandparent as its root"
+      assert_equal 1, two.children.count, "Parent should have one child"
+      assert_equal 1, one.children.count, "Grandparent should have one child"
+
+      four = Run.create(:workflow_id => 1)
+      assert_same four, four.root_ancestor, "Single run is not its own root"
+
+      four.parent = one
+      four.save
+      assert_same one, four.root_ancestor, "Child run does not have parent as its root"
+      assert_equal 2, one.children.count, "Parent should have two children"
+    end
   end
 end
