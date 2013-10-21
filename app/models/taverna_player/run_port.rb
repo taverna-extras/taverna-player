@@ -5,6 +5,7 @@ module TavernaPlayer
     belongs_to :run, :class_name => "TavernaPlayer::Run"
 
     validates_presence_of :name
+    validates_uniqueness_of :name, :scope => [:run_id, :port_type]
 
     attr_accessible :depth, :name, :value
   end
