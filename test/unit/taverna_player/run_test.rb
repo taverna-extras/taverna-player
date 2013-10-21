@@ -120,14 +120,24 @@ module TavernaPlayer
     end
 
     test "should create run from another run" do
-      run = Run.create_from_run(taverna_player_runs(:one))
-      assert run.valid?, "Run is invalid"
-      refute run.new_record?, "Run was not saved"
+      assert_difference(["Run.count", "RunPort::Input.count"]) do
+        parent = taverna_player_runs(:three)
+        run = Run.create_from_run(parent)
+        assert run.valid?, "Run is invalid"
+        refute run.new_record?, "Run was not saved"
+        assert_equal 1, run.inputs.count, "Run should have 1 input"
+        refute_same parent.inputs.first, run.inputs.first, "Input was linked, not copied"
+      end
     end
 
     test "new run from another run" do
-      run = Run.new_from_run(taverna_player_runs(:one))
-      assert run.save, "Run was not saved"
+      assert_difference(["Run.count", "RunPort::Input.count"]) do
+        parent = taverna_player_runs(:three)
+        run = Run.new_from_run(parent)
+        assert run.save, "Run was not saved"
+        assert_equal 1, run.inputs.count, "Run should have 1 input"
+        refute_same parent.inputs.first, run.inputs.first, "Input was linked, not copied"
+      end
     end
   end
 end

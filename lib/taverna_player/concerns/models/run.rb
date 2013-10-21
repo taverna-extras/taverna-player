@@ -62,6 +62,7 @@ module TavernaPlayer
             :url => "/system/:class/:attachment/:id/:filename",
             :default_url => ""
 
+          after_create :populate_child_inputs, :if => :parent_id
           after_create :enqueue
 
           class << self
@@ -82,6 +83,20 @@ module TavernaPlayer
           end
 
           private
+
+          # For each input on the parent run, make sure we have an equivalent
+          # on the child. Copy the values/files of inputs that are missing.
+          def populate_child_inputs
+            parent.inputs.each do |i|
+              input = TavernaPlayer::RunPort::Input.find_or_initialize_by_run_id_and_name(id, i.name)
+              if input.new_record?
+                input.value = i.value
+                input.file = i.file
+                input.depth = i.depth
+                input.save
+              end
+            end
+          end
 
           def enqueue
             worker = TavernaPlayer::Worker.new(self)
