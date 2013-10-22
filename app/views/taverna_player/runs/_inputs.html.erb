@@ -8,14 +8,16 @@
       <%= input.name %>
     </p>
 
+    <% if input.file.blank? %>
     <p>
       <b>Value:</b>
       <%= input.value %>
     </p>
-
+    <% else %>
     <p>
       <b>File:</b>
       <%= link_to input.file_file_name, input.file.url %>
     </p>
+    <% end %>
   <% end%>
 </div>
