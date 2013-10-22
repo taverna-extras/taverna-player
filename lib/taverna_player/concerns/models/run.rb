@@ -62,27 +62,16 @@ module TavernaPlayer
             :url => "/system/:class/:attachment/:id/:filename",
             :default_url => ""
 
+          after_initialize :initialize_child_run, :if => :has_parent?
           after_create :populate_child_inputs, :if => :has_parent?
           after_create :enqueue
 
-          class << self
-            def new_from_run(run, attributes = {}, options = {})
-              unless run.instance_of? TavernaPlayer::Run
-                run = find(run)
-              end
-
-              attributes[:parent_id] = run.id
-              attributes[:workflow_id] = run.workflow_id
-
-              new(attributes, options)
-            end
-
-            def create_from_run(run, attributes = {})
-              new_from_run(run, attributes).tap { |resource| resource.save }
-            end
-          end
-
           private
+
+          # A child run MUST have the same workflow as its parent.
+          def initialize_child_run
+            self.workflow = parent.workflow
+          end
 
           # For each input on the parent run, make sure we have an equivalent
           # on the child. Copy the values/files of inputs that are missing.

@@ -119,10 +119,10 @@ module TavernaPlayer
       assert_equal 2, one.children.count, "Parent should have two children"
     end
 
-    test "should create run from another run" do
+    test "create run from another run" do
       assert_difference(["Run.count", "RunPort::Input.count"]) do
         parent = taverna_player_runs(:three)
-        run = Run.create_from_run(parent)
+        run = Run.create(:parent_id => parent.id)
         assert run.valid?, "Run is invalid"
         refute run.new_record?, "Run was not saved"
         assert run.has_parent?, "Run should have a parent"
@@ -134,7 +134,7 @@ module TavernaPlayer
     test "new run from another run" do
       assert_difference(["Run.count", "RunPort::Input.count"]) do
         parent = taverna_player_runs(:three)
-        run = Run.new_from_run(parent)
+        run = Run.new(:parent_id => parent.id)
         assert run.save, "Run was not saved"
         assert run.has_parent?, "Run should have a parent"
         assert_equal 1, run.inputs.count, "Run should have 1 input"
