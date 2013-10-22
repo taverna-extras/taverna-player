@@ -69,5 +69,77 @@ module TavernaPlayer
       refute taverna_player_runs(:five).complete?, "Run not complete"
       assert taverna_player_runs(:six).complete?, "Run is complete"
     end
+
+    test "a parent cannot be younger than its child" do
+      older = Run.create(:workflow_id => 1)
+      young = Run.create(:workflow_id => 1)
+      older.parent = young
+      refute older.save, "Run saved with a younger parent"
+    end
+
+    test "parent/child graph should be acyclic" do
+      parent = Run.create(:workflow_id => 1)
+      child = Run.create(:workflow_id => 1)
+      parent.children << child
+      parent.parent = child
+      refute parent.save, "Run saved with child as its parent"
+    end
+
+    test "finding root ancestor of a run" do
+      one = Run.create(:workflow_id => 1)
+      assert_same one, one.root_ancestor, "Single run is not its own root"
+      assert_equal 0, one.children.count, "Not a parent, should not have children"
+
+      two = Run.create(:workflow_id => 1)
+      assert_same two, two.root_ancestor, "Single run is not its own root"
+
+      two.parent = one
+      two.save
+      assert_same one, one.root_ancestor, "Parent run is not its own root"
+      assert_same one, two.root_ancestor, "Child run does not have parent as its root"
+      assert_equal 1, one.children.count, "Parent should have one child"
+
+      three = Run.create(:workflow_id => 1)
+      assert_same three, three.root_ancestor, "Single run is not its own root"
+
+      three.parent = two
+      three.save
+      assert_same one, one.root_ancestor, "Parent run is not its own root"
+      assert_same one, two.root_ancestor, "Child run does not have parent as its root"
+      assert_same one, three.root_ancestor, "Grandchild run does not have grandparent as its root"
+      assert_equal 1, two.children.count, "Parent should have one child"
+      assert_equal 1, one.children.count, "Grandparent should have one child"
+
+      four = Run.create(:workflow_id => 1)
+      assert_same four, four.root_ancestor, "Single run is not its own root"
+
+      four.parent = one
+      four.save
+      assert_same one, four.root_ancestor, "Child run does not have parent as its root"
+      assert_equal 2, one.children.count, "Parent should have two children"
+    end
+
+    test "should create run from another run" do
+      assert_difference(["Run.count", "RunPort::Input.count"]) do
+        parent = taverna_player_runs(:three)
+        run = Run.create_from_run(parent)
+        assert run.valid?, "Run is invalid"
+        refute run.new_record?, "Run was not saved"
+        assert run.has_parent?, "Run should have a parent"
+        assert_equal 1, run.inputs.count, "Run should have 1 input"
+        refute_same parent.inputs.first, run.inputs.first, "Input was linked, not copied"
+      end
+    end
+
+    test "new run from another run" do
+      assert_difference(["Run.count", "RunPort::Input.count"]) do
+        parent = taverna_player_runs(:three)
+        run = Run.new_from_run(parent)
+        assert run.save, "Run was not saved"
+        assert run.has_parent?, "Run should have a parent"
+        assert_equal 1, run.inputs.count, "Run should have 1 input"
+        refute_same parent.inputs.first, run.inputs.first, "Input was linked, not copied"
+      end
+    end
   end
 end

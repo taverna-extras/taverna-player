@@ -8,7 +8,7 @@ module TavernaPlayer
 
         included do
           attr_accessible :create_time, :delayed_job, :embedded, :finish_time,
-            :inputs_attributes, :log, :name, :proxy_interactions,
+            :inputs_attributes, :log, :name, :parent_id, :proxy_interactions,
             :proxy_notifications, :results, :run_id, :start_time,
             :status_message, :workflow_id
 
@@ -23,6 +23,12 @@ module TavernaPlayer
           has_many :interactions, :class_name => "TavernaPlayer::Interaction",
             :dependent => :destroy
           belongs_to :delayed_job, :class_name => "::Delayed::Job"
+
+          # A run can have children, which are runs.
+          # A run can have a parent, which is another run.
+          has_many :children, :class_name => "TavernaPlayer::Run",
+            :foreign_key => "parent_id"
+          belongs_to :parent, :class_name => "TavernaPlayer::Run"
 
           accepts_nested_attributes_for :inputs
 
@@ -39,6 +45,13 @@ module TavernaPlayer
           validates :saved_state, :inclusion => { :in => STATES }
           validates :stop, :presence => true, :if => :cancelled?
 
+          # A parent must have an "older" run id than its children. This only
+          # needs to be checked on update because on create we don't have an
+          # id for ourself.
+          validates :parent_id, :numericality => { :less_than => :id,
+              :message => "Parents must have lower ids than children" },
+            :allow_nil => true, :on => :update
+
           has_attached_file :log,
             :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
             :url => "/system/:class/:attachment/:id/:filename",
@@ -49,9 +62,41 @@ module TavernaPlayer
             :url => "/system/:class/:attachment/:id/:filename",
             :default_url => ""
 
+          after_create :populate_child_inputs, :if => :has_parent?
           after_create :enqueue
 
+          class << self
+            def new_from_run(run, attributes = {}, options = {})
+              unless run.instance_of? TavernaPlayer::Run
+                run = find(run)
+              end
+
+              attributes[:parent_id] = run.id
+              attributes[:workflow_id] = run.workflow_id
+
+              new(attributes, options)
+            end
+
+            def create_from_run(run, attributes = {})
+              new_from_run(run, attributes).tap { |resource| resource.save }
+            end
+          end
+
           private
+
+          # For each input on the parent run, make sure we have an equivalent
+          # on the child. Copy the values/files of inputs that are missing.
+          def populate_child_inputs
+            parent.inputs.each do |i|
+              input = TavernaPlayer::RunPort::Input.find_or_initialize_by_run_id_and_name(id, i.name)
+              if input.new_record?
+                input.value = i.value
+                input.file = i.file
+                input.depth = i.depth
+                input.save
+              end
+            end
+          end
 
           def enqueue
             worker = TavernaPlayer::Worker.new(self)
@@ -60,6 +105,12 @@ module TavernaPlayer
           end
 
         end # included
+
+        # Get the original ancestor of this run. In practice this is the first
+        # run in the chain without a parent.
+        def root_ancestor
+          has_parent? ? parent.root_ancestor : self
+        end
 
         # There are two courses of action here:
         #
@@ -127,6 +178,10 @@ module TavernaPlayer
         # This is used as a catch-all for finished, cancelled and failed
         def complete?
           finished? || cancelled? || failed?
+        end
+
+        def has_parent?
+          !parent_id.nil?
         end
       end
     end
