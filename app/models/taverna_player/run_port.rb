@@ -8,6 +8,8 @@ module TavernaPlayer
     validates_uniqueness_of :name, :scope => [:run_id, :port_type]
 
     attr_accessible :depth, :name, :value
+
+    default_scope order("lower(name) ASC")
   end
 
   class RunPort::Input < RunPort
