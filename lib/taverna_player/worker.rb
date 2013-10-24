@@ -7,6 +7,11 @@ module TavernaPlayer
       @workflow = TavernaPlayer.workflow_proxy.class_name.find(@run.workflow_id)
     end
 
+    # This tells delayed_job to only try and complete each run once.
+    def max_attempts
+      1
+    end
+
     def perform
       unless TavernaPlayer.pre_run_callback.nil?
         status_message "Running pre-run tasks"
