@@ -19,5 +19,40 @@ module TavernaPlayer
       out_port = RunPort::Output.new
       assert !out_port.save, "Saved the run output port without a name"
     end
+
+    test "should not save small values in a file" do
+      test_value =
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"
+
+      port = RunPort::Input.create(:name => "test_port")
+      port.value = test_value
+      assert port.save, "Port did not save"
+      assert_nil port.file.path, "File present"
+      assert_equal test_value, port.value, "Saved value does not match test"
+    end
+
+    test "should save large values in a file" do
+      test_value =
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"
+
+      port = RunPort::Input.create(:name => "test_port")
+      port.value = test_value
+      assert port.save, "Port did not save"
+      assert_not_nil port.file.path, "File not present"
+      assert_equal test_value, port.value, "Saved value does not match test"
+
+      port.value = "small"
+      assert port.save, "Port did not save"
+      assert_nil port.file.path, "File present"
+    end
   end
 end
