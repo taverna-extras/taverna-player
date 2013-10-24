@@ -1,6 +1,7 @@
 require "require_all"
 require "coderay"
 require "delayed_job_active_record"
+require "jbuilder"
 require 'mime/types'
 require "paperclip"
 require "rails_autolink"

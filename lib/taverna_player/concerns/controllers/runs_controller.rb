@@ -84,9 +84,7 @@ module TavernaPlayer
 
         # GET /runs
         def index
-          respond_to do |format|
-            format.html # index.html.erb
-          end
+
         end
 
         # GET /runs/1
@@ -106,6 +104,7 @@ module TavernaPlayer
             # Render show.{html|js}.erb unless the run is embedded.
             format.html { render "taverna_player/runs/embedded/show" if @run.embedded }
             format.js { render "taverna_player/runs/embedded/show" if @run.embedded }
+            format.json # show.json.jbuilder
           end
         end
 
