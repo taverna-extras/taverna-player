@@ -119,6 +119,7 @@ module TavernaPlayer
           respond_to do |format|
             # Render new.html.erb unless the run is embedded.
             format.html { render "taverna_player/runs/embedded/new" if @run.embedded }
+            format.json # new.json.jbuilder
           end
         end
 
@@ -129,8 +130,10 @@ module TavernaPlayer
           respond_to do |format|
             if @run.save
               format.html { redirect_to @run, :notice => 'Run was successfully created.' }
+              format.json { render :show, :status => :created, :location => @run }
             else
               format.html { render :action => "new" }
+              format.json { render :json => @run.errors, :status => :unprocessable_entity }
             end
           end
         end
