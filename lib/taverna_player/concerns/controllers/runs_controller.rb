@@ -7,6 +7,8 @@ module TavernaPlayer
         extend ActiveSupport::Concern
 
         included do
+          respond_to :html, :json, :js
+
           before_filter :find_runs, :only => [ :index ]
           before_filter :find_run, :except => [ :index, :new, :create ]
           before_filter :find_workflow, :only => [ :new ]
@@ -106,45 +108,45 @@ module TavernaPlayer
             end
           end
 
-          respond_to do |format|
+          respond_with(@run) do |format|
             # Render show.{html|js}.erb unless the run is embedded.
-            format.html { render "taverna_player/runs/embedded/show" if @run.embedded }
-            format.js { render "taverna_player/runs/embedded/show" if @run.embedded }
-            format.json # show.json.jbuilder
+            format.any(:html, :js) do
+              render "taverna_player/runs/embedded/show" if @run.embedded
+            end
           end
         end
 
         # GET /runs/new
         def new
-          respond_to do |format|
+          respond_with(@run) do |format|
             # Render new.html.erb unless the run is embedded.
-            format.html { render "taverna_player/runs/embedded/new" if @run.embedded }
-            format.json # new.json.jbuilder
+            format.html do
+              render "taverna_player/runs/embedded/new" if @run.embedded
+            end
           end
         end
 
         # POST /runs
         def create
           @run = Run.new(params[:run])
-
-          respond_to do |format|
-            if @run.save
-              format.html { redirect_to @run, :notice => 'Run was successfully created.' }
-              format.json { render :show, :status => :created, :location => @run }
-            else
-              format.html { render :action => "new" }
-              format.json { render :json => @run.errors, :status => :unprocessable_entity }
-            end
+          if @run.save
+            flash[:notice] = "Run was successfully created."
           end
+
+          respond_with(@run, :status => :created, :location => @run)
         end
 
         # DELETE /runs/1
         def destroy
           if @run.complete?
             @run.destroy
-            redirect_to runs_url
+            flash[:notice] = "Run was deleted."
+            respond_with(@run)
           else
-            redirect_to :back
+            flash[:error] = "Run must be cancelled before deletion."
+            respond_with(@run, :nothing => true, :status => :forbidden) do |format|
+              format.html { redirect_to :back }
+            end
           end
         end
 
@@ -152,10 +154,14 @@ module TavernaPlayer
         def cancel
           @run.cancel unless @run.complete?
 
-          if @run.embedded?
-            redirect_to view_context.new_embedded_run_path(@run)
-          else
-            redirect_to :back
+          respond_with(@run, :action => :show) do |format|
+            format.html do
+              if @run.embedded?
+                redirect_to view_context.new_embedded_run_path(@run)
+              else
+                redirect_to :back
+              end
+            end
           end
         end
 

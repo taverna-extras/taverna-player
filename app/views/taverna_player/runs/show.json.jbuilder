@@ -1,13 +1,6 @@
 json.partial! "info", :run => @run
 
-json.inputs @run.inputs do |input|
-  json.name input.name
-  if input.file.blank?
-    json.value input.value
-  else
-    json.file_uri input.file.url
-  end
-end
+json.partial! "inputs", :inputs => @run.inputs
 
 if @run.outputs.size > 0
   json.outputs @run.outputs do |output|

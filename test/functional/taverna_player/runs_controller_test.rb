@@ -124,30 +124,55 @@ module TavernaPlayer
         "Did not render with the correct layout"
     end
 
-    test "should create run" do
+    test "should create run via browser" do
       assert_difference("Run.count") do
-        post :create, :run => { :workflow_id => @workflow }
+        post :create, :run => { :workflow_id => @workflow.id }
       end
 
       assert_redirected_to run_path(assigns(:run)),
         "Did not redirect correctly"
-      assert_equal 'Run was successfully created.', flash[:notice],
+      assert_equal "Run was successfully created.", flash[:notice],
         "Incorrect or missing flash notice"
       assert assigns(:run).valid?, "Created run was invalid"
     end
 
-    test "should not destroy running run" do
+    test "should create run via json" do
+      assert_difference("Run.count") do
+        post :create, :run => { :workflow_id => @workflow.id },
+          :format => :json
+      end
+
+      assert_response :created, "Response was not created"
+      assert_equal "Run was successfully created.", flash[:notice],
+        "Incorrect or missing flash notice"
+      assert assigns(:run).valid?, "Created run was invalid"
+    end
+
+    test "should not destroy running run via browser" do
       @request.env["HTTP_REFERER"] = "/runs"
       assert_no_difference(["Run.count", "RunPort::Output.count"],
         "Run count and output port count changed") do
           delete :destroy, :id => @run1, :use_route => :taverna_player
       end
 
+      assert_equal "Run must be cancelled before deletion.", flash[:error],
+        "Incorrect or missing flash notice"
       assert_response :redirect, "Response was not a redirect"
       assert_redirected_to runs_path, "Did not redirect correctly"
     end
 
-    test "should cancel run and redirect to index" do
+    test "should not destroy running run via json" do
+      assert_no_difference(["Run.count", "RunPort::Output.count"],
+        "Run count and output port count changed") do
+          delete :destroy, :id => @run1, :format => :json
+      end
+
+      assert_equal "Run must be cancelled before deletion.", flash[:error],
+        "Incorrect or missing flash notice"
+      assert_response :forbidden, "Response was not forbidden"
+    end
+
+    test "should cancel run and redirect to index via browser" do
       @request.env["HTTP_REFERER"] = "/runs"
       put :cancel, :id => @run1, :use_route => :taverna_player
 
@@ -155,12 +180,18 @@ module TavernaPlayer
       assert_redirected_to runs_path, "Did not redirect correctly"
     end
 
-    test "should cancel run and redirect to show" do
-      @request.env["HTTP_REFERER"] = "/runs/2"
-      put :cancel, :id => @run2, :use_route => :taverna_player
+    test "should cancel run and redirect to show via browser" do
+      @request.env["HTTP_REFERER"] = "/runs/1"
+      put :cancel, :id => @run1, :use_route => :taverna_player
 
       assert_response :redirect, "Response was not a redirect"
-      assert_redirected_to run_path(@run2), "Did not redirect correctly"
+      assert_redirected_to run_path(@run1), "Did not redirect correctly"
+    end
+
+    test "should cancel run via json" do
+      put :cancel, :id => @run1, :format => :json
+
+      assert_response :success, "Response was not success"
     end
 
     test "should destroy run and all associated ports and interactions" do
