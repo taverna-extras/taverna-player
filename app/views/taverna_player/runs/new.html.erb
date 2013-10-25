@@ -5,7 +5,7 @@
 <h2>Set inputs</h2>
 
 <%= form_for @run, :html => {:multipart => true} do |f| %>
-  <%= f.hidden_field :workflow_id, :value => @workflow.id %>
+  <%= f.hidden_field :workflow_id %>
   <%= f.hidden_field :embedded %>
 
   <div>

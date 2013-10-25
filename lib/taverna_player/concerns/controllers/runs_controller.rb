@@ -110,7 +110,7 @@ module TavernaPlayer
 
         # GET /runs/new
         def new
-          @run = Run.new
+          @run = Run.new(:workflow_id => @workflow.id)
           @run.embedded = true if params[:embedded] == "true"
 
           respond_to do |format|
