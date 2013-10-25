@@ -10,6 +10,7 @@ module TavernaPlayer
           before_filter :find_runs, :only => [ :index ]
           before_filter :find_run, :except => [ :index, :new, :create ]
           before_filter :find_workflow, :only => [ :new ]
+          before_filter :setup_new_run, :only => :new
           before_filter :find_interaction, :only => [ :notification, :read_interaction, :save_interaction ]
 
           layout :choose_layout
@@ -27,6 +28,11 @@ module TavernaPlayer
 
           def find_workflow
             @workflow = TavernaPlayer.workflow_proxy.class_name.find(params[:workflow_id])
+          end
+
+          def setup_new_run
+            @run = Run.new(:workflow_id => @workflow.id)
+            @run.embedded = true if params[:embedded] == "true"
           end
 
           def find_interaction
@@ -110,9 +116,6 @@ module TavernaPlayer
 
         # GET /runs/new
         def new
-          @run = Run.new(:workflow_id => @workflow.id)
-          @run.embedded = true if params[:embedded] == "true"
-
           respond_to do |format|
             # Render new.html.erb unless the run is embedded.
             format.html { render "taverna_player/runs/embedded/new" if @run.embedded }
