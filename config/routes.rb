@@ -1,5 +1,5 @@
 TavernaPlayer::Engine.routes.draw do
-  resources :runs, :except => [:edit, :update] do
+  resources :runs, :except => :edit do
     member do
       put "cancel", :action => "cancel"
       get "output/:port(/*path)", :action => "output"

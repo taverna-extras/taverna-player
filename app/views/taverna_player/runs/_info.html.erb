@@ -6,7 +6,10 @@
 
   <p>
     <b>Name:</b>
-    <%= run.name %>
+    <%= form_for run, :html => {:multipart => true} do |f| %>
+      <%= f.text_field :name %>
+      <%= f.submit "Update" %>
+    <% end %>
   </p>
 
   <p>

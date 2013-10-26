@@ -13,6 +13,7 @@ module TavernaPlayer
           before_filter :find_run, :except => [ :index, :new, :create ]
           before_filter :find_workflow, :only => [ :new ]
           before_filter :setup_new_run, :only => :new
+          before_filter :filter_update_parameters, :only => :update
           before_filter :find_interaction, :only => [ :notification, :read_interaction, :save_interaction ]
 
           layout :choose_layout
@@ -35,6 +36,11 @@ module TavernaPlayer
           def setup_new_run
             @run = Run.new(:workflow_id => @workflow.id)
             @run.embedded = true if params[:embedded] == "true"
+          end
+
+          def filter_update_parameters
+            name = params[:run][:name]
+            @update_parameters = { :name => name } unless name.blank?
           end
 
           def find_interaction
@@ -134,6 +140,13 @@ module TavernaPlayer
           end
 
           respond_with(@run, :status => :created, :location => @run)
+        end
+
+        # PUT /runs/1
+        def update
+          @run.update_attributes(@update_parameters)
+
+          respond_with(@run)
         end
 
         # DELETE /runs/1
