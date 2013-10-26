@@ -14,7 +14,7 @@ module TavernaPlayer
           :action => "index" }, {}, {}, "Did not route correctly"
     end
 
-    test "should route to a run" do
+    test "should route to a service credential" do
       assert_routing "/service_credentials/1",
         { :controller => "taverna_player/service_credentials",
           :action => "show", :id => "1" }, {}, {}, "Did not route correctly"
@@ -31,6 +31,7 @@ module TavernaPlayer
     test "should get new" do
       get :new
       assert_response :success
+      assert_not_nil assigns(:service_credential)
       assert_template "application", "Did not render with the correct layout"
     end
 
