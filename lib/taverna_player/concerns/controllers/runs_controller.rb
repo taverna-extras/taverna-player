@@ -138,8 +138,7 @@ module TavernaPlayer
 
         # DELETE /runs/1
         def destroy
-          if @run.complete?
-            @run.destroy
+          if @run.destroy
             flash[:notice] = "Run was deleted."
             respond_with(@run)
           else

@@ -65,6 +65,7 @@ module TavernaPlayer
           after_initialize :initialize_child_run, :if => :has_parent?
           after_create :populate_child_inputs, :if => :has_parent?
           after_create :enqueue
+          before_destroy :complete?
 
           private
 
