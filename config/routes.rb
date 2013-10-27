@@ -10,4 +10,11 @@ TavernaPlayer::Engine.routes.draw do
   end
 
   resources :service_credentials
+
+  if TavernaPlayer.enable_server_admin
+    scope TavernaPlayer.server_admin_namespace do
+      get "taverna", :controller => "taverna", :action => "index"
+      put "taverna", :controller => "taverna", :action => "update"
+    end
+  end
 end

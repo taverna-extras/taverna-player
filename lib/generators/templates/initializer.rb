@@ -41,6 +41,16 @@ TavernaPlayer.setup do |config|
   config.server_poll_interval = 5
   config.server_retry_interval = 10
 
+  # Taverna Server administration configuration information. Turn this on if
+  # you want to be able to configure your Taverna Server through Taverna
+  # Player. If you already have a separate namespace for administrative
+  # functions set up within your portal, e.g. "admin", you can add the Taverna
+  # Server configuration to that.
+  config.enable_server_admin = false
+  config.server_admin_namespace = nil
+  config.server_admin_username = "admin"
+  config.server_admin_password = "admin"
+
   # Taverna Server connection configuration.
   #config.server_connection[:verify_peer] = true
   #config.server_connection[:ca_file] = "/etc/certs/my-cert.crt"

@@ -15,7 +15,8 @@ require_rel "taverna_player"
 
 module TavernaPlayer
   # Configuration without defaults
-  mattr_accessor :server_address, :server_password, :server_username
+  mattr_accessor :server_address, :server_admin_password, :server_password,
+    :server_admin_username, :server_username
 
   # This should be set to the name of the workflow model class in the main
   # application via the workflow_model_proxy method below.
@@ -52,6 +53,20 @@ module TavernaPlayer
   # Taverna Server connection parameters
   mattr_accessor :server_connection
   @@server_connection = T2Server::DefaultConnectionParameters.new
+
+  # Enable Taverna Server admin interface?
+  mattr_accessor :enable_server_admin
+  @@enable_server_admin = false
+
+  # Taverna Server admin credentials
+  def self.server_admin_credentials
+    T2Server::HttpBasic.new(TavernaPlayer.server_admin_username,
+      TavernaPlayer.server_admin_password)
+  end
+
+  # Admin namespace
+  mattr_accessor :server_admin_namespace
+  TavernaPlayer.server_admin_namespace = nil
 
   def self.player_hostname=(hostname)
     uri = URI.parse(hostname)
