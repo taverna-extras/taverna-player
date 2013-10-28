@@ -183,6 +183,12 @@ module TavernaPlayer
             :filename => "#{@run.name}-log.txt"
         end
 
+        # GET /runs/1/results
+        def download_results
+          send_file @run.results.path, :type => "application/zip",
+            :filename => "#{@run.name}-all-results.zip"
+        end
+
         # GET /runs/1/output/*
         def output
           # We need to parse out the path into a list of numbers here so we have

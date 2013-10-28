@@ -59,7 +59,7 @@ module TavernaPlayer
 
           has_attached_file :results,
             :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
-            :url => "/system/:class/:attachment/:id/:filename",
+            :url => "/runs/:id/results",
             :default_url => ""
 
           after_initialize :initialize_child_run, :if => :has_parent?
