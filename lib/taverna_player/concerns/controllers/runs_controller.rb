@@ -177,6 +177,12 @@ module TavernaPlayer
           end
         end
 
+        # GET /runs/1/log
+        def download_log
+          send_file @run.log.path, :type => "text/plain",
+            :filename => "#{@run.name}-log.txt"
+        end
+
         # GET /runs/1/output/*
         def output
           # We need to parse out the path into a list of numbers here so we have

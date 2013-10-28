@@ -54,7 +54,7 @@ module TavernaPlayer
 
           has_attached_file :log,
             :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
-            :url => "/system/:class/:attachment/:id/:filename",
+            :url => "/runs/:id/log",
             :default_url => ""
 
           has_attached_file :results,
