@@ -17,7 +17,7 @@ module TavernaPlayer
 
     has_attached_file :file,
       :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
-      :url => "/system/:class/:attachment/:id/:filename",
+      :url => :file_url_via_run,
       :default_url => ""
 
     def value
@@ -40,6 +40,10 @@ module TavernaPlayer
     end
 
     private
+
+    def file_url_via_run
+      "/runs/#{run_id}/input/#{name}"
+    end
 
     def save_value_to_file(v)
       Dir.mktmpdir("#{id}", Rails.root.join("tmp")) do |tmp_dir|

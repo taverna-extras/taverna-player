@@ -2,6 +2,7 @@ TavernaPlayer::Engine.routes.draw do
   resources :runs, :except => :edit do
     member do
       put "cancel", :action => "cancel"
+      get "input/:port", :action => "input"
       get "output/:port(/*path)", :action => "output"
       get "log", :action => "download_log"
       get "results", :action => "download_results"

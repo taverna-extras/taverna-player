@@ -189,6 +189,20 @@ module TavernaPlayer
             :filename => "#{@run.name}-all-results.zip"
         end
 
+        # GET /runs/1/input/*
+        def input
+          input = RunPort::Input.find_by_run_id_and_name(@run.id, params[:port])
+
+          # If there is no such input port then return a 404.
+          raise ActionController::RoutingError.new('Not Found') if input.nil?
+
+          if input.file.nil?
+            send_data input.value, :disposition => "inline"
+          else
+            send_file input.file.path, :disposition => "inline"
+          end
+        end
+
         # GET /runs/1/output/*
         def output
           # We need to parse out the path into a list of numbers here so we have
