@@ -234,7 +234,7 @@ module TavernaPlayer
           if port.size < 255
             output.value = port.value
           else
-            output.value = port.value(0..255)
+            output.value = port.value(0...255)
           end
         end
 

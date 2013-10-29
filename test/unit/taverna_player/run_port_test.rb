@@ -48,6 +48,7 @@ module TavernaPlayer
       port.value = test_value
       assert port.save, "Port did not save"
       assert_not_nil port.file.path, "File not present"
+      assert port.read_attribute(:value).size == 255, "Port value size != 255"
       assert_equal test_value, port.value, "Saved value does not match test"
 
       port.value = "small"

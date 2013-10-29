@@ -31,7 +31,7 @@ module TavernaPlayer
 
     def value=(v)
       if !v.blank? && v.size > 255
-        self[:value] = v[0..255]
+        self[:value] = v[0...255]
         save_value_to_file(v)
       else
         self.file = nil unless file.path.blank?
