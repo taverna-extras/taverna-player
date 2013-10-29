@@ -8,6 +8,7 @@ TavernaPlayer::Engine.routes.draw do
       scope "download" do
         get "log", :action => "download_log"
         get "results", :action => "download_results"
+        get "output/:port", :action => "download_output"
       end
 
       scope "proxy" do

@@ -189,6 +189,22 @@ module TavernaPlayer
             :filename => "#{@run.name}-all-results.zip"
         end
 
+        # GET /runs/1/download/output/:port
+        def download_output
+          output = RunPort::Output.find_by_run_id_and_name(@run.id, params[:port])
+
+          # If there is no such output port then return a 404.
+          raise ActionController::RoutingError.new('Not Found') if output.nil?
+
+          if output.file.blank?
+            send_data output.value, :type => "text/plain",
+              :filename => "#{@run.name}-#{output.name}.txt"
+          else
+            send_file output.file.path, :type => output.file.content_type,
+              :filename => "#{@run.name}-#{output.file_file_name}"
+          end
+        end
+
         # GET /runs/1/input/*
         def input
           input = RunPort::Input.find_by_run_id_and_name(@run.id, params[:port])

@@ -226,27 +226,46 @@ module TavernaPlayer
     def process_outputs(run)
       outputs = []
 
-      run.output_ports.each_value do |port|
-        output = TavernaPlayer::RunPort::Output.new(:name => port.name,
-          :depth => port.depth)
+      Dir.mktmpdir(run.id, Rails.root.join("tmp")) do |tmp_dir|
+        run.output_ports.each_value do |port|
+          output = TavernaPlayer::RunPort::Output.new(:name => port.name,
+            :depth => port.depth)
 
-        if port.depth == 0 && port.type =~ /text/
-          if port.size < 255
-            output.value = port.value
+          tmp_file_name = File.join(tmp_dir, port.name)
+
+          if port.depth == 0
+            Zip::ZipFile.open(@run.results.path) do |zip|
+             if port.type =~ /text/
+                output.value = zip.read(port.name)
+              else
+                output.file = singleton_output(port.name, "#{tmp_file_name}.txt", zip)
+              end
+            end
           else
-            output.value = port.value(0...255)
+            # TODO: Need to rework this so it's not just re-downloading the
+            # whole port again. This is the quickest way right now though.
+            port.zip("#{tmp_file_name}.zip")
+            output.file = File.new("#{tmp_file_name}.zip")
           end
+
+          output.metadata = {
+            :size => port.size,
+            :type => port.type
+          }
+
+          outputs << output
         end
-
-        output.metadata = {
-          :size => port.size,
-          :type => port.type
-        }
-
-        outputs << output
       end
 
       outputs
+    end
+
+    def singleton_output(name, tmp_file, zip)
+      File.open(tmp_file, "w") do |file|
+        file.write zip.read(name)
+      end
+
+      File.new(tmp_file)
     end
 
     def status_message(message)

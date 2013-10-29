@@ -14,6 +14,7 @@
       <p>
         <b>Value:</b>
         <%= "(#{output.metadata[:type]})" if output.depth == 0 %>
+        <%= link_to "Download", run_path(run) + "/download/output/#{output.name}" %>
         <%= show_output(run, output) %>
       </p>
 

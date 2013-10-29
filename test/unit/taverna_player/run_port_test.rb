@@ -20,7 +20,7 @@ module TavernaPlayer
       assert !out_port.save, "Saved the run output port without a name"
     end
 
-    test "should not save small values in a file" do
+    test "should not save small input values in a file" do
       test_value =
         "01234567890123456789012345678901234567890123456789"\
         "01234567890123456789012345678901234567890123456789"\
@@ -35,7 +35,22 @@ module TavernaPlayer
       assert_equal test_value, port.value, "Saved value does not match test"
     end
 
-    test "should save large values in a file" do
+    test "should not save small output values in a file" do
+      test_value =
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"
+
+      port = RunPort::Output.create(:name => "test_port")
+      port.value = test_value
+      assert port.save, "Port did not save"
+      assert_nil port.file.path, "File present"
+      assert_equal test_value, port.value, "Saved value does not match test"
+    end
+
+    test "should save large input values in a file" do
       test_value =
         "01234567890123456789012345678901234567890123456789"\
         "01234567890123456789012345678901234567890123456789"\
@@ -45,6 +60,27 @@ module TavernaPlayer
         "01234567890123456789012345678901234567890123456789"
 
       port = RunPort::Input.create(:name => "test_port")
+      port.value = test_value
+      assert port.save, "Port did not save"
+      assert_not_nil port.file.path, "File not present"
+      assert port.read_attribute(:value).size == 255, "Port value size != 255"
+      assert_equal test_value, port.value, "Saved value does not match test"
+
+      port.value = "small"
+      assert port.save, "Port did not save"
+      assert_nil port.file.path, "File present"
+    end
+
+    test "should save large output values in a file" do
+      test_value =
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"
+
+      port = RunPort::Output.create(:name => "test_port")
       port.value = test_value
       assert port.save, "Port did not save"
       assert_not_nil port.file.path, "File not present"
