@@ -7,18 +7,14 @@ module TavernaPlayer
     validates_presence_of :name
     validates_uniqueness_of :name, :scope => [:run_id, :port_type]
 
-    attr_accessible :depth, :name, :value
-
-    default_scope order("lower(name) ASC")
-  end
-
-  class RunPort::Input < RunPort
-    attr_accessible :file
+    attr_accessible :depth, :file, :name, :value
 
     has_attached_file :file,
       :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
       :url => :file_url_via_run,
       :default_url => ""
+
+    default_scope order("lower(name) ASC")
 
     def value
       v = self[:value]
@@ -41,13 +37,9 @@ module TavernaPlayer
 
     private
 
-    def file_url_via_run
-      "/runs/#{run_id}/input/#{name}"
-    end
-
     def save_value_to_file(v)
       Dir.mktmpdir("#{id}", Rails.root.join("tmp")) do |tmp_dir|
-        tmp_file_name = File.join(tmp_dir, "value.txt")
+        tmp_file_name = File.join(tmp_dir, "#{name}.txt")
 
         File.open(tmp_file_name, "w") do |f|
           f.write(v)
@@ -56,12 +48,26 @@ module TavernaPlayer
         self.file = File.new(tmp_file_name)
       end
     end
+  end
 
+  class RunPort::Input < RunPort
+
+    private
+
+    def file_url_via_run
+      "/runs/#{run_id}/input/#{name}"
+    end
   end
 
   class RunPort::Output < RunPort
     attr_accessible :metadata
 
     serialize :metadata
+
+    private
+
+    def file_url_via_run
+      "/runs/#{run_id}/output/#{name}"
+    end
   end
 end
