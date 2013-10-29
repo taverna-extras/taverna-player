@@ -75,6 +75,18 @@ module TavernaPlayer
         "Did not route correctly")
     end
 
+    test "should route to results download" do
+      assert_routing "/runs/1/results",
+        { :controller => "taverna_player/runs", :action => "download_results",
+          :id => "1" }, {}, {}, "Did not route correctly"
+    end
+
+    test "should route to log download" do
+      assert_routing "/runs/1/log",
+        { :controller => "taverna_player/runs", :action => "download_log",
+          :id => "1" }, {}, {}, "Did not route correctly"
+    end
+
     test "should get index and be overridden" do
       get :index, :use_route => :taverna_player
       assert_response :success, "Response was not success"
