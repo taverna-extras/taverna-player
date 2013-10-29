@@ -177,13 +177,13 @@ module TavernaPlayer
           end
         end
 
-        # GET /runs/1/log
+        # GET /runs/1/download/log
         def download_log
           send_file @run.log.path, :type => "text/plain",
             :filename => "#{@run.name}-log.txt"
         end
 
-        # GET /runs/1/results
+        # GET /runs/1/download/results
         def download_results
           send_file @run.results.path, :type => "application/zip",
             :filename => "#{@run.name}-all-results.zip"

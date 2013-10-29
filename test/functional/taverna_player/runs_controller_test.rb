@@ -76,13 +76,13 @@ module TavernaPlayer
     end
 
     test "should route to results download" do
-      assert_routing "/runs/1/results",
+      assert_routing "/runs/1/download/results",
         { :controller => "taverna_player/runs", :action => "download_results",
           :id => "1" }, {}, {}, "Did not route correctly"
     end
 
     test "should route to log download" do
-      assert_routing "/runs/1/log",
+      assert_routing "/runs/1/download/log",
         { :controller => "taverna_player/runs", :action => "download_log",
           :id => "1" }, {}, {}, "Did not route correctly"
     end
