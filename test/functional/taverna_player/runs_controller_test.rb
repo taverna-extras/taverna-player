@@ -38,6 +38,12 @@ module TavernaPlayer
         "Did not route correctly"
     end
 
+    test "should route to a run input" do
+      assert_routing "/runs/1/input/IN",
+        { :controller => "taverna_player/runs", :action => "input",
+          :id => "1", :port => "IN" }, {}, {}, "Did not route correctly"
+    end
+
     test "should route to cancel on a run" do
       assert_routing({ :method => "put", :path => "/runs/1/cancel" },
         { :controller => "taverna_player/runs", :action => "cancel",
