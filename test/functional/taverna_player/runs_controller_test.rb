@@ -69,6 +69,12 @@ module TavernaPlayer
         "Did not route correctly")
     end
 
+    test "should route to output port download" do
+      assert_routing "/runs/1/download/output/Message",
+        { :controller => "taverna_player/runs", :action => "download_output",
+          :id => "1", :port => "Message" }, {}, {}, "Did not route correctly"
+    end
+
     test "should get index and be overridden" do
       get :index, :use_route => :taverna_player
       assert_response :success, "Response was not success"

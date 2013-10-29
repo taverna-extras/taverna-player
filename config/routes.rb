@@ -4,6 +4,11 @@ TavernaPlayer::Engine.routes.draw do
       put "cancel", :action => "cancel"
       get "input/:port", :action => "input"
       get "output/:port(/*path)", :action => "output"
+
+      scope "download" do
+        get "output/:port", :action => "download_output"
+      end
+
       get "log", :action => "download_log"
       get "results", :action => "download_results"
       get "proxy/:int_id/:name", :action => "read_interaction"
