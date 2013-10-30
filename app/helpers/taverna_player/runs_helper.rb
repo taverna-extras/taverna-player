@@ -14,7 +14,7 @@ module TavernaPlayer
             end
           end
         end
-        TavernaPlayer.output_renderer.render(content, output.metadata[:type])
+        raw(TavernaPlayer.output_renderer.render(content, output.metadata[:type]))
       else
         parse_port_list(run, output)
       end

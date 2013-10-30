@@ -19,14 +19,14 @@ def format_text(content, type)
   content = CodeRay.scan(content, :text).div(:css => :class)
 
   # Use auto_link to turn URI-like text into links.
-  raw(auto_link(content, :html => { :target => '_blank' }, :sanitize => false))
+  auto_link(content, :html => { :target => '_blank' }, :sanitize => false)
 end
 
 def format_xml(content, type)
   # Make sure XML is indented consistently.
   out = String.new
   REXML::Document.new(content).write(out, 1)
-  raw(CodeRay.scan(out, :xml).div(:css => :class, :line_numbers => :table))
+  CodeRay.scan(out, :xml).div(:css => :class, :line_numbers => :table)
 end
 
 def show_image(content, type)
