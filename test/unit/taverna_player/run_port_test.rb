@@ -31,6 +31,7 @@ module TavernaPlayer
       port = RunPort::Input.create(:name => "test_port")
       port.value = test_value
       assert port.save, "Port did not save"
+      assert_equal port.value_preview, port.value, "Value and preview differ"
       assert_nil port.file.path, "File present"
       assert_equal test_value, port.value, "Saved value does not match test"
     end
@@ -46,6 +47,7 @@ module TavernaPlayer
       port = RunPort::Output.create(:name => "test_port")
       port.value = test_value
       assert port.save, "Port did not save"
+      assert_equal port.value_preview, port.value, "Value and preview differ"
       assert_nil port.file.path, "File present"
       assert_equal test_value, port.value, "Saved value does not match test"
     end
@@ -65,6 +67,7 @@ module TavernaPlayer
       assert_not_nil port.file.path, "File not present"
       assert port.read_attribute(:value).size == 255, "Port value size != 255"
       assert_equal test_value, port.value, "Saved value does not match test"
+      assert_not_equal port.value_preview, port.value, "Value and preview same"
 
       port.value = "small"
       assert port.save, "Port did not save"
@@ -86,6 +89,7 @@ module TavernaPlayer
       assert_not_nil port.file.path, "File not present"
       assert port.read_attribute(:value).size == 255, "Port value size != 255"
       assert_equal test_value, port.value, "Saved value does not match test"
+      assert_not_equal port.value_preview, port.value, "Value and preview same"
 
       port.value = "small"
       assert port.save, "Port did not save"

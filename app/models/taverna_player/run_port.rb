@@ -16,6 +16,10 @@ module TavernaPlayer
 
     default_scope order("lower(name) ASC")
 
+    def value_preview
+      self[:value]
+    end
+
     def value
       v = self[:value]
       if !v.blank? && !file.path.blank?
