@@ -113,7 +113,7 @@ module TavernaPlayer
               end
             else
               waiting = true unless note.has_reply?
-              int = Interaction.find_or_create_by_run_id_and_unique_id_and_serial(@run.id, note.id, note.serial)
+              int = Interaction.find_or_initialize_by_run_id_and_unique_id_and_serial(@run.id, note.id, note.serial)
 
               # Need to catch this here in case some other process has replied.
               if note.has_reply? && !int.replied?
