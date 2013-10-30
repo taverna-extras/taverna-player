@@ -238,7 +238,7 @@ module TavernaPlayer
              if port.type =~ /text/
                 output.value = zip.read(port.name)
               else
-                output.file = singleton_output(port.name, "#{tmp_file_name}.txt", zip)
+                output.file = singleton_output(port.name, tmp_file_name, zip)
               end
             end
           else
@@ -261,7 +261,7 @@ module TavernaPlayer
     end
 
     def singleton_output(name, tmp_file, zip)
-      File.open(tmp_file, "w") do |file|
+      File.open(tmp_file, "wb") do |file|
         file.write zip.read(name)
       end
 
