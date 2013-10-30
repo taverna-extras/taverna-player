@@ -33,15 +33,8 @@ module TavernaPlayer
     def render(content, mimetype)
       type = MIME::Types[mimetype].first
 
-      renderer = begin
-        @hash[type.media_type][type.sub_type]
-      rescue
-        begin
-          @hash[type.media_type][:default]
-        rescue
-          @hash[:default]
-        end
-      end
+      renderer = @hash[type.media_type][type.sub_type] ||
+        @hash[type.media_type][:default] || @hash[:default]
 
       if renderer.is_a? Proc
         renderer.call(content, type)
