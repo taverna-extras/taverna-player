@@ -13,7 +13,6 @@ TavernaPlayer::Engine.routes.draw do
 
       scope "proxy" do
         get ":int_id/:name", :action => "read_interaction"
-        put ":int_id/:name", :action => "save_interaction"
         post ":int_id", :action => "notification"
       end
     end

@@ -1,6 +1,14 @@
 module TavernaPlayer
   module RunsHelper
 
+    def interaction_redirect(interaction)
+      if interaction.page_uri.blank?
+        run_url(interaction.run) + "/proxy/#{interaction.unique_id}/page.html"
+      else
+        interaction.page_uri
+      end
+    end
+
     def show_output(run, output)
       if output.depth == 0
         if output.value.blank?

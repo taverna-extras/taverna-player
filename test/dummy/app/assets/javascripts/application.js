@@ -12,4 +12,5 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require taverna_player/application
 //= require_tree .

@@ -1,7 +1,66 @@
 
 <div id="run-interaction">
   <% unless interaction.nil? %>
-    <%= content_tag(:iframe, "", {:width => "100%", :height => "500px",
-      :src => run_url(run) + "/proxy/#{interaction.unique_id}/page.html"}) %>
+
+    <script type="application/javascript">
+    var inputData = null;
+
+    function registerCalls() {
+      pmrpc.register({
+        publicProcedureName : "reply",
+        procedure : function(status, results) {
+          interaction_reply('<%= "#{run_url(run)}/proxy/#{interaction.unique_id}" %>', status, results);
+          return "OK";
+        }
+      });
+
+      pmrpc.register({
+        publicProcedureName : "getParameterValue",
+        procedure : function(parameterName) {
+          return getParameterValue(parameterName);
+        }
+      });
+
+      inputData = JSON.parse(getDataFromUrl('<%= "#{run_url(run)}/proxy/#{interaction.unique_id}/interaction#{interaction.unique_id}InputData.json" %>', "application/json"));
+
+      pmrpc.register({
+        publicProcedureName : "getInputData",
+        procedure : function() {
+          return inputData;
+        }
+      });
+
+      pmrpc.register( {
+        publicProcedureName : "getWorkflowRunId",
+        procedure : function () {
+          return "<%= run.run_id %>";
+        }
+      });
+
+      pmrpc.register( {
+        publicProcedureName : "setTitle",
+        procedure : function(title) {
+          document.title = title;
+          return "OK";
+        }
+      });
+
+      pmrpc.register( {
+        publicProcedureName : "getDataFromUrl",
+        procedure : function(url, type) {
+          return getDataFromUrl(url, type);
+        }
+      });
+    }
+
+    $(document).ready(
+      function() {
+        registerCalls();
+      }
+    );
+    </script>
+
+    <%= content_tag(:iframe, "", { :width => "100%", :height => "500px",
+      :src => interaction_redirect(interaction) }) %>
   <% end %>
 </div>

@@ -14,7 +14,7 @@ module TavernaPlayer
           before_filter :find_workflow, :only => [ :new ]
           before_filter :setup_new_run, :only => :new
           before_filter :filter_update_parameters, :only => :update
-          before_filter :find_interaction, :only => [ :notification, :read_interaction, :save_interaction ]
+          before_filter :find_interaction, :only => [ :notification, :read_interaction ]
 
           layout :choose_layout
 
@@ -289,18 +289,10 @@ module TavernaPlayer
           end
         end
 
-        # PUT /runs/1/proxy/:int_id/:name
-        def save_interaction
-          @interaction.output_value = request.body.read
-          @interaction.save
-
-          render :nothing => true, :status => 204
-        end
-
         # POST /runs/1/proxy/:int_id
         def notification
-          reply = Hash.from_xml(request.body.read)
-          @interaction.feed_reply = reply["entry"]["result_status"]
+          @interaction.output_value = request.body.read
+          @interaction.feed_reply = request.headers["X-Taverna-Interaction-Reply"]
           @interaction.save
 
           render :nothing => true, :status => 201

@@ -2,6 +2,9 @@ module TavernaPlayer
   class Worker
     include TavernaPlayer::Engine.routes.url_helpers
 
+    # How to get the interaction presentation frame out of the interaction page.
+    INTERACTION_REGEX = /document\.getElementById\(\'presentationFrame\'\)\.src = \"(.+)\";/
+
     def initialize(run)
       @run = run
       @workflow = TavernaPlayer.workflow_proxy.class_name.find(@run.workflow_id)
@@ -124,15 +127,17 @@ module TavernaPlayer
               unless int.replied?
                 if int.page.blank?
                   page = server.read(note.uri, "text/html", credentials)
-                  page.gsub!(@run.proxy_interactions,
-                    run_url(@run, :protocol => TavernaPlayer.hostname[:scheme],
-                      :host => TavernaPlayer.hostname[:host]) +
-                    "/proxy/#{int.unique_id}")
-                  page.gsub!(@run.proxy_notifications,
-                    run_url(@run, :protocol => TavernaPlayer.hostname[:scheme],
-                      :host => TavernaPlayer.hostname[:host]) +
-                    "/proxy/#{int.unique_id}")
-                  int.page = page
+
+                  INTERACTION_REGEX.match(page) do
+                    page_uri = $1
+
+                    if page_uri.starts_with?(server.uri.to_s)
+                      page = server.read(URI.parse(page_uri), "text/html", credentials)
+                      int.page = mangle_interaction_frame(page, int.unique_id)
+                    else
+                      int.page_uri = page_uri
+                    end
+                  end
                 end
 
                 if !int.feed_reply.blank? && !int.output_value.blank?
@@ -192,6 +197,16 @@ module TavernaPlayer
     end
 
     private
+
+    def mangle_interaction_frame(page, id)
+      [@run.proxy_interactions, @run.proxy_notifications].each do |uri|
+        page.gsub!(uri, run_url(@run,
+          :protocol => TavernaPlayer.hostname[:scheme],
+          :host => TavernaPlayer.hostname[:host]) + "/proxy/#{id}")
+      end
+
+      page
+    end
 
     def run_callback(callback, *params)
       if callback.is_a? Proc

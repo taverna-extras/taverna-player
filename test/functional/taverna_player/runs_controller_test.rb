@@ -66,15 +66,6 @@ module TavernaPlayer
         "Did not route correctly"
     end
 
-    test "should route to interaction resource write proxy" do
-      assert_routing({ :method => "put",
-        :path => "/runs/1/proxy/#{@int.unique_id}/file.json" },
-        { :controller => "taverna_player/runs", :action => "save_interaction",
-          :id => "1", :name => "file", :int_id => @int.unique_id,
-          :format => "json" }, {}, {},
-        "Did not route correctly")
-    end
-
     test "should route to results download" do
       assert_routing "/runs/1/download/results",
         { :controller => "taverna_player/runs", :action => "download_results",
