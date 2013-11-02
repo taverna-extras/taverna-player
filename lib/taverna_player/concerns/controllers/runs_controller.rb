@@ -277,11 +277,6 @@ module TavernaPlayer
               end
             end
 
-            format.js do
-              send_data proxy_read(name), :type => "text/javascript",
-                :disposition => "inline"
-            end
-
             format.json do
               send_data proxy_read(name),:type => "application/json",
                 :disposition => "inline"

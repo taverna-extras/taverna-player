@@ -1,6 +1,5 @@
 module TavernaPlayer
   class Worker
-    include TavernaPlayer::Engine.routes.url_helpers
 
     # How to get the interaction presentation frame out of the interaction page.
     INTERACTION_REGEX = /document\.getElementById\(\'presentationFrame\'\)\.src = \"(.+)\";/
@@ -133,7 +132,8 @@ module TavernaPlayer
 
                     if page_uri.starts_with?(server.uri.to_s)
                       page = server.read(URI.parse(page_uri), "text/html", credentials)
-                      int.page = mangle_interaction_frame(page, int.unique_id)
+                      int.page = page.gsub("#{@run.proxy_interactions}/pmrpc.js",
+                        "/assets/taverna_player/application.js")
                     else
                       int.page_uri = page_uri
                     end
@@ -197,16 +197,6 @@ module TavernaPlayer
     end
 
     private
-
-    def mangle_interaction_frame(page, id)
-      [@run.proxy_interactions, @run.proxy_notifications].each do |uri|
-        page.gsub!(uri, run_url(@run,
-          :protocol => TavernaPlayer.hostname[:scheme],
-          :host => TavernaPlayer.hostname[:host]) + "/proxy/#{id}")
-      end
-
-      page
-    end
 
     def run_callback(callback, *params)
       if callback.is_a? Proc
