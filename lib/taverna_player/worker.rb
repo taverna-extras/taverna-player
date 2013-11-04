@@ -243,7 +243,8 @@ module TavernaPlayer
              if port.type =~ /text/
                 output.value = zip.read(port.name)
               else
-                output.file = singleton_output(port.name, tmp_file_name, zip)
+                port_name = port.error? ? "#{port.name}.error" : port.name
+                output.file = singleton_output(port_name, tmp_file_name, zip)
               end
             end
           else
