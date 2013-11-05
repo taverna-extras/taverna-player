@@ -3,7 +3,7 @@
   <% unless interaction.nil? %>
 
     <script type="application/javascript">
-    var inputData = <%= raw(interaction.output_value) %>;
+    var inputData = <%= raw(interaction.data) %>;
 
     function registerCalls() {
       pmrpc.register({

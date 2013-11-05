@@ -246,7 +246,7 @@ module TavernaPlayer
 
         # POST /runs/1/interaction/:int_id
         def write_interaction
-          @interaction.output_value = request.body.read
+          @interaction.data = request.body.read
           @interaction.feed_reply = request.headers["X-Taverna-Interaction-Reply"]
           @interaction.save
 

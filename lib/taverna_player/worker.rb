@@ -106,7 +106,7 @@ module TavernaPlayer
               int = Interaction.find_by_run_id_and_serial(@run.parent_id, note.serial)
               new_int = Interaction.find_or_initialize_by_run_id_and_unique_id_and_serial(@run.id, note.id, note.serial)
               if new_int.new_record?
-                note.reply(int.feed_reply, int.output_value)
+                note.reply(int.feed_reply, int.data)
                 new_int.displayed = true
                 new_int.replied = true
                 new_int.save
@@ -138,12 +138,12 @@ module TavernaPlayer
                   end
                 end
 
-                if int.output_value.blank?
-                  int.output_value = note.input_data.force_encoding("UTF-8")
+                if int.data.blank?
+                  int.data = note.input_data.force_encoding("UTF-8")
                 end
 
-                if !int.feed_reply.blank? && !int.output_value.blank?
-                  note.reply(int.feed_reply, int.output_value)
+                if !int.feed_reply.blank? && !int.data.blank?
+                  note.reply(int.feed_reply, int.data)
 
                   int.replied = true
                 end

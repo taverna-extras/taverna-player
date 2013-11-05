@@ -1,7 +1,6 @@
 module TavernaPlayer
   class Interaction < ActiveRecord::Base
-    attr_accessible :displayed, :feed_reply, :output_value, :page, :replied,
-      :unique_id
+    attr_accessible :displayed, :feed_reply, :page, :replied, :unique_id
 
     belongs_to :run, :class_name => "TavernaPlayer::Run"
 
