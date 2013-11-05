@@ -14,27 +14,6 @@ function getParameterValue(name) {
     return results[1];
 }
 
-function getDataFromUrl(url, type) {
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("GET", url, false);
-
-  if (type != null) {
-    if (xmlhttp.overrideMimeType) {
-      xmlhttp.overrideMimeType(type);
-    } else {
-      xmlhttp.setRequestHeader("Content-Type", type);
-    }
-  }
-
-  xmlhttp.send();
-
-  if (xmlhttp.status != 200) {
-    return '';
-  }
-
-  return xmlhttp.responseText;
-}
-
 function interaction_reply(url, status, results) {
   var outputData = JSON.stringify(results);
 

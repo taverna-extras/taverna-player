@@ -42,13 +42,6 @@
           return "OK";
         }
       });
-
-      pmrpc.register( {
-        publicProcedureName : "getDataFromUrl",
-        procedure : function(url, type) {
-          return getDataFromUrl(url, type);
-        }
-      });
     }
 
     $(document).ready(
