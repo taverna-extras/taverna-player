@@ -52,8 +52,6 @@ module TavernaPlayer
         @run.run_id = run.id
         @run.state = run.status
         @run.create_time = run.create_time
-        @run.proxy_notifications = run.notifications_uri.to_s
-        @run.proxy_interactions = run.interactions_uri.to_s
         @run.save
 
         unless @run.inputs.size == 0
@@ -132,7 +130,7 @@ module TavernaPlayer
 
                     if page_uri.starts_with?(server.uri.to_s)
                       page = server.read(URI.parse(page_uri), "text/html", credentials)
-                      int.page = page.gsub("#{@run.proxy_interactions}/pmrpc.js",
+                      int.page = page.gsub("#{run.interactions_uri.to_s}/pmrpc.js",
                         "/assets/taverna_player/application.js")
                     else
                       int.page_uri = page_uri
