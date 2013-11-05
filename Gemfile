@@ -16,5 +16,3 @@ gem "taverna-t2flow", "~> 0.4.5"
 
 # To use debugger
 # gem 'debugger'
-
-gem "t2-server", :git => "git://github.com/myGrid/t2-server-gem", :branch => "next"

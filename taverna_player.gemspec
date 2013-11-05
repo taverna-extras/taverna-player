@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "3.2.14"
   s.add_dependency "jquery-rails", "~> 3.0.4"
   s.add_dependency "paperclip", "~> 3.4.1"
-  #s.add_dependency "t2-server", "~> 1.0.0"
+  s.add_dependency "t2-server", "~> 1.0.0"
   s.add_dependency "delayed_job_active_record", "~> 0.4.3"
   s.add_dependency "daemons", "~> 1.1.9"
   s.add_dependency "rubyzip", "~> 0.9.9"
