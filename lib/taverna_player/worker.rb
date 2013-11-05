@@ -140,6 +140,10 @@ module TavernaPlayer
                   end
                 end
 
+                if int.output_value.blank?
+                  int.output_value = note.input_data.force_encoding("UTF-8")
+                end
+
                 if !int.feed_reply.blank? && !int.output_value.blank?
                   note.reply(int.feed_reply, int.output_value)
 

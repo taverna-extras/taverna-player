@@ -50,19 +50,18 @@ module TavernaPlayer
           :id => "1" }, {}, {}, "Did not route correctly")
     end
 
-    test "should route to notification feed proxy" do
+    test "should route to interaction write proxy" do
       assert_routing({ :method => "post",
-        :path => "/runs/1/proxy/#{@int.unique_id}" },
-        { :controller => "taverna_player/runs", :action => "notification",
+        :path => "/runs/1/interaction/#{@int.unique_id}" },
+        { :controller => "taverna_player/runs", :action => "write_interaction",
           :id => "1", :int_id => @int.unique_id }, {}, {},
         "Did not route correctly")
     end
 
-    test "should route to interaction resource read proxy" do
-      assert_routing "/runs/1/proxy/#{@int.unique_id}/file.json",
+    test "should route to interaction read proxy" do
+      assert_routing "/runs/1/interaction/#{@int.unique_id}",
         { :controller => "taverna_player/runs", :action => "read_interaction",
-          :id => "1", :name => "file", :int_id => @int.unique_id,
-          :format => "json" }, {}, {},
+          :id => "1", :int_id => @int.unique_id, }, {}, {},
         "Did not route correctly"
     end
 

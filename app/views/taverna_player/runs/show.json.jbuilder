@@ -20,6 +20,6 @@ unless @interaction.nil?
   json.interaction do
     json.id @interaction.unique_id
     json.serial @interaction.serial
-    json.uri run_path(@run) + "/proxy/#{@interaction.unique_id}/page.html"
+    json.uri interaction_redirect(@interaction)
   end
 end

@@ -14,7 +14,7 @@ module TavernaPlayer
           before_filter :find_workflow, :only => [ :new ]
           before_filter :setup_new_run, :only => :new
           before_filter :filter_update_parameters, :only => :update
-          before_filter :find_interaction, :only => [ :notification, :read_interaction ]
+          before_filter :find_interaction, :only => [ :read_interaction, :write_interaction ]
 
           layout :choose_layout
 
@@ -45,30 +45,6 @@ module TavernaPlayer
 
           def find_interaction
             @interaction = Interaction.find_by_unique_id(params[:int_id])
-          end
-
-          # Read a resource from the interactions working directory of a run.
-          # If it's an html resource then rewrite the links within it to point
-          # back to this portal.
-          #
-          # This is a bit of a hack because we have to comply with Taverna
-          # Server's security model.
-          def proxy_read(name, type = :any)
-            credentials = T2Server::HttpBasic.new(TavernaPlayer.server_username,
-            TavernaPlayer.server_password)
-            server = T2Server::Server.new(TavernaPlayer.server_address)
-            uri = URI.parse("#{@run.proxy_interactions}/#{name}")
-
-            page = server.read(uri, "*/*", credentials)
-
-            if type == :html
-              page.gsub!(@run.proxy_interactions, run_url(@run) +
-                "/proxy/#{@interaction.unique_id}")
-              page.gsub!(@run.proxy_notifications, run_url(@run) +
-                "/proxy/#{@interaction.unique_id}")
-            end
-
-            page
           end
 
           # Read the data from the results zip file.
@@ -262,30 +238,14 @@ module TavernaPlayer
           end
         end
 
-        # GET /runs/1/proxy/:int_id/:name
+        # GET /runs/1/interaction/:int_id
         def read_interaction
-          respond_to do |format|
-            name = "#{params[:name]}.#{params[:format]}"
-
-            format.html do
-              if name == "page.html"
-                send_data @interaction.page, :type => "text/html",
-                  :disposition => "inline"
-              else
-                send_data proxy_read(name, :html), :type => "text/html",
-                  :disposition => "inline"
-              end
-            end
-
-            format.json do
-              send_data proxy_read(name),:type => "application/json",
-                :disposition => "inline"
-            end
-          end
+          send_data @interaction.page, :type => "text/html",
+            :disposition => "inline"
         end
 
-        # POST /runs/1/proxy/:int_id
-        def notification
+        # POST /runs/1/interaction/:int_id
+        def write_interaction
           @interaction.output_value = request.body.read
           @interaction.feed_reply = request.headers["X-Taverna-Interaction-Reply"]
           @interaction.save

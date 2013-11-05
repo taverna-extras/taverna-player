@@ -11,9 +11,9 @@ TavernaPlayer::Engine.routes.draw do
         get "output/:port", :action => "download_output"
       end
 
-      scope "proxy" do
-        get ":int_id/:name", :action => "read_interaction"
-        post ":int_id", :action => "notification"
+      scope "interaction" do
+        get ":int_id", :action => "read_interaction"
+        post ":int_id", :action => "write_interaction"
       end
     end
   end
