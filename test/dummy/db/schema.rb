@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131102114343) do
+ActiveRecord::Schema.define(:version => 20131105142417) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -30,15 +30,15 @@ ActiveRecord::Schema.define(:version => 20131102114343) do
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "taverna_player_interactions", :force => true do |t|
-    t.boolean  "replied",                          :default => false
+    t.boolean  "replied",                        :default => false
     t.integer  "run_id"
-    t.datetime "created_at",                                          :null => false
-    t.datetime "updated_at",                                          :null => false
-    t.boolean  "displayed",                        :default => false
+    t.datetime "created_at",                                        :null => false
+    t.datetime "updated_at",                                        :null => false
+    t.boolean  "displayed",                      :default => false
     t.string   "unique_id"
     t.text     "page"
     t.string   "feed_reply"
-    t.text     "output_value", :limit => 16777215
+    t.text     "data",       :limit => 16777215
     t.string   "serial"
     t.string   "page_uri"
   end
@@ -78,8 +78,6 @@ ActiveRecord::Schema.define(:version => 20131102114343) do
     t.integer  "results_file_size"
     t.datetime "results_updated_at"
     t.boolean  "embedded",             :default => false
-    t.string   "proxy_notifications"
-    t.string   "proxy_interactions"
     t.boolean  "stop",                 :default => false
     t.string   "log_file_name"
     t.string   "log_content_type"

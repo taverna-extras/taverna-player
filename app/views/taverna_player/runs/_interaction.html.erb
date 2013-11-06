@@ -3,13 +3,13 @@
   <% unless interaction.nil? %>
 
     <script type="application/javascript">
-    var inputData = null;
+    var inputData = <%= raw(interaction.data) %>;
 
     function registerCalls() {
       pmrpc.register({
         publicProcedureName : "reply",
         procedure : function(status, results) {
-          interaction_reply('<%= "#{run_url(run)}/proxy/#{interaction.unique_id}" %>', status, results);
+          interaction_reply('<%= "#{run_url(run)}/interaction/#{interaction.unique_id}" %>', status, results);
           return "OK";
         }
       });
@@ -20,8 +20,6 @@
           return getParameterValue(parameterName);
         }
       });
-
-      inputData = JSON.parse(getDataFromUrl('<%= "#{run_url(run)}/proxy/#{interaction.unique_id}/interaction#{interaction.unique_id}InputData.json" %>', "application/json"));
 
       pmrpc.register({
         publicProcedureName : "getInputData",
@@ -42,13 +40,6 @@
         procedure : function(title) {
           document.title = title;
           return "OK";
-        }
-      });
-
-      pmrpc.register( {
-        publicProcedureName : "getDataFromUrl",
-        procedure : function(url, type) {
-          return getDataFromUrl(url, type);
         }
       });
     }
