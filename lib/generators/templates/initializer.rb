@@ -49,6 +49,10 @@ TavernaPlayer.setup do |config|
   #config.server_connection[:open_timeout] = 10
   #config.server_connection[:read_timeout] = 10
 
+  # Where to store files created by workflow runs. Should be fully qualified
+  # or use :rails_root for the root directory of your application.
+  #config.file_store = ":rails_root/public/system"
+
   # Callbacks to be run at various points during a workflow run. These can be
   # defined as Proc objects or as methods and referenced by name.
   #

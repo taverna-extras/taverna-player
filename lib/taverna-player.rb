@@ -41,6 +41,10 @@ module TavernaPlayer
     yield @@output_renderer if block_given?
   end
 
+  # Path to place where files should be stored.
+  mattr_accessor :file_store
+  @@file_store = ":rails_root/public/system"
+
   # Taverna server polling interval (in seconds)
   mattr_accessor :server_poll_interval
   @@server_poll_interval = 5

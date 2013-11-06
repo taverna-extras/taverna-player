@@ -53,12 +53,12 @@ module TavernaPlayer
             :allow_nil => true, :on => :update
 
           has_attached_file :log,
-            :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
+            :path => File.join(TavernaPlayer.file_store, ":class/:attachment/:id/:filename"),
             :url => "/runs/:id/download/log",
             :default_url => ""
 
           has_attached_file :results,
-            :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
+            :path => File.join(TavernaPlayer.file_store, ":class/:attachment/:id/:filename"),
             :url => "/runs/:id/download/results",
             :default_url => ""
 

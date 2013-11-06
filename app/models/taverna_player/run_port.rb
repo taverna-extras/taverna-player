@@ -10,7 +10,7 @@ module TavernaPlayer
     attr_accessible :depth, :file, :name, :value
 
     has_attached_file :file,
-      :path => ":rails_root/public/system/:class/:attachment/:id/:filename",
+      :path => File.join(TavernaPlayer.file_store, ":class/:attachment/:id/:filename"),
       :url => :file_url_via_run,
       :default_url => ""
 
