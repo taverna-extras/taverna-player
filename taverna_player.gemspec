@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails_autolink", "~> 1.1.0"
   s.add_dependency "require_all", "~> 1.3.1"
   s.add_dependency "jbuilder", "~> 1.5.2"
+  s.add_dependency "pmrpc-rails", "~> 1.0.0"
 
   s.add_development_dependency "sqlite3"
 end

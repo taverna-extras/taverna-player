@@ -4,6 +4,7 @@ require "delayed_job_active_record"
 require "jbuilder"
 require 'mime/types'
 require "paperclip"
+require "pmrpc-rails"
 require "rails_autolink"
 require "t2-server"
 require "taverna-t2flow"
