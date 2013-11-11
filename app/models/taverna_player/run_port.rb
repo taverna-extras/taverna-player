@@ -16,6 +16,10 @@ module TavernaPlayer
 
     default_scope order("lower(name) ASC")
 
+    def display_name
+      name.gsub('_', ' ')
+    end
+
     def value_preview
       self[:value]
     end

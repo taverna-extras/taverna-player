@@ -19,7 +19,7 @@ two:
 
 three:
   id: 3
-  name: IN
+  name: IN_Value
   value: Rob
   port_type: TavernaPlayer::RunPort::Input
   run_id: 3
@@ -36,7 +36,7 @@ four:
 
 five:
   id: 5
-  name: OUT
+  name: Long_N_unnecessary_Name_OUT
   value: (http://example.com/path?query=1)
   port_type: TavernaPlayer::RunPort::Output
   run_id: 4
