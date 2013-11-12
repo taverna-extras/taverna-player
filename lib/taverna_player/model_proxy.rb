@@ -3,7 +3,7 @@ module TavernaPlayer
   class ModelProxy
     attr_reader :class_name
 
-    def initialize(class_name, method_names)
+    def initialize(class_name, method_names = [])
       if class_name.is_a?(String)
         begin
           @class_name = Object.const_get(class_name)
