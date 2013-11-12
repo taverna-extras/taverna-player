@@ -15,6 +15,10 @@ module TavernaPlayer
           # workflow model in the parent app, whatever it calls its model.
           belongs_to :workflow, :class_name => TavernaPlayer.workflow_proxy.class_name.to_s
 
+          unless TavernaPlayer.user_proxy.nil?
+            belongs_to :user, :class_name => TavernaPlayer.user_proxy.class_name.to_s
+          end
+
           has_many :inputs, :class_name => "TavernaPlayer::RunPort::Input",
             :dependent => :destroy
           has_many :outputs, :class_name => "TavernaPlayer::RunPort::Output",

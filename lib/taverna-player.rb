@@ -26,6 +26,14 @@ module TavernaPlayer
     yield @@workflow_proxy if block_given?
   end
 
+  # This should be set to the name of the user model class in the main
+  # application via the user_model_proxy method below. Defaults to nil.
+  mattr_reader :user_proxy
+  @@user_proxy = nil
+  def self.user_model_proxy=(user_class)
+    @@user_proxy = ModelProxy.new(user_class)
+  end
+
   # Setup default output render callbacks.
   mattr_reader :output_renderer
   @@output_renderer = OutputRenderer.new

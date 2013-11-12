@@ -29,6 +29,11 @@ TavernaPlayer.setup do |config|
     #proxy.inputs_method_name = :inputs
   #end
 
+  # This should be set to the name of the user model class in the main
+  # application if you have one. This defaults to nil and should be left as
+  # such if your main application does not have users.
+  #config.user_model_proxy = "User"
+
   # Taverna Server configuration information. The poll interval is in seconds
   # and sets how often the server will be polled for updates by each worker.
   # The retry interval is also in seconds and sets how long a worker will wait
