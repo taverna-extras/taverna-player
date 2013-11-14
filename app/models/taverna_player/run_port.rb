@@ -27,7 +27,7 @@ module TavernaPlayer
     def value
       v = self[:value]
       if !v.blank? && !file.path.blank?
-        File.binread(file.path)
+        File.read(file.path)
       else
         v
       end
@@ -49,7 +49,7 @@ module TavernaPlayer
       Dir.mktmpdir("#{id}", Rails.root.join("tmp")) do |tmp_dir|
         tmp_file_name = File.join(tmp_dir, "#{name}.txt")
 
-        File.binwrite(tmp_file_name, v)
+        File.write(tmp_file_name, v.force_encoding("UTF-8"))
 
         self.file = File.new(tmp_file_name)
       end

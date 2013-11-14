@@ -103,7 +103,7 @@ module TavernaPlayer
       assert_nil port.file.path, "File present"
     end
 
-    test "should handle non ascii characters in large input values" do
+    test "should handle non ascii/utf-8 characters in large input values" do
       test_value =
         "\xC2"\
         "01234567890123456789012345678901234567890123456789"\
@@ -122,7 +122,7 @@ module TavernaPlayer
       assert_not_equal port.value_preview, port.value, "Value and preview same"
     end
 
-    test "should handle non ascii characters in large output values" do
+    test "should handle non ascii/utf-8 characters in large output values" do
       test_value =
         "\xC2"\
         "01234567890123456789012345678901234567890123456789"\
