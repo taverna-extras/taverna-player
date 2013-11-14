@@ -10,7 +10,7 @@ test/dummy/public/system/
 test/dummy/config/initializers/taverna_player.rb
 
 *~
-html/
+rdoc/
 .buildpath
 .project
 .idea

@@ -14,10 +14,23 @@ end
 
 RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'TavernaPlayer'
+  rdoc.main     = 'README.rdoc'
+  rdoc.title    = 'Taverna Player'
   rdoc.options << '--line-numbers'
-  rdoc.rdoc_files.include('README.rdoc')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+  rdoc.options << "--tab-width=2"
+
+  files = [
+    "README.rdoc",
+    "LICENCE.rdoc",
+    "app/helpers/taverna_player/application_helper.rb",
+    "app/models/taverna_player/run.rb",
+    "app/models/taverna_player/run_port.rb",
+    "app/models/taverna_player/service_credential.rb",
+    "lib/taverna-player.rb",
+    "lib/taverna_player/output_renderer.rb"
+    ]
+
+  rdoc.rdoc_files.include(files)
 end
 
 APP_RAKEFILE = File.expand_path("../test/dummy/Rakefile", __FILE__)

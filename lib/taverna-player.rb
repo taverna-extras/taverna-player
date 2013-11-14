@@ -14,6 +14,8 @@ require "zip/zip"
 # Grab everything in the taverna_player directory using the require_all gem.
 require_rel "taverna_player"
 
+# This module serves as the configuration point of Taverna Player. Examples of
+# all configuration options can be found in the taverna_player initializer.
 module TavernaPlayer
   # Configuration without defaults
   mattr_accessor :server_address, :server_password, :server_username
@@ -21,6 +23,14 @@ module TavernaPlayer
   # This should be set to the name of the workflow model class in the main
   # application via the workflow_model_proxy method below.
   mattr_reader :workflow_proxy
+
+  # :call-seq:
+  #   workflow_model_proxy(workflow_class) {|proxy| ...}
+  #
+  # Set up a proxy to the main application's workflow model. The class name
+  # should be supplied as a string, e.g. "Workflow".
+  #
+  # See the taverna_player initializer for more information.
   def self.workflow_model_proxy(workflow_class)
     @@workflow_proxy = ModelProxy.new(workflow_class, [:file, :title, :inputs])
     yield @@workflow_proxy if block_given?
@@ -30,6 +40,14 @@ module TavernaPlayer
   # application via the user_model_proxy method below. Defaults to nil.
   mattr_reader :user_proxy
   @@user_proxy = nil
+
+  # :call-seq:
+  #   user_model_proxy = user_class
+  #
+  # Set up a proxy to the main application's user model if it has one. The
+  # class name should be supplied as a string, e.g. "User".
+  #
+  # See the taverna_player initializer for more information.
   def self.user_model_proxy=(user_class)
     @@user_proxy = ModelProxy.new(user_class)
   end
@@ -51,6 +69,13 @@ module TavernaPlayer
   @@output_renderer.add("image/bmp", :show_image_tp_default)
   @@output_renderer.add("application/x-error", :workflow_error_tp_default)
 
+  # :call-seq:
+  #   output_renderers {|renderer| ...}
+  #
+  # Set up the renderers for each MIME type that you want to be able to show
+  # in the browser. In most cases the supplied defaults will be sufficient.
+  #
+  # See the taverna_player initializer for more information.
   def self.output_renderers
     yield @@output_renderer if block_given?
   end
@@ -87,6 +112,12 @@ module TavernaPlayer
   mattr_accessor :run_failed_callback
   @@run_failed_callback = nil
 
+  # :call-seq:
+  #   setup {|config| ...}
+  #
+  # Yield this configuration class so that Taverna Player can be set up.
+  #
+  # See the taverna_player initializer for more information.
   def self.setup
     yield self
   end

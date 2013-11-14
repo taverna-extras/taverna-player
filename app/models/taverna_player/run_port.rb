@@ -1,7 +1,13 @@
 module TavernaPlayer
+
+  # This class is the superclass of the input and output port types
+  # RunPort::Input and RunPort::Output, respectively. It holds much common
+  # functionality.
+  #
+  # A port can hold either a text value or a file.
   class RunPort < ActiveRecord::Base
 
-    MAXIMUM_DATABASE_VALUE_SIZE = 255
+    MAXIMUM_DATABASE_VALUE_SIZE = 255  # :nodoc:
 
     self.inheritance_column = "port_type"
 
@@ -27,14 +33,28 @@ module TavernaPlayer
     # the value if the file has changed. This must run after "delete_value"!
     before_save :process_value, :if => :value_changed?, :unless => :file_file_name_changed?
 
+    # :call-seq:
+    #   display_name -> string
+    #
+    # Convert this port's name to a more presentable form. In practice this
+    # means converting underscores (_) to spaces, while preserving case.
     def display_name
       name.gsub('_', ' ')
     end
 
+    # :call-seq:
+    #   value_preview -> string
+    #
+    # Show up to the first 256 characters of the port's value. This returns
+    # nil if the port has a file instead of a value.
     def value_preview
       self[:value]
     end
 
+    # :call-seq:
+    #   value -> string
+    #
+    # Return the value held in this port if there is one.
     def value
       v = self[:value]
       if !v.blank? && !file.path.blank?
@@ -74,6 +94,7 @@ module TavernaPlayer
     end
   end
 
+  # This class represents a workflow input port.
   class RunPort::Input < RunPort
 
     private
@@ -83,6 +104,7 @@ module TavernaPlayer
     end
   end
 
+  # This class represents a workflow output port.
   class RunPort::Output < RunPort
 
     attr_accessible :metadata
@@ -94,5 +116,21 @@ module TavernaPlayer
     def file_url_via_run
       "/runs/#{run_id}/output/#{name}"
     end
+
+    public
+
+    ##
+    # :method: metadata
+    # :call-seq:
+    #   metadata -> hash
+    #
+    # Get the size and type metadata for this output port in a Hash. For a
+    # list output it might look like this:
+    #
+    #  {
+    #    :size => [12, 36509],
+    #    :type => ["text/plain", "image/png"]
+    #  }
+
   end
 end
