@@ -19,3 +19,7 @@ def player_run_failed_callback(run)
   w = Workflow.find(run.workflow_id)
   puts "Run-failed callback called for run '#{run.name}' of workflow '#{w.id}'"
 end
+
+def user_one
+  User.find(1)
+end

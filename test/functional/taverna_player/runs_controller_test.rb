@@ -148,6 +148,22 @@ module TavernaPlayer
       assert_equal "Run was successfully created.", flash[:notice],
         "Incorrect or missing flash notice"
       assert assigns(:run).valid?, "Created run was invalid"
+      refute assigns(:run).user_id.nil?, "Run should have a user_id"
+    end
+
+    test "should create embedded run via browser" do
+      assert_difference("Run.count") do
+        post :create,
+          :run => { :workflow_id => @workflow.id, :embedded => "true" }
+      end
+
+      assert_redirected_to run_path(assigns(:run)),
+        "Did not redirect correctly"
+      assert_equal "Run was successfully created.", flash[:notice],
+        "Incorrect or missing flash notice"
+      assert assigns(:run).valid?, "Created run was invalid"
+      assert assigns(:run).embedded?, "Run not marked as embedded"
+      assert assigns(:run).user_id.nil?, "Run should not have a user_id"
     end
 
     test "should create run via json" do
@@ -160,6 +176,22 @@ module TavernaPlayer
       assert_equal "Run was successfully created.", flash[:notice],
         "Incorrect or missing flash notice"
       assert assigns(:run).valid?, "Created run was invalid"
+      refute assigns(:run).user_id.nil?, "Run should have a user_id"
+    end
+
+    test "should create embedded run via json" do
+      assert_difference("Run.count") do
+        post :create,
+          :run => { :workflow_id => @workflow.id, :embedded => "true" },
+          :format => :json
+      end
+
+      assert_response :created, "Response was not created"
+      assert_equal "Run was successfully created.", flash[:notice],
+        "Incorrect or missing flash notice"
+      assert assigns(:run).valid?, "Created run was invalid"
+      assert assigns(:run).embedded?, "Run not marked as embedded"
+      assert assigns(:run).user_id.nil?, "Run should not have a user_id"
     end
 
     test "should not destroy running run via browser" do
