@@ -34,6 +34,10 @@ TavernaPlayer.setup do |config|
   # such if your main application does not have users.
   #config.user_model_proxy = "User"
 
+  # This should be set to the name of the method used to get the current user
+  # in the main app. For Devise this would be :current_user. Defaults to nil.
+  #config.current_user_callback = nil
+
   # Taverna Server configuration information. The poll interval is in seconds
   # and sets how often the server will be polled for updates by each worker.
   # The retry interval is also in seconds and sets how long a worker will wait

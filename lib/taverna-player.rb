@@ -34,6 +34,11 @@ module TavernaPlayer
     @@user_proxy = ModelProxy.new(user_class)
   end
 
+  # This should be set to the name of the method used to get the current user
+  # in the main app. For Devise this would be :current_user. Defaults to nil.
+  mattr_accessor :current_user_callback
+  @@current_user_callback = nil
+
   # Setup default output render callbacks.
   mattr_reader :output_renderer
   @@output_renderer = OutputRenderer.new

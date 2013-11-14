@@ -13,6 +13,7 @@ module TavernaPlayer
           before_filter :find_run, :except => [ :index, :new, :create ]
           before_filter :find_workflow, :only => [ :new ]
           before_filter :setup_new_run, :only => :new
+          before_filter :set_run_user, :only => :create
           before_filter :filter_update_parameters, :only => :update
           before_filter :find_interaction, :only => [ :read_interaction, :write_interaction ]
 
@@ -37,6 +38,15 @@ module TavernaPlayer
           def setup_new_run
             @run = Run.new(:workflow_id => @workflow.id)
             @run.embedded = true if params[:embedded] == "true"
+          end
+
+          def set_run_user
+            return if params[:run][:embedded] == "true" || TavernaPlayer.user_proxy.nil?
+
+            unless TavernaPlayer.current_user_callback.blank?
+              user = method(TavernaPlayer.current_user_callback).call
+              params[:run][:user_id] = user.id unless user.nil?
+            end
           end
 
           def filter_update_parameters

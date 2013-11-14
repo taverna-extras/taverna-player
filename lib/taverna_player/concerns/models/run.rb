@@ -9,7 +9,7 @@ module TavernaPlayer
         included do
           attr_accessible :create_time, :delayed_job, :embedded, :finish_time,
             :inputs_attributes, :log, :name, :parent_id, :results, :run_id,
-            :start_time, :status_message, :workflow_id
+            :start_time, :status_message, :user_id, :workflow_id
 
           # Each run is spawned from a workflow. This provides the link to the
           # workflow model in the parent app, whatever it calls its model.
