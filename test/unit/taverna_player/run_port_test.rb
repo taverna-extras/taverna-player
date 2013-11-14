@@ -157,5 +157,141 @@ module TavernaPlayer
       assert_equal @port5.name.gsub('_', ' '), @port5.display_name,
         "Only underscores should be changed"
     end
+
+    test "should not allow both file and value on create input" do
+      file = fixture_file_upload "/files/crassostrea_gigas.csv"
+      port = RunPort::Input.create(:name => "test_port", :value => "test",
+        :file => file)
+
+      assert port.value.blank?, "Value should be blank"
+      refute port.file.blank?, "File should be present"
+    end
+
+    test "should not allow both file and value on create output" do
+      file = fixture_file_upload "/files/crassostrea_gigas.csv"
+      port = RunPort::Output.create(:name => "test_port", :value => "test",
+        :file => file)
+
+      assert port.value.blank?, "Value should be blank"
+      refute port.file.blank?, "File should be present"
+    end
+
+    test "should not allow both file and value on update input" do
+      file = fixture_file_upload "/files/crassostrea_gigas.csv"
+      port = RunPort::Input.create(:name => "test_port")
+
+      port.file = file
+      port.value = "test"
+      port.save
+
+      assert port.value.blank?, "Value should be blank"
+      refute port.file.blank?, "File should be present"
+    end
+
+    test "should not allow both file and value on update output" do
+      file = fixture_file_upload "/files/crassostrea_gigas.csv"
+      port = RunPort::Output.create(:name => "test_port")
+
+      port.file = file
+      port.value = "test"
+      port.save
+
+      assert port.value.blank?, "Value should be blank"
+      refute port.file.blank?, "File should be present"
+    end
+
+    test "should change large input value correctly" do
+      orig_value =
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"
+
+      new_value =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"\
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"\
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"\
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"\
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"\
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+      port = RunPort::Input.create(:name => "test_port", :value => orig_value)
+      refute port.value.blank?, "Value is empty"
+      refute port.file.blank?, "File not present"
+
+      port.value = new_value
+      port.save
+      refute port.value.blank?, "Value is empty"
+      refute port.file.blank?, "File not present"
+      assert_not_equal orig_value, port.value, "Port still has old value"
+    end
+
+    test "should change large output value correctly" do
+      orig_value =
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"
+
+      new_value =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"\
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"\
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"\
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"\
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"\
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+      port = RunPort::Output.create(:name => "test_port", :value => orig_value)
+      refute port.value.blank?, "Value is empty"
+      refute port.file.blank?, "File not present"
+
+      port.value = new_value
+      port.save
+      refute port.value.blank?, "Value is empty"
+      refute port.file.blank?, "File not present"
+      assert_not_equal orig_value, port.value, "Port still has old value"
+    end
+
+    test "should blank out large value if file changed" do
+      orig_value =
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"
+
+      port = RunPort::Input.create(:name => "test_port", :value => orig_value)
+      refute port.value.blank?, "Value is empty"
+      refute port.file.blank?, "File not present"
+
+      port.file = fixture_file_upload "/files/crassostrea_gigas.csv"
+      port.save
+      assert_nil port.value, "Port value not nil"
+      refute port.file.blank?, "File not present"
+    end
+
+    test "should blank out large value if file removed" do
+      orig_value =
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"
+
+      port = RunPort::Input.create(:name => "test_port", :value => orig_value)
+      refute port.value.blank?, "Value is empty"
+      refute port.file.blank?, "File not present"
+
+      port.file = nil
+      port.save
+      assert_nil port.value, "Port value not nil"
+      assert port.file.blank?, "File not present"
+    end
   end
 end

@@ -16,5 +16,6 @@ end
 
 class ActiveSupport::TestCase
   include TavernaPlayer::Engine.routes.url_helpers
+  include ActionDispatch::TestProcess
   fixtures :all
 end
