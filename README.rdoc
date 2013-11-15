@@ -2,10 +2,597 @@
 
 Authors::     Robert Haines
 Contact::     mailto:support@mygrid.org.uk
-URL::         http://www.taverna.org.uk/
+URL::         http://www.taverna.org.uk
 Licence::     BSD (See LICENCE or http://www.opensource.org/licenses/bsd-license.php)
 Copyright::   (c) 2013 The University of Manchester, UK
 
+{<img src="https://codeclimate.com/github/myGrid/taverna-player.png" />}[https://codeclimate.com/github/myGrid/taverna-player]
+
 == Synopsis
 
-Taverna Player is a rails plugin to run Taverna workflows via Taverna Server.
+Taverna Player is a Ruby on Rails plugin to run Taverna workflows on a Taverna
+Server.
+
+Taverna Player handles all aspects of running a workflow including:
+* Gathering inputs and upload to Taverna Server
+* Monitoring the run
+* Presenting workflow interactions to the user
+* Gathering and download of workflow outputs
+
+It, purposefully, does not:
+* Manage workflows
+* Manage users
+
+== Getting started
+
+These instructions assume that you are familiar with Rails and its concepts.
+Also, knowledge of {Rails Engines}[http://guides.rubyonrails.org/engines.html]
+and how they integrate with other Rails applications will be useful.
+
+Taverna Player works with Rails 3.2. Add it to your Gemfile with:
+ gem "taverna-player"
+
+And run the bundle command to install it.
+
+Next you need to run the install generator:
+ rails generate taverna_player:install
+
+This installs an initializer (into your application's
+<tt>config/initializers</tt> directory) which describes all of Taverna Player's
+configuration options and there are some things that MUST be configured before
+it will work - see below for more information. The install generator also
+prints out a list of other steps for setting up Taverna Player; these are
+repeated below in the next section.
+
+=== Hooking Taverna Player into your Rails application
+
+Mount the Taverna Player engine in your <tt>config/routes.rb</tt>. For example:
+
+  mount TavernaPlayer::Engine, :at => "/"
+
+Make sure you have defined root_url to something in your
+<tt>config/routes.rb</tt>. For example:
+
+  root :to => "home#index"
+
+Make sure you have flash messages in your main layout
+(usually <tt>app/views/layouts/application.html.erb</tt>). For example:
+
+  <p class="notice"><%= notice %></p>
+  <p class="alert"><%= alert %></p>
+
+Taverna Player uses delayed_job to run workflows on a Taverna Server. If your
+application is not already using delayed_job then you can install the
+delayed_job script in your <tt>script</tt> directory with:
+
+  rails generate taverna_player:job
+
+Taverna Player comes with some very simple, unstyled views and layouts. If you
+wish to override these with your own customized views you can copy them into
+your application with:
+
+  rails generate taverna_player:views
+
+The views are copied to the <tt>app/views/taverna_player</tt> directory so that
+they take precedence over the default ones. You can delete any that you do not
+need to customize but there are no penalties for leaving them there. There is
+more information on overriding views below.
+
+If you need to override the Taverna Player controllers, to implement user
+authorization for example, you can copy some customizable stubs with:
+
+  rails generate taverna_player:controllers
+
+The stubs are copied to the <tt>app/controllers/taverna_player</tt> directory
+so that they take precedence over the default ones. You can delete any that you
+do not need to customize but there are no penalties for leaving them there.
+There is more information on overriding controllers below.
+
+If you need to override the Taverna Player Run model, to add columns to the
+table for example, you can copy a customizable stub with:
+
+  rails generate taverna_player:models
+
+The stub is copied to the <tt>app/models/taverna_player</tt> directory so that
+it takes precedence over the default one. There is more information on
+overriding models below.
+
+If you want to use pre- and post-run callbacks you can setup some basic stubs
+with:
+
+  rails generate taverna_player:callbacks
+
+They will be saved to <tt>lib/taverna_player_callbacks.rb</tt>. Don't forget to
+then require and register them in the Taverna Player initializer. There is more
+information on callbacks below.
+
+You can add to, or change, the workflow run outputs render methods to better
+suit your particular application. To copy the defaults that Taverna Player
+ships with into your application for customization run:
+
+  rails generate taverna_player:renderers
+
+They will be saved to <tt>lib/taverna_player_renderers.rb</tt>. Don't forget to
+then require and register them in the Taverna Player initializer. There is more
+information on renderers below.
+
+=== Taverna Player initializer
+
+The {default initializer}[https://github.com/myGrid/taverna-player/blob/master/lib/generators/templates/initializer.rb]
+that is installed by the install generator requires minimal configuration for
+simple set ups. It is fully commented with everything that needs to be set but
+further explanations are given below.
+
+==== Essential (required) configuration
+
+Firstly, Taverna Player needs to know what the model is that represents
+workflows within your application and it needs to know how to get a workflow
+file out of that model so it can run it. If your workflow model is called
+"Workflow" and the method to get the workflow filename from that model is
+called "file_name" then the following will configure this correctly:
+
+  config.workflow_model_proxy("Workflow") do |proxy|
+    proxy.file_method_name = :file_name
+  end
+
+Secondly, Taverna Player needs to know where your Taverna Server is and how to
+authenticate to it:
+
+  config.server_address = "http://localhost:8080/taverna"
+  config.server_username = "taverna"
+  config.server_password = "taverna"
+
+Make sure you do not commit this information into your repository!
+
+This should usually be enough to get Taverna Player up and running within your
+application but there are lots of other configuration options detailed below.
+
+==== Optional configuration
+
+===== Taverna Server
+
+There are two settings to control how often Taverna Player communicates with
+Taverna Server:
+
+  config.server_poll_interval = 5
+  config.server_retry_interval = 10
+
+The first specifies, in seconds, how often <em>each run</em> is polled. Polling
+is used to check a run's status (has it finished yet?) and check for
+interactions. If you have long running workflows then it is probably worth
+setting this value higher; If you have lots of interactions then keeping it low
+is good to improve the responsiveness for users. Keep in mind that as polling
+is for each run then setting this value very low will produce a lot of polling
+requests when you have lots of running workflows.
+
+The second specifies, in seconds, how long to wait before retrying an operation
+that Taverna Server has rejected due to its current load. This can happen in
+two places:
+* Creating the run. Each Taverna Server has a limit (usually quite high) to
+  how many workflow runs it can support at a time - this is the entire set of
+  runs resident on the server in any state (initialized, running or finished).
+  If it is at this limit then it will refuse requests to create any more.
+* Starting the run. Each Taverna Server also has a limit to how many workflow
+  runs it can have actually running at once - runs that are yet to start, or
+  that have finished do not count towards this total. If it is at this limit
+  then it will refuse requests to start any more.
+Neither of these situations are fatal errors however, so Taverna Player will
+back off for the specified time and then try again. It is worth tailoring this
+number to the sort of workflows you will be running. For long-running,
+batch-style workflows then it can be set quite high but if you have workflows
+that make use of interactions (so you have users watching the workflows
+running) then it should probably be set lower.
+
+There are a number of options for configuring the connection to the Taverna
+Server. These are actually provided by the underlying
+{t2-server client library}[https://rubygems.org/gems/t2-server] and surfaced
+here for extra control. They are
+{documented in more detail}[http://mygrid.github.io/t2-server-gem/] elsewhere
+but broadly fall into two categories: Security and timeouts.
+
+The following are all concerned with connecting to a secure Taverna Server and
+will be set to your Ruby/OS defaults if you leave them alone. If you use a
+self-signed certificate for your server, or you require client certificate
+authentication you will need to edit them appropriately.
+
+  config.server_connection[:verify_peer] = true
+  config.server_connection[:ca_file] = "/etc/certs/my-cert.crt"
+  config.server_connection[:ca_path] = "/etc/certs/"
+  config.server_connection[:client_certificate] = "client-cert.crt"
+  config.server_connection[:client_password] = "P@5$w0Rd!"
+  config.server_connection[:ssl_version] = :TLSv1
+
+The following are timeout options and should be set with care. The underlying
+operating system defaults (usually 300 seconds each) will be used if they are
+not set explicitly.
+
+  config.server_connection[:open_timeout] = 300
+  config.server_connection[:read_timeout] = 300
+
+===== Users
+
+If your application has users then there is some basic support for that
+out-of-the-box in Taverna Player. You can tell Taverna Player what your user
+model is called with (example "User" here):
+
+  config.user_model_proxy = "User"
+
+And you can tell it how to discover who your current user is by specifying a
+callback. If you are using {Devise}[https://rubygems.org/gems/devise]
+(recommended) for your authentication then you would supply the provided
+"current_user" method like this:
+
+  config.current_user_callback = :current_user
+
+With this set up then when a run is created Taverna Player will set the owner
+of that run to be the current logged in user if there is one.
+
+Note that this does not automatically mean that Taverna Player is checking that
+users are authenticated! If you require this or if you have more complex
+requirements then you will need to override the Run model and the Runs
+controller. See below for more details.
+
+===== Files
+
+Taverna Player needs to store various files for each run's inputs and outputs.
+The {paperclip}[https://rubygems.org/gems/paperclip] gem is used to provide
+these facilities and the only configuration required is to specify where you
+want it to store its files:
+
+  config.file_store = ":rails_root/public/system"
+
+Use ":rails_root" for the root of your application, or specify a full path for
+anywhere else.
+
+===== Run callbacks and renderers
+
+These are described in their own sections, below.
+
+=== Overriding the default views
+
+If you use the generator, described above, to copy the views into your
+application they will be used in preference to the default ones. This means
+that any changes you make will be immediately reflected in the output of your
+application. See the
+{Rails documentation}[http://guides.rubyonrails.org/engines.html#overriding-views]
+for more information on overriding views.
+
+The supplied views provide a good example of how to maintain a current view of
+the state of a run and handle any workflow interactions that may occur during
+a run. It is worth understanding how they work before pulling them apart for
+your own needs.
+
+=== Overriding the default models and controllers
+
+You can override the following core components:
+* Run (model)
+* RunsController
+* ServiceCredentialsController
+
+Use the generators, detailed above, to create stubs for you to expand. These
+components have been designed for overriding with the decorator pattern using
+{ActiveSupport::Concern}[http://api.rubyonrails.org/classes/ActiveSupport/Concern.html].
+This allows for things to be overridden but still have the same name (as is
+required for such things within Rails). Please also see the information about
+overriding models and controllers in the
+{Rails documentation}[http://guides.rubyonrails.org/engines.html#overriding-models-and-controllers].
+
+The vitally important thing is to preserve the +include+ statement within your
+overriding code. For example, the RunsController stub looks like this:
+
+  module TavernaPlayer
+    class RunsController < TavernaPlayer::ApplicationController
+      # Do not remove the next line.
+      include TavernaPlayer::Concerns::Controllers::RunsController
+
+      # Extend the RunsController here.
+    end
+  end
+
+You can add code both before and after the +include+ statement but anything
+before it might be overridden by the original code itself if there are name
+clashes.
+
+If you wanted to add a before filter to authenticate your users you would add
+that line before the +include+ statement, for example.
+
+=== Run callbacks
+
+Taverna Player provides four points around a workflow run for you to specify
+callbacks to be run:
+* Pre-run: This is called directly before Taverna Server is contacted.
+* Post-run: This is called after all operations on Taverna Server have been
+  completed when the run finishes normally.
+* Run-cancelled: This is called after all operations on Taverna Server have
+  been completed when the run has been cancelled by the user.
+* Run-failed: This is called after all operations on Taverna Server have been
+  completed when the run has failed.
+
+Each of these callbacks is provided with the current run object as its
+parameter and can be set in the initializer by providing the name of the method
+(string or symbol) to run or a Proc object:
+
+  config.pre_run_callback = :player_pre_run_callback
+  config.post_run_callback = "player_post_run_callback"
+  config.run_cancelled_callback = Proc.new { |run| puts "Cancelled: #{run.name}" }
+  config.run_failed_callback = :player_run_failed_callback
+
+*Important!* If your callback fails then the run itself will "fail". This may
+or may not matter for the run-failed callback but if your pre-run callback
+fails then the run will never get to Taverna Server! How can it? Your pre-run
+callback may have been setting up vital resources for your run; Taverna Player
+can not second-guess this so "fails" the run.
+
+For this reason it is not recommended to put a lot of complex functionality
+into the callbacks. An ideal use would be to gather statistics from the run
+(average time, how many times a user runs it, etc) once it has finished.
+
+An example callback that just prints out the run's name and workflow id would
+be:
+
+  def player_run_callback(run)
+    w = Workflow.find(run.workflow_id)
+    puts "Callback called for run '#{run.name}' of workflow '#{w.id}'"
+  end
+
+A set of example callbacks can be installed with the generator detailed above.
+Don't forget to make sure any callback code is <tt>require</tt>d somewhere and
+the callbacks themselves registered in the initializer.
+
+=== Rendering outputs
+
+Workflows can produce results in many different formats and Taverna Player
+tries to accomodate this as best it can. It provides basic facilities for
+rendering as many result types as it can and these are extendible wherever
+possible.
+
+==== Output helper
+
+A very basic output helper is provided, <tt>show_output</tt>, which can be
+used in your views. This will format the output of each workflow output port in
+a generic way. If it is a singleton output then it is displayed normally. If it
+is a list output then the list is rendered as a HTML ordered list
+(<tt><ol></tt>).
+
+If you require anything more complex then you will have to override this helper
+or provide your own and call it from your views.
+
+==== Type renderers
+
+Taverna Player has a system of specific type renderers to handle different
+types of output. A number of defaults are supplied but these can be replaced
+and added to if required.
+
+To install a set of example renderers you can use the generator detailed above.
+
+To register a renderer for use add it into the renderers block in the
+initializer:
+
+  config.output_renderers do |renderers|
+    ...
+  end
+
+So to just register a single default renderer method (called
+"my_default_renderer") you would do this:
+
+  config.output_renderers do |renderers|
+    renderers.default(:my_default_renderer)
+  end
+
+And it would be used to render every type of output. A more sensible example
+would be to have a renderer for PNG-type images and a renderer for text
+outputs as well:
+
+  config.output_renderers do |renderers|
+    renderers.default(:my_default_renderer)
+    renderers.add("text/plain", :text_renderer, true)
+    renderers.add("image/png", :show_image)
+  end
+
+This does three things:
+* Registers a renderer for PNG images. This could be as simple as wrapping it
+  in an <tt><img ../></tt> tag.
+* Registers a renderer for outputs of type "text/plain" and <em>sets this as
+  the default renderer for all other types beginning with "text"</em>. That is
+  what the final parameter set to +true+ does.
+* Registers a default renderer for all other types. This should probably give
+  an explanation as to why the output cannot be shown in the browser with a
+  link to download the output to the user's computer.
+
+Note the use of MIME types for specifying all types.
+
+Obviously outputs such as images and text are so common that Taverna Player
+provides these renderers for you and has them set up and registered by default.
+You would only need to override them if you wanted extra information to be
+displayed as well, such as sizes next to images, etc.
+
+Note that it is not a good idea to register a single image renderer for all
+"image" types as many cannot be shown in most browsers, e.g. TIFF images.
+The default set of registered renderers is shown in the default initializer
+but, as an example, here is how it handles the images that most browsers can
+show:
+
+  renderers.add("image/jpeg", :show_image)
+  renderers.add("image/png", :show_image)
+  renderers.add("image/gif", :show_image)
+  renderers.add("image/bmp", :show_image)
+
+Note that the same renderer callback is used for each one.
+
+==== Writing your own renderers
+
+To be a renderer callback a method must accept two parameters (in this order):
+1. The content to be rendered.
+1. The MIME type of the content.
+
+In the case of text outputs the content will likely (depending on the output
+helper you use, described above) be the entire text content of the output. In
+most other cases it will probably be a URI or path to the actual content for
+use in, for example, an <tt><img .../></tt> tag.
+
+The type is provided in case a renderer wishes to be general and differentiate
+between different subtypes.
+
+Note that all renderer callbacks are called by Taverna Player in a context that
+includes the {ActionView::Helpers}[http://api.rubyonrails.org/classes/ActionView/Helpers.html]
+so your callbacks have access to them too, including helpers from third-party
+gems that register their helpers correctly.
+
+==== Example type renderers
+
+These are some of the supplied renderers that are registered by default in
+Taverna Player.
+
+===== Plain text
+
+Taverna Player provides a plain text renderer that formats text with a
+monospaced font, converts URI-like things to clickable links and respects
+carriage returns and newlines. It looks something like this:
+
+  def format_text(content, type)
+    # Use CodeRay to format text so that newlines are respected.
+    content = CodeRay.scan(content, :text).div(:css => :class)
+
+    # Use auto_link to turn URI-like text into links.
+    auto_link(content, :html => { :target => '_blank' }, :sanitize => false)
+  end
+
+The {coderay}[https://rubygems.org/gems/coderay] gem is used to format the
+text, preserving newlines and the
+{rails_autolink}[https://rubygems.org/gems/rails_autolink] gem is used to
+convert URI-like text into clickable links.
+
+This renderer is registered as the default for all "text" media types.
+
+===== XML
+
+This renderer catches "text/XML" outputs:
+
+  def format_xml(content, type)
+    # Make sure XML is indented consistently.
+    out = String.new
+    REXML::Document.new(content).write(out, 1)
+    CodeRay.scan(out, :xml).div(:css => :class, :line_numbers => :table)
+  end
+
+It uses {REXML}[http://ruby-doc.org/stdlib-1.9.3/libdoc/rexml/rdoc/index.html]
+to format the XML and {coderay}[https://rubygems.org/gems/coderay] to
+syntax-highlight it.
+
+Note that for XML to be detected as XML it must, as per the standard, include
+the XML declaration, e.g.:
+
+  <?xml version="1.0" ?>
+
+===== Images
+
+As described above, images are just dropped into an <tt><img ../></tt> tag:
+
+  def show_image(content, type)
+    # Can't use image_tag() here because the image doesn't really exist (it's
+    # in a zip file, really) and this confuses the Rails asset pipeline.
+    tag("img", :src => content)
+  end
+
+Note the comment about the Rails asset pipeline in there if you are writing
+your own image renderer and are using the asset pipeline.
+
+The content parameter here gives the path to the image to be displayed.
+
+===== Other types catch-all
+
+The default renderer for other, or unknown types, is:
+
+  def cannot_inline(content, type)
+    "Sorry but we cannot show this type of content in the browser. Please " +
+      link_to("download it", content) + " to view it on your local machine."
+  end
+
+=== Service Credentials
+
+<b>Please see the notes in the limitations section below!</b>
+
+At the moment the Service Credentials facilities are basic and provided purely
+to allow access to services which are ostensibly public but still require a
+login of some kind.
+
+In practice very few services that will be used via public tools such as
+Taverna Player are in use so this should not affect most users at this time.
+It is the intention to fill this gap in functionality as soon as possible,
+however.
+
+If you do have services in your workflows that require such a login then you
+can add them through the Service Credentials model. The types of credential
+that Taverna Server can accept are detailed in the
+{Client Library Documentation}[http://mygrid.github.io/t2-server-gem/] but
+Taverna Player supports a subset:
+
+==== REST
+
+REST services are commonly secured via HTTP Basic or HTTP Digest authentication
+and Taverna treats these two schemes in the same way. Simply register the
+username and password with the host name of the server on which the service is
+running:
+
+  https://example.com:8443/
+
+The above example shows a https server running on port 8443. If the service is
+on port 80 for http or port 443 for https then you don’t need to specify the
+port.
+
+If there are services on the same host that require different credentials then
+you will need to specify the realm for which each set of credentials applies.
+This is done by adding the name of the realm to the end of the host name with
+a # separating them:
+
+  https://example.com:8443/#realm
+
+==== SOAP
+
+SOAP services are commonly secured via WS-Security. Simply register the WSDL
+address of the service with your username and password:
+
+  https://example.com:8443/services/MyService?wsdl
+
+==== R server
+
+You can authenticate to R Servers in almost exactly the same way as for REST
+services - only the protocol scheme is different. So instead of http or https
+it is rserve:
+
+  rserve://example.com:6311
+
+== Limitations and to-do list
+
+The most serious limitation is with the Service Credentials. Because Taverna
+Server needs to be given the credentials in plaintext (which is why you should
+always use HTTPS) we have to store them as such. For the time being it is
+recommended to only use them for services that are ostensibly public, but with
+a login requirement. An example of this might be a R server on the local
+machine, which is only available locally, but nevertheless requires a login.
+
+Service Credentials are also intended, at the moment, to be a global resource.
+They are not per-user. Every workflow run will be given these credentials.
+
+Service Credentials only provide username/password type credentials at the
+moment.
+
+=== To do
+
+In no particular order:
+
+* Taverna Player as a service. Allow usage of Taverna Player via a fully
+  RESTful interface with JSON and XML support (in progress).
+* User specific (and therefore private) credentials wallet for secure services.
+* Comprehensive Taverna Server administration panel. This would allow admin
+  users to view and manage runs directly on the Taverna Server along with
+  other such admin tasks.
+
+== Support
+
+Please email {support@mygrid.org.uk}[mailto:support@mygrid.org.uk] for any
+questions relating to Taverna Player.
+
+Bug reports or feature requests may be submitted to the
+{public issue tracker}[https://github.com/myGrid/taverna-player/issues] at
+GitHub.
