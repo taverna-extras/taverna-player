@@ -139,9 +139,17 @@ module TavernaPlayer
           update_attribute(:stop, true)
         end
 
-        # Return state as a symbol.
+        # Return state as a symbol. If a run is running, but has been asked to
+        # stop, then it is :cancelling. This is a pseudo-state to avoid race
+        # conditions when cancelling a run so is specifically NOT in the list
+        # of allowed states above.
         def state
-          self[:saved_state].to_sym
+          s = self[:saved_state].to_sym
+          if s == :running
+            stop ? :cancelling : :running
+          else
+            s
+          end
         end
 
         # Save state as a downcased string. See the note above about why a
@@ -162,6 +170,10 @@ module TavernaPlayer
 
         def cancelled?
           state == :cancelled
+        end
+
+        def cancelling?
+          state == :cancelling
         end
 
         def failed?

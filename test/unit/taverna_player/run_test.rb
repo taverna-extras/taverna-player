@@ -42,6 +42,28 @@ module TavernaPlayer
       assert_equal :cancelled, run.state, "Run's state was not cancelled"
     end
 
+    test "should not be able to set state to cancelling directly" do
+      run = Run.new
+      run.workflow = workflows(:one)
+      assert run.save, "Could not save run initially"
+
+      run.state = :cancelling
+      refute run.save, "Saved the run with the cancelling state."
+    end
+
+    test "should be in cancelling state after being cancelled" do
+      run = Run.new
+      run.workflow = workflows(:one)
+      run.state = :running
+      assert run.save, "Could not save run initially."
+      run.delayed_job_id = nil # Remove delayed job to pretend it is running.
+      assert_equal :running, run.state, "Run is not in running state."
+
+      run.cancel
+      assert run.stop, "Run was not stopped."
+      assert run.cancelling?, "Run did not move into cancelling state"
+    end
+
     test "should create run with a default name" do
       run = Run.new
       assert_not_nil run.name, "Default run name is not set."
