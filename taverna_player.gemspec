@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://www.taverna.org.uk"
   s.summary     = "Taverna Player is a rails plugin to run Taverna Workflows."
   s.description = "Taverna Player runs Taverna Workflows using Taverna Server."
+  s.license     = "BSD"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["LICENCE.rdoc", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
