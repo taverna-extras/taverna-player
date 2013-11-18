@@ -185,6 +185,7 @@ module TavernaPlayer
         @run.failure_message = "#{exception.message}\n#{backtrace}"
 
         @run.state = :failed
+        @run.finish_time = Time.now
         status_message "Failed"
         return
       end
@@ -302,6 +303,7 @@ module TavernaPlayer
       end
 
       @run.state = :cancelled
+      @run.finish_time = Time.now
       status_message "Cancelled"
     end
 
