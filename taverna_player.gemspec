@@ -14,8 +14,8 @@ Gem::Specification.new do |s|
   s.description = "Taverna Player runs Taverna Workflows using Taverna Server."
   s.license     = "BSD"
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["LICENCE.rdoc", "Rakefile", "README.rdoc"]
-  s.test_files = Dir["test/**/*"]
+  s.files       = `git ls-files`.split("\n")
+  s.test_files  = `git ls-files -- test/*`.split("\n")
 
   s.add_dependency "rails", "3.2.14"
   s.add_dependency "jquery-rails", "~> 3.0.4"
