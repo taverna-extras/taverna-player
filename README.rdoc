@@ -32,7 +32,7 @@ and how they integrate with other Rails applications will be useful.
 Taverna Player works with Rails 3.2. Add it to your Gemfile with:
  gem "taverna-player"
 
-And run the bundle command to install it.
+And run the <tt>bundle install</tt> command to install it.
 
 Next you need to run the install generator:
  rails generate taverna_player:install
@@ -42,7 +42,44 @@ This installs an initializer (into your application's
 configuration options and there are some things that MUST be configured before
 it will work - see below for more information. The install generator also
 prints out a list of other steps for setting up Taverna Player; these are
-repeated below in the next section.
+repeated and detailed below.
+
+== Running Taverna Player
+
+Once you have Taverna Player installed and configured in your Rails application
+it will largely take care of itself. The nature of Rails Engines is that they
+become part of the containing application relatively seamlessly.
+
+The only extra step required for full operation of Taverna Player is to start
+the delayed_job script so that workflows are actually run. Even if you already
+use delayed_job in your application it is worth checking this section because
+Taverna Player uses its own named queue to run jobs.
+
+=== In development
+
+If you simply want to have a single worker running while testing then you can
+use the rake task supplied by delayed_job:
+
+  rake jobs:work
+
+=== In production
+
+In production you will want to run lots of workers for maximum throughput. A
+good starting number of concurrent workers will probably be the number of
+workflows that your Taverna Server can run at the same time. Any lower than
+this and you are not running Taverna Server at its configured capacity; any
+higher and you just end up with workers waiting for Taverna Server to have
+space for them anyway. You might pick up some efficiencies starting new
+workflow runs while the results of those just finished are being collected but
+it is probably not worth having more than one or two extra workers for this.
+
+So if your Taverna Server can run 20 concurrent workflows at once then you
+would start your workers like this:
+
+  RAILS_ENV=production bundle exec ./script/delayed_job -n 20 --queue=player start
+
+See the documentation for {delayed_job}[https://rubygems.org/gems/delayed_job]
+for more options and information.
 
 == Hooking Taverna Player into your Rails application
 
