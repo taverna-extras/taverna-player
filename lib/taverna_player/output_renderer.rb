@@ -17,9 +17,13 @@ module TavernaPlayer
     # Taverna Workflow error MIME type
     TAVERNA_ERROR_TYPE = MIME::Type.new("application/x-error")
 
+    # Empty file MIME types as used in older and new versions of "file".
+    EMPTY_FILE_OLD = MIME::Type.new("application/x-empty")
+    EMPTY_FILE_NEW = MIME::Type.new("inode/x-empty")
+
     def initialize
       @hash = Hash.new
-      MIME::Types.add(TAVERNA_ERROR_TYPE)
+      MIME::Types.add(TAVERNA_ERROR_TYPE, EMPTY_FILE_OLD, EMPTY_FILE_NEW)
     end
     # :startdoc:
 
