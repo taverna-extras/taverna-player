@@ -44,7 +44,7 @@ it will work - see below for more information. The install generator also
 prints out a list of other steps for setting up Taverna Player; these are
 repeated below in the next section.
 
-=== Hooking Taverna Player into your Rails application
+== Hooking Taverna Player into your Rails application
 
 Mount the Taverna Player engine in your <tt>config/routes.rb</tt>. For example:
 
@@ -116,14 +116,14 @@ They will be saved to <tt>lib/taverna_player_renderers.rb</tt>. Don't forget to
 then require and register them in the Taverna Player initializer. There is more
 information on renderers below.
 
-=== Taverna Player initializer
+== Taverna Player initializer
 
 The {default initializer}[https://github.com/myGrid/taverna-player/blob/master/lib/generators/templates/initializer.rb]
 that is installed by the install generator requires minimal configuration for
 simple set ups. It is fully commented with everything that needs to be set but
 further explanations are given below.
 
-==== Essential (required) configuration
+=== Essential (required) configuration
 
 Firstly, Taverna Player needs to know what the model is that represents
 workflows within your application and it needs to know how to get a workflow
@@ -147,9 +147,9 @@ Make sure you do not commit this information into your repository!
 This should usually be enough to get Taverna Player up and running within your
 application but there are lots of other configuration options detailed below.
 
-==== Optional configuration
+=== Optional configuration
 
-===== Taverna Server
+==== Taverna Server
 
 There are two settings to control how often Taverna Player communicates with
 Taverna Server:
@@ -209,7 +209,7 @@ not set explicitly.
   config.server_connection[:open_timeout] = 300
   config.server_connection[:read_timeout] = 300
 
-===== Users
+==== Users
 
 If your application has users then there is some basic support for that
 out-of-the-box in Taverna Player. You can tell Taverna Player what your user
@@ -232,7 +232,7 @@ users are authenticated! If you require this or if you have more complex
 requirements then you will need to override the Run model and the Runs
 controller. See below for more details.
 
-===== Files
+==== Files
 
 Taverna Player needs to store various files for each run's inputs and outputs.
 The {paperclip}[https://rubygems.org/gems/paperclip] gem is used to provide
@@ -244,11 +244,11 @@ want it to store its files:
 Use ":rails_root" for the root of your application, or specify a full path for
 anywhere else.
 
-===== Run callbacks and renderers
+==== Run callbacks and renderers
 
 These are described in their own sections, below.
 
-=== Overriding the default views
+== Overriding the default views
 
 If you use the generator, described above, to copy the views into your
 application they will be used in preference to the default ones. This means
@@ -262,7 +262,7 @@ the state of a run and handle any workflow interactions that may occur during
 a run. It is worth understanding how they work before pulling them apart for
 your own needs.
 
-=== Overriding the default models and controllers
+== Overriding the default models and controllers
 
 You can override the following core components:
 * Run (model)
@@ -296,7 +296,7 @@ clashes.
 If you wanted to add a before filter to authenticate your users you would add
 that line before the +include+ statement, for example.
 
-=== Run callbacks
+== Run callbacks
 
 Taverna Player provides four points around a workflow run for you to specify
 callbacks to be run:
@@ -339,14 +339,14 @@ A set of example callbacks can be installed with the generator detailed above.
 Don't forget to make sure any callback code is <tt>require</tt>d somewhere and
 the callbacks themselves registered in the initializer.
 
-=== Rendering outputs
+== Rendering outputs
 
 Workflows can produce results in many different formats and Taverna Player
 tries to accomodate this as best it can. It provides basic facilities for
 rendering as many result types as it can and these are extendible wherever
 possible.
 
-==== Output helper
+=== Output helper
 
 A very basic output helper is provided, <tt>show_output</tt>, which can be
 used in your views. This will format the output of each workflow output port in
@@ -357,7 +357,7 @@ is a list output then the list is rendered as a HTML ordered list
 If you require anything more complex then you will have to override this helper
 or provide your own and call it from your views.
 
-==== Type renderers
+=== Type renderers
 
 Taverna Player has a system of specific type renderers to handle different
 types of output. A number of defaults are supplied but these can be replaced
@@ -419,7 +419,7 @@ show:
 
 Note that the same renderer callback is used for each one.
 
-==== Writing your own renderers
+=== Writing your own renderers
 
 To be a renderer callback a method must accept two parameters (in this order):
 1. The content to be rendered.
@@ -438,12 +438,12 @@ includes the {ActionView::Helpers}[http://api.rubyonrails.org/classes/ActionView
 so your callbacks have access to them too, including helpers from third-party
 gems that register their helpers correctly.
 
-==== Example type renderers
+=== Example type renderers
 
 These are some of the supplied renderers that are registered by default in
 Taverna Player.
 
-===== Plain text
+==== Plain text
 
 Taverna Player provides a plain text renderer that formats text with a
 monospaced font, converts URI-like things to clickable links and respects
@@ -464,7 +464,7 @@ convert URI-like text into clickable links.
 
 This renderer is registered as the default for all "text" media types.
 
-===== XML
+==== XML
 
 This renderer catches "text/XML" outputs:
 
@@ -484,7 +484,7 @@ the XML declaration, e.g.:
 
   <?xml version="1.0" ?>
 
-===== Images
+==== Images
 
 As described above, images are just dropped into an <tt><img ../></tt> tag:
 
@@ -499,7 +499,7 @@ your own image renderer and are using the asset pipeline.
 
 The content parameter here gives the path to the image to be displayed.
 
-===== Other types catch-all
+==== Other types catch-all
 
 The default renderer for other, or unknown types, is:
 
@@ -508,7 +508,7 @@ The default renderer for other, or unknown types, is:
       link_to("download it", content) + " to view it on your local machine."
   end
 
-=== Service Credentials
+== Service Credentials
 
 <b>Please see the notes in the limitations section below!</b>
 
@@ -527,7 +527,7 @@ that Taverna Server can accept are detailed in the
 {Client Library Documentation}[http://mygrid.github.io/t2-server-gem/] but
 Taverna Player supports a subset:
 
-==== REST
+=== REST
 
 REST services are commonly secured via HTTP Basic or HTTP Digest authentication
 and Taverna treats these two schemes in the same way. Simply register the
@@ -547,14 +547,14 @@ a # separating them:
 
   https://example.com:8443/#realm
 
-==== SOAP
+=== SOAP
 
 SOAP services are commonly secured via WS-Security. Simply register the WSDL
 address of the service with your username and password:
 
   https://example.com:8443/services/MyService?wsdl
 
-==== R server
+=== R server
 
 You can authenticate to R Servers in almost exactly the same way as for REST
 services - only the protocol scheme is different. So instead of http or https
