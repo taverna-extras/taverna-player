@@ -68,6 +68,8 @@ module TavernaPlayer
   @@output_renderer.add("image/gif", :show_image_tp_default)
   @@output_renderer.add("image/bmp", :show_image_tp_default)
   @@output_renderer.add("application/x-error", :workflow_error_tp_default)
+  @@output_renderer.add("application/x-empty", :empty_tp_default)
+  @@output_renderer.add("inode/x-empty", :empty_tp_default)
 
   # :call-seq:
   #   output_renderers {|renderer| ...}

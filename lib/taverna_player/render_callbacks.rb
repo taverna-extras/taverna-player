@@ -24,3 +24,7 @@ def cannot_inline_tp_default(content, type)
   "Sorry but we cannot show this type of content in the browser. Please " +
    link_to("download it", content) + " to view it on your local machine."
 end
+
+def empty_tp_default(content, type)
+  "<div>&lt;empty output&gt;</div>"
+end
