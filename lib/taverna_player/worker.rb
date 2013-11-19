@@ -109,6 +109,8 @@ module TavernaPlayer
                 note.reply(int.feed_reply, int.data)
                 new_int.displayed = true
                 new_int.replied = true
+                new_int.feed_reply = int.feed_reply
+                new_int.data = int.data
                 new_int.save
               end
             else
