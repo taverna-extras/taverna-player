@@ -65,7 +65,7 @@ module TavernaPlayer
             :url => "/runs/:id/download/results",
             :default_url => ""
 
-          after_initialize :initialize_child_run, :if => :has_parent?
+          after_initialize :initialize_child_run, :if => "new_record? && has_parent?"
           after_create :populate_child_inputs, :if => :has_parent?
           after_create :enqueue
           before_destroy :complete?
