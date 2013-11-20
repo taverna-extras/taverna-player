@@ -193,7 +193,7 @@ string.</p>
 
           
           <div class="method-source-code" id="add-source">
-            <pre><span class="ruby-comment"># File lib/taverna_player/output_renderer.rb, line 34</span>
+            <pre><span class="ruby-comment"># File lib/taverna_player/output_renderer.rb, line 38</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">add</span>(<span class="ruby-identifier">mimetype</span>, <span class="ruby-identifier">method</span>, <span class="ruby-identifier">default</span> = <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">type</span> = <span class="ruby-constant">MIME</span><span class="ruby-operator">::</span><span class="ruby-constant">Types</span>[<span class="ruby-identifier">mimetype</span>].<span class="ruby-identifier">first</span>
 
@@ -234,7 +234,7 @@ cannot normally be shown in the browser inline.</p>
 
           
           <div class="method-source-code" id="default-source">
-            <pre><span class="ruby-comment"># File lib/taverna_player/output_renderer.rb, line 58</span>
+            <pre><span class="ruby-comment"># File lib/taverna_player/output_renderer.rb, line 62</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">default</span>(<span class="ruby-identifier">method</span>)
   <span class="ruby-ivar">@hash</span>[<span class="ruby-value">:default</span>] = <span class="ruby-identifier">method</span>
 <span class="ruby-keyword">end</span></pre>
@@ -270,7 +270,7 @@ with the given MIME type and returns the resultant rendering.</p>
 
           
           <div class="method-source-code" id="render-source">
-            <pre><span class="ruby-comment"># File lib/taverna_player/output_renderer.rb, line 67</span>
+            <pre><span class="ruby-comment"># File lib/taverna_player/output_renderer.rb, line 71</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">render</span>(<span class="ruby-identifier">content</span>, <span class="ruby-identifier">mimetype</span>)
   <span class="ruby-identifier">type</span> = <span class="ruby-constant">MIME</span><span class="ruby-operator">::</span><span class="ruby-constant">Types</span>[<span class="ruby-identifier">mimetype</span>].<span class="ruby-identifier">first</span>
 
@@ -315,7 +315,7 @@ media type (see the add method for more details).</p>
 
           
           <div class="method-source-code" id="type_default-source">
-            <pre><span class="ruby-comment"># File lib/taverna_player/output_renderer.rb, line 47</span>
+            <pre><span class="ruby-comment"># File lib/taverna_player/output_renderer.rb, line 51</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">type_default</span>(<span class="ruby-identifier">media_type</span>, <span class="ruby-identifier">method</span>)
   <span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">media_type</span>] <span class="ruby-operator">||=</span> {}
   <span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">media_type</span>][<span class="ruby-value">:default</span>] = <span class="ruby-identifier">method</span>
