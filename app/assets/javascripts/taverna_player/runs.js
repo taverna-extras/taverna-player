@@ -17,7 +17,7 @@ function getParameterValue(name) {
 function interaction_reply(url, status, results) {
   var outputData = JSON.stringify(results);
 
-  $.ajax({
+  jQuery.ajax({
     url: url,
     type: "POST",
     async: false,
@@ -25,7 +25,7 @@ function interaction_reply(url, status, results) {
     headers: {
       "Content-Type": "application/json",
       "X-Taverna-Interaction-Reply": escape(status),
-      "X-CSRF-Token": $('meta[name="csrf-token"]').attr("content")
+      "X-CSRF-Token": jQuery('meta[name="csrf-token"]').attr("content")
     }
   });
 
