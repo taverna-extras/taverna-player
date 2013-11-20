@@ -87,10 +87,27 @@ Mount the Taverna Player engine in your <tt>config/routes.rb</tt>. For example:
 
   mount TavernaPlayer::Engine, :at => "/"
 
+Perform Taverna Player's migrations:
+
+  rake taverna_player:install:migrations
+  rake db:migrate
+
 Make sure you have defined root_url to something in your
 <tt>config/routes.rb</tt>. For example:
 
   root :to => "home#index"
+
+Add Taverna Player's assets to your application's manifests.
+
+In app/assets/javascripts/application.js:
+
+  //= require taverna_player/application
+
+In app/assets/stylesheets/application.css
+
+  *= require taverna_player/application
+
+And everything should be found by the asset pipeline automatically.
 
 Make sure you have flash messages in your main layout
 (usually <tt>app/views/layouts/application.html.erb</tt>). For example:
