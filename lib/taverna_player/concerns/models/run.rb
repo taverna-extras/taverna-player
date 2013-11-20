@@ -30,7 +30,7 @@ module TavernaPlayer
           # A run can have children, which are runs.
           # A run can have a parent, which is another run.
           has_many :children, :class_name => "TavernaPlayer::Run",
-            :foreign_key => "parent_id"
+            :foreign_key => "parent_id", :dependent => :nullify
           belongs_to :parent, :class_name => "TavernaPlayer::Run"
 
           accepts_nested_attributes_for :inputs

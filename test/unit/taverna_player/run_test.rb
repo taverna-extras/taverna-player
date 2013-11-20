@@ -163,5 +163,22 @@ module TavernaPlayer
         refute_same parent.inputs.first, run.inputs.first, "Input was linked, not copied"
       end
     end
+
+    test "killing parent should orphan child" do
+      parent = taverna_player_runs(:three)
+      run = Run.create(:parent_id => parent.id)
+      assert run.valid?, "Child run is invalid"
+      assert_not_nil run.parent_id, "Child run has no parent"
+
+      parent.state = :finished # Fake it.
+      parent.save
+      assert_difference(["Run.count", "RunPort::Input.count"], -1) do
+        parent.destroy
+      end
+
+      # Reload child state
+      run.reload
+      assert_nil run.parent_id, "Child run still has a parent"
+    end
   end
 end
