@@ -24,24 +24,40 @@ There is also some manual setup to do, if you haven't already done it:
 
        mount TavernaPlayer::Engine, :at => "/"
 
-  2. Make sure you have defined root_url to something in your config/routes.rb.
+  2. Perform Taverna Player's migrations:
+
+       rake taverna_player:install:migrations
+       rake db:migrate
+
+  3. Make sure you have defined root_url to something in your config/routes.rb.
      For example:
 
        root :to => "home#index"
 
-  3. Make sure you have flash messages in your main layout
+  4. Add Taverna Player's assets to your application's manifests.
+     In app/assets/javascripts/application.js:
+
+       //= require taverna_player/application
+
+     In app/assets/stylesheets/application.css
+
+       *= require taverna_player/application
+
+     And everything should be found by the asset pipeline automatically.
+
+  5. Make sure you have flash messages in your main layout
      (usually app/views/layouts/application.html.erb). For example:
 
        <p class="notice"><%= notice %></p>
        <p class="alert"><%= alert %></p>
 
-  4. Taverna Player uses delayed_job to run workflows on a Taverna Server. If
+  6. Taverna Player uses delayed_job to run workflows on a Taverna Server. If
      your application is not already using delayed_job then you can install
      the delayed_job script in your "script" directory with:
 
        rails generate taverna_player:job
 
-  5. Taverna Player comes with some very simple, unstyled views and layouts.
+  7. Taverna Player comes with some very simple, unstyled views and layouts.
      If you wish to override these with your own customized views you can copy
      them into your application with:
 
@@ -52,7 +68,7 @@ There is also some manual setup to do, if you haven't already done it:
      do not need to customize but there are no penalties for leaving them
      there.
 
-  6. If you need to override the Taverna Player controllers, to implement user
+  8. If you need to override the Taverna Player controllers, to implement user
      authorization for example, you can copy some customizable stubs with:
 
        rails generate taverna_player:controllers
@@ -62,7 +78,7 @@ There is also some manual setup to do, if you haven't already done it:
      you do not need to customize but there are no penalties for leaving them
      there.
 
-  7. If you need to override the Taverna Player Run model, to add columns to
+  9. If you need to override the Taverna Player Run model, to add columns to
      the table for example, you can copy a customizable stub with:
 
        rails generate taverna_player:models
@@ -70,7 +86,7 @@ There is also some manual setup to do, if you haven't already done it:
      The stub is copied to the app/models/taverna_player directory so that it
      takes precedence over the default one.
 
-  8. If you want to use pre- and post-run callbacks you can setup some basic
+ 10. If you want to use pre- and post-run callbacks you can setup some basic
      stubs with:
 
        rails generate taverna_player:callbacks
@@ -78,7 +94,7 @@ There is also some manual setup to do, if you haven't already done it:
      They will be saved to "lib/taverna_player_callbacks.rb". Don't forget to
      then require and register them in the Taverna Player initializer.
 
-  9. You can add to, or change, the workflow run outputs render methods to
+ 11. You can add to, or change, the workflow run outputs render methods to
      better suit your particular application. To copy the defaults that
      Taverna Player ships with into your application for customization run:
 
