@@ -24,6 +24,18 @@ There is also some manual setup to do, if you haven't already done it:
 
        mount TavernaPlayer::Engine, :at => "/"
 
+     You can also nest the Taverna Player runs resources within your workflows
+     resources if you wish, like this:
+
+       resources :workflows do
+         resources :runs, :controller => "TavernaPlayer::Runs",
+           :except => :edit
+       end
+
+     The runs resources in Taverna Player do not provide an edit view by
+     default so, unless you add it yourself by overriding the controller you
+     should add the :except clause to the routes.
+
   2. Perform Taverna Player's migrations:
 
        rake taverna_player:install:migrations
