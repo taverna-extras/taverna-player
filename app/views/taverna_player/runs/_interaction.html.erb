@@ -2,7 +2,7 @@
 <div id="run-interaction">
   <% unless interaction.nil? %>
 
-    <script type="application/javascript">
+    <%= javascript_tag do %>
     var inputData = <%= raw(interaction.data) %>;
 
     function registerCalls() {
@@ -49,7 +49,7 @@
         registerCalls();
       }
     );
-    </script>
+    <% end %>
 
     <%= content_tag(:iframe, "", { :width => "100%", :height => "500px",
       :src => interaction_redirect(interaction) }) %>

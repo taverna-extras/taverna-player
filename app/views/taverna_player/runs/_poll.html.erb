@@ -1,6 +1,6 @@
 
 <div id="run-poll">
-  <script type="text/javascript">
+  <%= javascript_tag do %>
     var poll_interval = <%= TavernaPlayer.server_poll_interval * 2000 %>
 
     jQuery(document).ready(
@@ -12,5 +12,5 @@
     function poll_run() {
       jQuery.get("<%= reload %>", null, null, "script")
     }
-  </script>
+  <% end %>
 </div>
