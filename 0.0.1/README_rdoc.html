@@ -202,6 +202,18 @@ example:</p>
 <pre class="ruby"><span class="ruby-identifier">mount</span> <span class="ruby-constant">TavernaPlayer</span><span class="ruby-operator">::</span><span class="ruby-constant">Engine</span>, :<span class="ruby-identifier">at</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;/&quot;</span>
 </pre>
 
+<p>You can also nest the Taverna Player runs resources within your workflows
+resources if you wish, like this:</p>
+
+<pre class="ruby"><span class="ruby-identifier">resources</span> :<span class="ruby-identifier">workflows</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">resources</span> :<span class="ruby-identifier">runs</span>, :<span class="ruby-identifier">controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;TavernaPlayer::Runs&quot;</span>, :<span class="ruby-identifier">except</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">edit</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>The runs resources in Taverna Player do not provide an edit view by default
+so, unless you add it yourself by overriding the controller you should add
+the <code>:except</code> clause to the routes.</p>
+
 <p>Perform Taverna Player’s migrations:</p>
 
 <pre>rake taverna_player:install:migrations
