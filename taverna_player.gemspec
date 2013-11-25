@@ -1,9 +1,19 @@
+#------------------------------------------------------------------------------
+# Copyright (c) 2013 The University of Manchester, UK.
+#
+# BSD Licenced. See LICENCE.rdoc for details.
+#
+# Taverna Player was developed in the BioVeL project, funded by the European
+# Commission 7th Framework Programme (FP7), through grant agreement
+# number 283359.
+#
+# Author: Robert Haines
+#------------------------------------------------------------------------------
+
 $:.push File.expand_path("../lib", __FILE__)
 
-# Maintain your gem's version:
 require "taverna_player/version"
 
-# Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "taverna-player"
   s.version     = TavernaPlayer::VERSION

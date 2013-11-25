@@ -1,5 +1,14 @@
-// Place all the behaviors and hooks related to the matching controller here.
-// All this logic will automatically be available in application.js.
+//-----------------------------------------------------------------------------
+// Copyright (c) 2013 The University of Manchester, UK.
+//
+// BSD Licenced. See LICENCE.rdoc for details.
+//
+// Taverna Player was developed in the BioVeL project, funded by the European
+// Commission 7th Framework Programme (FP7), through grant agreement
+// number 283359.
+//
+// Author: Robert Haines
+//-----------------------------------------------------------------------------
 
 // Copied from http://www.netlobo.com/url_query_string_javascript.html
 function getParameterValue(name) {
