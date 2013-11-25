@@ -179,7 +179,7 @@ module TavernaPlayer
         @run.save
 
         run.delete
-      rescue Exception => exception
+      rescue => exception
         begin
           unless run.nil?
             download_log(run)
