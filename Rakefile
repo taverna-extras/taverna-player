@@ -32,6 +32,7 @@ RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.options << "--tab-width=2"
 
   files = [
+    "CHANGES.rdoc",
     "README.rdoc",
     "LICENCE.rdoc",
     "app/helpers/taverna_player/application_helper.rb",
