@@ -10,13 +10,13 @@
   # Author: Robert Haines
 %>
 
-<%= form_for(@service_credential) do |f| %>
-  <% if @service_credential.errors.any? %>
+<%= form_for(service_credential) do |f| %>
+  <% if service_credential.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@service_credential.errors.count, "error") %> prohibited this service_credential from being saved:</h2>
+      <h2><%= pluralize(service_credential.errors.count, "error") %> prohibited this service_credential from being saved:</h2>
 
       <ul>
-      <% @service_credential.errors.full_messages.each do |msg| %>
+      <% service_credential.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
       </ul>
