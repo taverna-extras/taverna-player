@@ -13,5 +13,6 @@ test/dummy/config/initializers/taverna_player.rb
 rdoc/
 .buildpath
 .project
+.settings
 .idea
 .rvmrc
