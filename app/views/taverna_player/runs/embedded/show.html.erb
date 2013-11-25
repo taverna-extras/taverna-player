@@ -12,15 +12,12 @@
 
 <h1>Embedded Run</h1>
 
-<%= render :partial => "taverna_player/runs/embedded/info",
-  :locals => { :run => @run } %>
+<%= render "taverna_player/runs/embedded/info", :run => @run %>
 
-<%= render :partial => "taverna_player/runs/embedded/button",
-  :locals => { :run => @run } %>
+<%= render "taverna_player/runs/embedded/button", :run => @run %>
 
 <% if @run.inputs.size > 0 %>
-  <%= render :partial => "taverna_player/runs/embedded/inputs",
-    :locals => { :run => @run } %>
+  <%= render "taverna_player/runs/embedded/inputs", :run => @run %>
 <% end %>
 
 <%
@@ -28,11 +25,9 @@
   # override it in the embedded directory if you wish but you will need to
   # change the file name below AND in embedded/show.js.erb.
 %>
-<%= render :partial => "interaction",
-  :locals => { :run => @run, :interaction => @interaction } %>
+<%= render "interaction", :run => @run, :interaction => @interaction %>
 
-<%= render :partial => "taverna_player/runs/embedded/outputs",
-  :locals => { :run => @run } %>
+<%= render "taverna_player/runs/embedded/outputs", :run => @run %>
 
 <%
   # Note that the base run/poll partial is used here. You can still
@@ -40,6 +35,5 @@
   # change the file name below AND in embedded/show.js.erb.
 %>
 <% unless @run.complete? %>
-  <%= render :partial => "poll",
-    :locals => { :reload => run_path(@run) } %>
+  <%= render "poll", :reload => run_path(@run) %>
 <% end %>

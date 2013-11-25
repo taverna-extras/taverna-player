@@ -34,7 +34,7 @@
     <td><%= run.start_time %></td>
     <td><%= run.finish_time %></td>
     <td><%= link_to 'Show', run %></td>
-    <td><%= render :partial => "button", :locals => { :run => run } %></td>
+    <td><%= render "button", :run => run %></td>
   </tr>
 <% end %>
 </table>
