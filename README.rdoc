@@ -6,6 +6,7 @@ URL::         http://www.taverna.org.uk
 Licence::     BSD (See LICENCE or http://www.opensource.org/licenses/bsd-license.php)
 Copyright::   (c) 2013 The University of Manchester, UK
 
+{<img src="https://badge.fury.io/rb/taverna-player.png" alt="Gem Version" />}[http://badge.fury.io/rb/taverna-player]
 {<img src="https://codeclimate.com/github/myGrid/taverna-player.png" />}[https://codeclimate.com/github/myGrid/taverna-player]
 
 == Synopsis
