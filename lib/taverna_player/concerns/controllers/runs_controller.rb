@@ -66,7 +66,7 @@ module TavernaPlayer
           end
 
           def find_interaction
-            @interaction = Interaction.find_by_unique_id(params[:int_id])
+            @interaction = Interaction.find_by_run_id_and_serial(@run.id, params[:serial])
           end
 
           # Read the data from the results zip file.

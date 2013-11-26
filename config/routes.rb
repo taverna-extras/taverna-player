@@ -24,8 +24,8 @@ TavernaPlayer::Engine.routes.draw do
       end
 
       scope "interaction" do
-        get ":int_id", :action => "read_interaction"
-        post ":int_id", :action => "write_interaction"
+        get ":serial", :action => "read_interaction"
+        post ":serial", :action => "write_interaction"
       end
     end
   end

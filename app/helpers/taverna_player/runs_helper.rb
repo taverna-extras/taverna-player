@@ -15,7 +15,7 @@ module TavernaPlayer
 
     def interaction_redirect(interaction)
       if interaction.page_uri.blank?
-        run_url(interaction.run) + "/interaction/#{interaction.unique_id}"
+        run_url(interaction.run) + "/interaction/#{interaction.serial}"
       else
         interaction.page_uri
       end

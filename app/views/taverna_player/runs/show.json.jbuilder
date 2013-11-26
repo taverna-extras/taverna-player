@@ -18,7 +18,6 @@ end
 
 unless @interaction.nil?
   json.interaction do
-    json.id @interaction.unique_id
     json.serial @interaction.serial
     json.uri interaction_redirect(@interaction)
   end

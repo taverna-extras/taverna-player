@@ -20,7 +20,7 @@
       pmrpc.register({
         publicProcedureName : "reply",
         procedure : function(status, results) {
-          interaction_reply('<%= "#{run_url(run)}/interaction/#{interaction.unique_id}" %>', status, results);
+          interaction_reply('<%= "#{run_url(run)}/interaction/#{interaction.serial}" %>', status, results);
           return "OK";
         }
       });

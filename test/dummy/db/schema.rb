@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131114130937) do
+ActiveRecord::Schema.define(:version => 20131126175640) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -35,7 +35,6 @@ ActiveRecord::Schema.define(:version => 20131114130937) do
     t.datetime "created_at",                                        :null => false
     t.datetime "updated_at",                                        :null => false
     t.boolean  "displayed",                      :default => false
-    t.string   "unique_id"
     t.text     "page"
     t.string   "feed_reply"
     t.text     "data",       :limit => 16777215
@@ -44,7 +43,6 @@ ActiveRecord::Schema.define(:version => 20131114130937) do
   end
 
   add_index "taverna_player_interactions", ["run_id"], :name => "index_taverna_player_interactions_on_run_id"
-  add_index "taverna_player_interactions", ["unique_id"], :name => "index_taverna_player_interactions_on_unique_id"
 
   create_table "taverna_player_run_ports", :force => true do |t|
     t.string   "name"

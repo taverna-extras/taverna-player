@@ -64,16 +64,16 @@ module TavernaPlayer
 
     test "should route to interaction write proxy" do
       assert_routing({ :method => "post",
-        :path => "/runs/1/interaction/#{@int.unique_id}" },
+        :path => "/runs/1/interaction/#{@int.serial}" },
         { :controller => "taverna_player/runs", :action => "write_interaction",
-          :id => "1", :int_id => @int.unique_id }, {}, {},
+          :id => "1", :serial => @int.serial }, {}, {},
         "Did not route correctly")
     end
 
     test "should route to interaction read proxy" do
-      assert_routing "/runs/1/interaction/#{@int.unique_id}",
+      assert_routing "/runs/1/interaction/#{@int.serial}",
         { :controller => "taverna_player/runs", :action => "read_interaction",
-          :id => "1", :int_id => @int.unique_id, }, {}, {},
+          :id => "1", :serial => @int.serial, }, {}, {},
         "Did not route correctly"
     end
 
