@@ -14,7 +14,8 @@ module TavernaPlayer
   class Interaction < ActiveRecord::Base
     attr_accessible :displayed, :feed_reply, :page, :replied
 
-    belongs_to :run, :class_name => "TavernaPlayer::Run"
+    belongs_to :run, :class_name => "TavernaPlayer::Run",
+      :inverse_of => :interactions
 
     validates_presence_of :serial
     validates_uniqueness_of :serial, :scope => :run_id,

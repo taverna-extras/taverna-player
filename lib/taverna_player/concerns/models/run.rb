@@ -31,18 +31,20 @@ module TavernaPlayer
           end
 
           has_many :inputs, :class_name => "TavernaPlayer::RunPort::Input",
-            :dependent => :destroy
+            :inverse_of => :run, :dependent => :destroy
           has_many :outputs, :class_name => "TavernaPlayer::RunPort::Output",
-            :dependent => :destroy
+            :inverse_of => :run, :dependent => :destroy
           has_many :interactions, :class_name => "TavernaPlayer::Interaction",
-            :dependent => :destroy
+            :inverse_of => :run, :dependent => :destroy
           belongs_to :delayed_job, :class_name => "::Delayed::Job"
 
           # A run can have children, which are runs.
           # A run can have a parent, which is another run.
           has_many :children, :class_name => "TavernaPlayer::Run",
-            :foreign_key => "parent_id", :dependent => :nullify
-          belongs_to :parent, :class_name => "TavernaPlayer::Run"
+            :foreign_key => "parent_id", :inverse_of => :parent,
+            :dependent => :nullify
+          belongs_to :parent, :class_name => "TavernaPlayer::Run",
+            :inverse_of => :children
 
           accepts_nested_attributes_for :inputs
 

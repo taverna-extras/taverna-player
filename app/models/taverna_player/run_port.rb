@@ -23,8 +23,6 @@ module TavernaPlayer
 
     self.inheritance_column = "port_type"
 
-    belongs_to :run, :class_name => "TavernaPlayer::Run"
-
     validates_presence_of :name
     validates_uniqueness_of :name, :scope => [:run_id, :port_type]
 
@@ -109,6 +107,9 @@ module TavernaPlayer
   # This class represents a workflow input port.
   class RunPort::Input < RunPort
 
+    belongs_to :run, :class_name => "TavernaPlayer::Run",
+      :inverse_of => :inputs
+
     private
 
     def file_url_via_run
@@ -122,6 +123,9 @@ module TavernaPlayer
     attr_accessible :metadata
 
     serialize :metadata
+
+    belongs_to :run, :class_name => "TavernaPlayer::Run",
+      :inverse_of => :outputs
 
     private
 
