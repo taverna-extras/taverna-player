@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131126175640) do
+ActiveRecord::Schema.define(:version => 20131127163539) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -42,6 +42,8 @@ ActiveRecord::Schema.define(:version => 20131126175640) do
     t.string   "page_uri"
   end
 
+  add_index "taverna_player_interactions", ["run_id", "replied"], :name => "index_taverna_player_interactions_on_run_id_and_replied"
+  add_index "taverna_player_interactions", ["run_id", "serial"], :name => "index_taverna_player_interactions_on_run_id_and_serial"
   add_index "taverna_player_interactions", ["run_id"], :name => "index_taverna_player_interactions_on_run_id"
 
   create_table "taverna_player_run_ports", :force => true do |t|
@@ -59,6 +61,7 @@ ActiveRecord::Schema.define(:version => 20131126175640) do
     t.text     "metadata"
   end
 
+  add_index "taverna_player_run_ports", ["run_id", "name"], :name => "index_taverna_player_run_ports_on_run_id_and_name"
   add_index "taverna_player_run_ports", ["run_id"], :name => "index_taverna_player_run_ports_on_run_id"
 
   create_table "taverna_player_runs", :force => true do |t|
@@ -88,7 +91,9 @@ ActiveRecord::Schema.define(:version => 20131126175640) do
     t.integer  "user_id"
   end
 
-  add_index "taverna_player_runs", ["run_id"], :name => "index_taverna_player_runs_on_run_id"
+  add_index "taverna_player_runs", ["parent_id"], :name => "index_taverna_player_runs_on_parent_id"
+  add_index "taverna_player_runs", ["user_id"], :name => "index_taverna_player_runs_on_user_id"
+  add_index "taverna_player_runs", ["workflow_id"], :name => "index_taverna_player_runs_on_workflow_id"
 
   create_table "taverna_player_service_credentials", :force => true do |t|
     t.string   "uri",         :null => false
