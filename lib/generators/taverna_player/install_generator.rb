@@ -15,11 +15,14 @@ module TavernaPlayer
     class InstallGenerator < Rails::Generators::Base
       source_root File.expand_path("../../templates", __FILE__)
 
-      desc "Creates a Taverna Player initializer"
+      desc "Creates Taverna Player initializers"
 
-      def copy_initializer
-        copy_file "initializer.rb",
-          "config/initializers/taverna_player.rb.example"
+      def copy_initializers
+        copy_file "player_initializer.rb",
+          "config/initializers/taverna_player.rb"
+
+        copy_file "server_initializer.rb",
+          "config/initializers/taverna_server.example.rb"
       end
 
       def show_readme

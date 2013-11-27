@@ -38,12 +38,12 @@ And run the <tt>bundle install</tt> command to install it.
 Next you need to run the install generator:
  rails generate taverna_player:install
 
-This installs an initializer (into your application's
-<tt>config/initializers</tt> directory) which describes all of Taverna Player's
-configuration options and there are some things that MUST be configured before
-it will work - see below for more information. The install generator also
-prints out a list of other steps for setting up Taverna Player; these are
-repeated and detailed below.
+This installs two initializer files (into your application's
+<tt>config/initializers</tt> directory) which describe all of Taverna Player's
+configuration options; there are some things that MUST be configured before it
+will work - see below for more information. The install generator also prints
+out a list of other steps for setting up Taverna Player; these are repeated
+and detailed below.
 
 == Running Taverna Player
 

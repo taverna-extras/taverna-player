@@ -1,14 +1,19 @@
 
 ==============================================================================
 
-An example initializer has been installed to:
-
-  config/initializers/taverna_player.rb.example
-
-Please look through this file and make any alterations as required. BEFORE you
-configure the Taverna Server URI and login information copy this file to:
+Two initializers have been installed to:
 
   config/initializers/taverna_player.rb
+  config/initializers/taverna_server.example.rb
+
+The first is general configuration for Taverna Player and it is safe to commit
+this to your repository. The second is configuration specific to your Taverna
+Server instance and should not be commited to your repository. Please look
+through these files and make any alterations as required. BEFORE you configure
+the Taverna Server URI and login information in taverna_server.example.rb copy
+this file to:
+
+  config/initializers/taverna_server.rb
 
 Then check the example file into your repository, add the non-example file to
 your version control ignore file (e.g. .gitignore) and then configure the
