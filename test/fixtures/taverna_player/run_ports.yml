@@ -34,6 +34,7 @@ three:
   port_type: TavernaPlayer::RunPort::Input
   run_id: 3
   depth: 0
+  metadata: "---\n:size: 3\n:type: text/plain"
 
 four:
   id: 4

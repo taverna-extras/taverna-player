@@ -26,7 +26,9 @@ module TavernaPlayer
     validates_presence_of :name
     validates_uniqueness_of :name, :scope => [:run_id, :port_type]
 
-    attr_accessible :depth, :file, :name, :value
+    attr_accessible :depth, :file, :metadata, :name, :value
+
+    serialize :metadata
 
     has_attached_file :file,
       :path => File.join(TavernaPlayer.file_store, ":class/:attachment/:id/:filename"),
@@ -102,9 +104,30 @@ module TavernaPlayer
         self.file = File.new(tmp_file_name)
       end
     end
+
+    public
+
+    ##
+    # :method: metadata
+    # :call-seq:
+    #   metadata -> hash
+    #
+    # Get the size and type metadata for this port in a Hash. For a list it
+    # might look like this:
+    #
+    #  {
+    #    :size => [12, 36509],
+    #    :type => ["text/plain", "image/png"]
+    #  }
+    #
+    # <b>Note:</b> By default Taverna Player only uses this field on outputs.
+    # It is provided as a field for inputs too as a convenience for
+    # implementors and for possible future use.
+
   end
 
-  # This class represents a workflow input port.
+  # This class represents a workflow input port. All functionality is provided
+  # by the RunPort superclass.
   class RunPort::Input < RunPort
 
     belongs_to :run, :class_name => "TavernaPlayer::Run",
@@ -117,12 +140,9 @@ module TavernaPlayer
     end
   end
 
-  # This class represents a workflow output port.
+  # This class represents a workflow output port. All functionality is
+  # provided by the RunPort superclass.
   class RunPort::Output < RunPort
-
-    attr_accessible :metadata
-
-    serialize :metadata
 
     belongs_to :run, :class_name => "TavernaPlayer::Run",
       :inverse_of => :outputs
@@ -132,21 +152,5 @@ module TavernaPlayer
     def file_url_via_run
       "/runs/#{run_id}/output/#{name}"
     end
-
-    public
-
-    ##
-    # :method: metadata
-    # :call-seq:
-    #   metadata -> hash
-    #
-    # Get the size and type metadata for this output port in a Hash. For a
-    # list output it might look like this:
-    #
-    #  {
-    #    :size => [12, 36509],
-    #    :type => ["text/plain", "image/png"]
-    #  }
-
   end
 end
