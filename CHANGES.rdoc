@@ -1,6 +1,15 @@
 = Changes log for Taverna Player
 
+== Version 0.2.0
 
+* [TAV-461] Remove unique_id from the interaction table.
+* [TAV-353] Optimize table indexing.
+* [TAV-353] Set inverse relationships in the models.
+* [TAV-353] Remove unused Paperclip columns.
+* [TAV-462] Separate out the config for Taverna Server.
+* [TAV-463] Serialize metadata field on input port.
+* [TAV-464] Allow RunPort model to be overridden.
+* [TAV-464] Allow overriding of Input and Output models.
 
 == About this CHANGES file
 
