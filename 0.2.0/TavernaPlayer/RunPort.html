@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>class TavernaPlayer::RunPort - Taverna Player</title>
+
+<link type="text/css" media="screen" href="../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="../index.html">Home</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/models/taverna_player/run_port.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">ActiveRecord::Base
+  
+</nav>
+
+    <!-- Included Modules -->
+<nav id="includes-section" class="section">
+  <h3 class="section-header">Included Modules</h3>
+
+  <ul class="link-list">
+  
+  
+    <li><span class="include">TavernaPlayer::Concerns::Models::RunPort</span>
+  
+  
+  </ul>
+</nav>
+
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-display_name">#display_name</a>
+    
+    <li><a href="#method-i-metadata">#metadata</a>
+    
+    <li><a href="#method-i-value">#value</a>
+    
+    <li><a href="#method-i-value_preview">#value_preview</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="../CHANGES_rdoc.html">CHANGES</a>
+  
+    <li class="file"><a href="../LICENCE_rdoc.html">LICENCE</a>
+  
+    <li class="file"><a href="../README_rdoc.html">README</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="../TavernaPlayer.html">TavernaPlayer</a>
+  
+    <li><a href="../TavernaPlayer/ApplicationHelper.html">TavernaPlayer::ApplicationHelper</a>
+  
+    <li><a href="../TavernaPlayer/OutputRenderer.html">TavernaPlayer::OutputRenderer</a>
+  
+    <li><a href="../TavernaPlayer/Run.html">TavernaPlayer::Run</a>
+  
+    <li><a href="../TavernaPlayer/RunPort.html">TavernaPlayer::RunPort</a>
+  
+    <li><a href="../TavernaPlayer/RunPort/Input.html">TavernaPlayer::RunPort::Input</a>
+  
+    <li><a href="../TavernaPlayer/RunPort/Output.html">TavernaPlayer::RunPort::Output</a>
+  
+    <li><a href="../TavernaPlayer/ServiceCredential.html">TavernaPlayer::ServiceCredential</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class TavernaPlayer::RunPort</h1>
+
+  <div id="description" class="description">
+    
+<p>This class is the superclass of the input and output port types <a
+href="RunPort/Input.html">RunPort::Input</a> and <a
+href="RunPort/Output.html">RunPort::Output</a>, respectively. It holds much
+common functionality.</p>
+
+<p>A port can hold either a text value or a file.</p>
+
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-display_name" class="method-detail ">
+        
+        
+        <div class="method-heading">
+          <span class="method-callseq">
+            display_name &rarr; string
+          </span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+        
+
+        <div class="method-description">
+          
+          <p>Convert this port’s name to a more presentable form. In practice this means
+converting underscores (_) to spaces, while preserving case.</p>
+          
+
+          
+          <div class="method-source-code" id="display_name-source">
+            <pre><span class="ruby-comment"># File app/models/taverna_player/run_port.rb, line 31</span>
+    </pre>
+          </div><!-- display_name-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- display_name-method -->
+
+    
+      <div id="method-i-metadata" class="method-detail ">
+        
+        
+        <div class="method-heading">
+          <span class="method-callseq">
+            metadata &rarr; hash
+          </span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+        
+
+        <div class="method-description">
+          
+          <p>Get the size and type metadata for this port in a Hash. For a list it might
+look like this:</p>
+
+<pre class="ruby">{
+  :<span class="ruby-identifier">size</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-value">12</span>, <span class="ruby-value">36509</span>],
+  :<span class="ruby-identifier">type</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-string">&quot;text/plain&quot;</span>, <span class="ruby-string">&quot;image/png&quot;</span>]
+}
+</pre>
+
+<p><strong>Note:</strong> By default Taverna Player only uses this field on
+outputs. It is provided as a field for inputs too as a convenience for
+implementors and for possible future use.</p>
+          
+
+          
+          <div class="method-source-code" id="metadata-source">
+            <pre><span class="ruby-comment"># File app/models/taverna_player/run_port.rb, line 63</span>
+  </pre>
+          </div><!-- metadata-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- metadata-method -->
+
+    
+      <div id="method-i-value" class="method-detail ">
+        
+        
+        <div class="method-heading">
+          <span class="method-callseq">
+            value &rarr; string
+          </span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+        
+
+        <div class="method-description">
+          
+          <p>Return the value held in this port if there is one.</p>
+          
+
+          
+          <div class="method-source-code" id="value-source">
+            <pre><span class="ruby-comment"># File app/models/taverna_player/run_port.rb, line 46</span>
+    </pre>
+          </div><!-- value-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- value-method -->
+
+    
+      <div id="method-i-value_preview" class="method-detail ">
+        
+        
+        <div class="method-heading">
+          <span class="method-callseq">
+            value_preview &rarr; string
+          </span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+        
+
+        <div class="method-description">
+          
+          <p>Show up to the first 256 characters of the port’s value. This returns nil
+if the port has a file instead of a value.</p>
+          
+
+          
+          <div class="method-source-code" id="value_preview-source">
+            <pre><span class="ruby-comment"># File app/models/taverna_player/run_port.rb, line 39</span>
+    </pre>
+          </div><!-- value_preview-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- value_preview-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.2.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
