@@ -11,18 +11,10 @@
 #------------------------------------------------------------------------------
 
 module TavernaPlayer
-  module Generators
-    class ModelsGenerator < Rails::Generators::Base
-      source_root File.expand_path("../../templates/models", __FILE__)
+  class Input < ActiveRecord::Base
+    # Do not remove the next line.
+    include TavernaPlayer::Concerns::Models::Input
 
-      desc "Copy the Taverna Player models into the main app for "\
-        "customization."
-
-      def copy_models
-        ["run.rb", "run_port.rb", "input.rb", "output.rb"].each do |file|
-          copy_file file, "app/models/taverna_player/#{file}"
-        end
-      end
-    end
+    # Extend the Input model here.
   end
 end

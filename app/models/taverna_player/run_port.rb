@@ -65,28 +65,12 @@ module TavernaPlayer
   # This class represents a workflow input port. All functionality is provided
   # by the RunPort superclass.
   class RunPort::Input < RunPort
-
-    belongs_to :run, :class_name => "TavernaPlayer::Run",
-      :inverse_of => :inputs
-
-    private
-
-    def file_url_via_run
-      "/runs/#{run_id}/input/#{name}"
-    end
+    include TavernaPlayer::Concerns::Models::Input
   end
 
   # This class represents a workflow output port. All functionality is
   # provided by the RunPort superclass.
   class RunPort::Output < RunPort
-
-    belongs_to :run, :class_name => "TavernaPlayer::Run",
-      :inverse_of => :outputs
-
-    private
-
-    def file_url_via_run
-      "/runs/#{run_id}/output/#{name}"
-    end
+    include TavernaPlayer::Concerns::Models::Output
   end
 end
