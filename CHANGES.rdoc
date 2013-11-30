@@ -1,5 +1,9 @@
 = Changes log for Taverna Player
 
+== Version 0.2.1
+
+* Fix classname typo in port model templates.
+
 == Version 0.2.0
 
 * [TAV-461] Remove unique_id from the interaction table.
