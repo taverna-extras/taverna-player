@@ -11,10 +11,10 @@
 #------------------------------------------------------------------------------
 
 module TavernaPlayer
-  class Input < ActiveRecord::Base
+  class RunPort::Input < ActiveRecord::Base
     # Do not remove the next line.
     include TavernaPlayer::Concerns::Models::Input
 
-    # Extend the Input model here.
+    # Extend the RunPort::Input model here.
   end
 end
