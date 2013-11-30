@@ -12,6 +12,7 @@
 
 module TavernaPlayer
   class Worker
+    include TavernaPlayer::Concerns::Callback
 
     # How to get the interaction presentation frame out of the interaction page.
     INTERACTION_REGEX = /document\.getElementById\(\'presentationFrame\'\)\.src = \"(.+)\";/
@@ -29,7 +30,7 @@ module TavernaPlayer
     def perform
       unless TavernaPlayer.pre_run_callback.nil?
         status_message "Running pre-run tasks"
-        run_callback(TavernaPlayer.pre_run_callback, @run)
+        callback(TavernaPlayer.pre_run_callback, @run)
       end
 
       status_message "Connecting to Taverna Server"
@@ -192,7 +193,7 @@ module TavernaPlayer
 
         unless TavernaPlayer.run_failed_callback.nil?
           status_message "Running post-failure tasks"
-          run_callback(TavernaPlayer.run_failed_callback, @run)
+          callback(TavernaPlayer.run_failed_callback, @run)
         end
 
         backtrace = exception.backtrace.join("\n")
@@ -206,7 +207,7 @@ module TavernaPlayer
 
       unless TavernaPlayer.post_run_callback.nil?
         status_message "Running post-run tasks"
-        run_callback(TavernaPlayer.post_run_callback, @run)
+        callback(TavernaPlayer.post_run_callback, @run)
       end
 
       @run.state = :finished
@@ -214,14 +215,6 @@ module TavernaPlayer
     end
 
     private
-
-    def run_callback(callback, *params)
-      if callback.is_a? Proc
-        callback.call(*params)
-      else
-        method(callback).call(*params)
-      end
-    end
 
     def download_log(run)
       Dir.mktmpdir(run.id, Rails.root.join("tmp")) do |tmp_dir|
@@ -313,7 +306,7 @@ module TavernaPlayer
 
       unless TavernaPlayer.run_cancelled_callback.nil?
         status_message "Running post-cancel tasks"
-        run_callback(TavernaPlayer.run_cancelled_callback, @run)
+        callback(TavernaPlayer.run_cancelled_callback, @run)
       end
 
       @run.state = :cancelled

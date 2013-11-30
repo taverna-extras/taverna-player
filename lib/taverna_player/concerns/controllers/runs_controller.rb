@@ -17,6 +17,8 @@ module TavernaPlayer
 
         extend ActiveSupport::Concern
 
+        include TavernaPlayer::Concerns::Callback
+
         included do
           respond_to :html, :json, :js
 
@@ -55,7 +57,7 @@ module TavernaPlayer
             return if params[:run][:embedded] == "true" || TavernaPlayer.user_proxy.nil?
 
             unless TavernaPlayer.current_user_callback.blank?
-              user = method(TavernaPlayer.current_user_callback).call
+              user = callback(TavernaPlayer.current_user_callback)
               params[:run][:user_id] = user.id unless user.nil?
             end
           end

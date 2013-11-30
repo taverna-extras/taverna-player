@@ -20,6 +20,8 @@ module TavernaPlayer
   # Each renderer has all of the ActionView::Helpers (such as link_to, tag,
   # etc) available to them.
   class OutputRenderer
+    include TavernaPlayer::Concerns::Callback
+
     # The renderers are all called in the scope of this class so we include
     # ActionView::Helpers here so that they are all available to them.
     include ActionView::Helpers
@@ -85,11 +87,7 @@ module TavernaPlayer
       renderer = @hash[type.media_type][type.sub_type] ||
         @hash[type.media_type][:default] || @hash[:default]
 
-      if renderer.is_a? Proc
-        renderer.call(content, type)
-      else
-        method(renderer).call(content, type)
-      end
+      callback(renderer, content, type)
     end
 
   end
