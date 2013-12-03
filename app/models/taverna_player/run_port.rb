@@ -58,6 +58,24 @@ module TavernaPlayer
     # the port's value.
 
     ##
+    # :method: path
+    # :call-seq:
+    #   path -> string
+    #   path(indices) -> string
+    #
+    # Return a url path segment that addresses this output value. Pass in a
+    # list of indices if it is a list port.
+    #
+    # For a port of depth 0 called "OUT":
+    #
+    #  path = output.path # => "/runs/1/output/OUT"
+    #
+    # For a port of depth 2 called "OUT_LIST":
+    #
+    #  path = output.path(0, 0) # => "runs/1/output/OUT_LIST/0/0"
+    #  path = output.path([1, 2]) # => "runs/1/output/OUT_LIST/1/2"
+
+    ##
     # :method: metadata
     # :call-seq:
     #   metadata -> hash

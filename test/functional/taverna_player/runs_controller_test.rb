@@ -38,22 +38,27 @@ module TavernaPlayer
     end
 
     test "should route to a run output" do
-      assert_routing "/runs/1/output/OUT",
+      assert_routing @run2.outputs[0].path,
         { :controller => "taverna_player/runs", :action => "output",
-          :id => "1", :port => "OUT" }, {}, {}, "Did not route correctly"
+          :id => "2", :port => "OUT" }, {}, {}, "Did not route correctly"
     end
 
     test "should route to a deep run output" do
-      assert_routing "/runs/1/output/OUT/0/0",
+      assert_routing @run2.outputs[0].path(0, 0),
         { :controller => "taverna_player/runs", :action => "output",
-          :id => "1", :port => "OUT", :path => "0/0" }, {}, {},
+          :id => "2", :port => "OUT", :path => "0/0" }, {}, {},
+        "Did not route correctly"
+
+      assert_routing @run2.outputs[0].path([1, 2]),
+        { :controller => "taverna_player/runs", :action => "output",
+          :id => "2", :port => "OUT", :path => "1/2" }, {}, {},
         "Did not route correctly"
     end
 
     test "should route to a run input" do
-      assert_routing "/runs/1/input/IN",
+      assert_routing @run3.inputs[0].path,
         { :controller => "taverna_player/runs", :action => "input",
-          :id => "1", :port => "IN" }, {}, {}, "Did not route correctly"
+          :id => "3", :port => "IN_Value" }, {}, {}, "Did not route correctly"
     end
 
     test "should route to cancel on a run" do

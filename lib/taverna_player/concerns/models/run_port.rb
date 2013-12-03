@@ -108,6 +108,12 @@ module TavernaPlayer
           end
         end
 
+        def path(*indices)
+          index = [*indices].flatten
+          path = index.empty? ? "" : "/" + index.join("/")
+          file_url_via_run + path
+        end
+
       end
     end
   end
