@@ -40,8 +40,22 @@ module TavernaPlayer
     # :method: value
     # :call-seq:
     #   value -> string
+    #   value(indices) -> string
     #
-    # Return the value held in this port if there is one.
+    # Return the value held in this port if there is one. Pass in a list of
+    # indices if it is a list port.
+    #
+    # For a port of depth 0:
+    #
+    #  value = output.value
+    #
+    # For a port of depth 2:
+    #
+    #  value = output.value(0, 0)
+    #  value = output.value([1, 2])
+    #
+    # Trying to get a list value out of a port of depth 0 will simply return
+    # the port's value.
 
     ##
     # :method: metadata
