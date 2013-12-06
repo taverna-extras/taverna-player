@@ -77,17 +77,38 @@ module TavernaPlayer
     end
 
     # :call-seq:
-    #   render(content, mimetype) -> markup
+    #   list(method)
     #
-    # This is the method that calls the correct renderer for the given content
-    # with the given MIME type and returns the resultant rendering.
-    def render(content, mimetype)
-      type = MIME::Types[mimetype].first
+    # Set a renderer to handle list outputs. This will typically format the
+    # list somehow and render the list items with further calls to
+    # TavernaPlayer.output_renderer.render.
+    def list(method)
+      @hash[:list] = method
+    end
 
-      renderer = @hash[type.media_type][type.sub_type] ||
-        @hash[type.media_type][:default] || @hash[:default]
+    # :call-seq:
+    #   render(output) -> markup
+    #
+    # This is the method that calls the correct renderer for the given output
+    # and returns the resultant rendering.
+    def render(output, index = [])
+      if output.depth > 0 && index.empty?
+        renderer = @hash[:list]
+      else
+        type = MIME::Types[recurse_into_lists(output.metadata[:type], index.dup)].first
+        renderer = @hash[type.media_type][type.sub_type] ||
+          @hash[type.media_type][:default] || @hash[:default]
+      end
 
-      callback(renderer, content, type)
+      raw(callback(renderer, output, index))
+    end
+
+    private
+
+    def recurse_into_lists(list, indexes)
+      return list if indexes.empty? || !list.is_a?(Array)
+      i = indexes.shift
+      return recurse_into_lists(list[i], indexes)
     end
 
   end

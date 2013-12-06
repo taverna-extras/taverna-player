@@ -73,6 +73,7 @@ module TavernaPlayer
   mattr_reader :output_renderer
   @@output_renderer = OutputRenderer.new
   @@output_renderer.default(:cannot_inline_tp_default)
+  @@output_renderer.list(:list_tp_default)
   @@output_renderer.add("text/plain", :format_text_tp_default, true)
   @@output_renderer.add("text/xml", :format_xml_tp_default)
   @@output_renderer.add("image/jpeg", :show_image_tp_default)

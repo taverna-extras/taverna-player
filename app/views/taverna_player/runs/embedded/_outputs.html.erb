@@ -24,7 +24,7 @@
 
       <p>
         <b>Value:</b>
-        <%= show_output(run, output) %>
+        <%= TavernaPlayer.output_renderer.render(output) %>
       </p>
 
     <% end%>
