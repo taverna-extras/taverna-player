@@ -79,22 +79,22 @@ TavernaPlayer.setup do |config|
   #config.run_failed_callback = "player_run_failed_callback"
   #config.run_failed_callback = :player_run_failed_callback
 
-  # Callbacks to be run to render various types of workflow output. These can
-  # be defined as Proc objects or as methods and referenced by name.
+  # Callbacks to be run to render various types of workflow port. These can be
+  # defined as Proc objects or as methods and referenced by name.
   #
   # Be careful! If a callback fails then users will see an Internal Server
-  # Error (HTTP status code 500) instead of their run outputs!
+  # Error (HTTP status code 500) instead of their run inputs and/or outputs!
   #
   # Add callbacks in this initializer or define them elsewhere and require the
   # file as usual (if they are not pulled in by some other code). You can
-  # create example stub callbacks using:
+  # create example callbacks using:
   #   "rails generate taverna_player:renderers"
   # which will put them in "lib/taverna_player_renderers.rb".
   #require "taverna_player_renderers"
 
-  # Renderers for each type of output (referenced by MIME type) must then be
+  # Renderers for each type of value (referenced by MIME type) must then be
   # registered. All the renderers shown below are supplied as defaults.
-  #config.output_renderers do |renderers|
+  #config.port_renderers do |renderers|
     # Set a default renderer for if there is a workflow type that browsers
     # can't otherwise handle.
     #renderers.default(:cannot_inline)
@@ -104,7 +104,7 @@ TavernaPlayer.setup do |config|
     # aren't otherwise registered.
     #renderers.add("text/plain", :format_text, true)
 
-    # This renderer overrides the default text/* renderer for text/xml outputs.
+    # This renderer overrides the default text/* renderer for text/xml values.
     #renderers.add("text/xml", :format_xml)
 
     # Browsers can't show all image types so just register very common ones.
@@ -116,6 +116,10 @@ TavernaPlayer.setup do |config|
     # This is the workflow error type and you should have a special renderer
     # for it.
     #renderers.add("application/x-error", :workflow_error)
+
+    # If your workflows have list outputs (probable) then something to render
+    # lists is also needed.
+    #renderers.list(:list_port)
   #end
 end
 

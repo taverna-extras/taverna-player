@@ -172,9 +172,9 @@ They will be saved to <tt>lib/taverna_player_callbacks.rb</tt>. Don't forget to
 then require and register them in the Taverna Player initializer. There is more
 information on callbacks below.
 
-You can add to, or change, the workflow run outputs render methods to better
-suit your particular application. To copy the defaults that Taverna Player
-ships with into your application for customization run:
+You can add to, or change, the workflow port render methods to better suit
+your particular application. To copy the defaults that Taverna Player ships
+with into your application for customization run:
 
   rails generate taverna_player:renderers
 
@@ -405,28 +405,24 @@ A set of example callbacks can be installed with the generator detailed above.
 Don't forget to make sure any callback code is <tt>require</tt>d somewhere and
 the callbacks themselves registered in the initializer.
 
-== Rendering outputs
+== Rendering workflow ports
 
-Workflows can produce results in many different formats and Taverna Player
-tries to accomodate this as best it can. It provides basic facilities for
-rendering as many result types as it can and these are extendible wherever
-possible.
+Workflows can accept inputs and produce results in many different formats and
+Taverna Player tries to accomodate this as best it can. It provides basic
+facilities for rendering as many types as it can and these are extensible
+wherever possible.
 
-=== Output helper
+Calling the port renderer is as simple as just passing it the port to be
+rendered in your view.
 
-A very basic output helper is provided, <tt>show_output</tt>, which can be
-used in your views. This will format the output of each workflow output port in
-a generic way. If it is a singleton output then it is displayed normally. If it
-is a list output then the list is rendered as a HTML ordered list
-(<tt><ol></tt>).
-
-If you require anything more complex then you will have to override this helper
-or provide your own and call it from your views.
+  <% run.outputs.each do |output| %>
+    <%= TavernaPlayer.port_renderer.render(output) %>
+  <% end %>
 
 === Type renderers
 
 Taverna Player has a system of specific type renderers to handle different
-types of output. A number of defaults are supplied but these can be replaced
+types of value. A number of defaults are supplied but these can be replaced
 and added to if required.
 
 To install a set of example renderers you can use the generator detailed above.
@@ -434,22 +430,22 @@ To install a set of example renderers you can use the generator detailed above.
 To register a renderer for use add it into the renderers block in the
 initializer:
 
-  config.output_renderers do |renderers|
+  config.port_renderers do |renderers|
     ...
   end
 
 So to just register a single default renderer method (called
 "my_default_renderer") you would do this:
 
-  config.output_renderers do |renderers|
+  config.port_renderers do |renderers|
     renderers.default(:my_default_renderer)
   end
 
-And it would be used to render every type of output. A more sensible example
+And it would be used to render every type of value. A more sensible example
 would be to have a renderer for PNG-type images and a renderer for text
-outputs as well:
+values as well:
 
-  config.output_renderers do |renderers|
+  config.port_renderers do |renderers|
     renderers.default(:my_default_renderer)
     renderers.add("text/plain", :text_renderer, true)
     renderers.add("image/png", :show_image)
@@ -458,16 +454,16 @@ outputs as well:
 This does three things:
 * Registers a renderer for PNG images. This could be as simple as wrapping it
   in an <tt><img ../></tt> tag.
-* Registers a renderer for outputs of type "text/plain" and <em>sets this as
+* Registers a renderer for values of type "text/plain" and <em>sets this as
   the default renderer for all other types beginning with "text"</em>. That is
   what the final parameter set to +true+ does.
 * Registers a default renderer for all other types. This should probably give
-  an explanation as to why the output cannot be shown in the browser with a
-  link to download the output to the user's computer.
+  an explanation as to why the value cannot be shown in the browser with a
+  link to download the value to the user's computer.
 
 Note the use of MIME types for specifying all types.
 
-Obviously outputs such as images and text are so common that Taverna Player
+Obviously values such as images and text are so common that Taverna Player
 provides these renderers for you and has them set up and registered by default.
 You would only need to override them if you wanted extra information to be
 displayed as well, such as sizes next to images, etc.
@@ -485,22 +481,20 @@ show:
 
 Note that the same renderer callback is used for each one.
 
+=== Rendering lists
+
+Taverna workflow inputs and output can be lists and rendering them requires a
+
 === Writing your own renderers
 
 To be a renderer callback a method must accept two parameters (in this order):
-1. The content to be rendered.
-1. The MIME type of the content.
+1. The port to be rendered.
+1. A list of indices into the port. For a singleton port this will be an empty
+   list. For a port of depth 2 this would be a list with two items, e.g.
+   <tt>[0, 0]</tt>
 
-In the case of text outputs the content will likely (depending on the output
-helper you use, described above) be the entire text content of the output. In
-most other cases it will probably be a URI or path to the actual content for
-use in, for example, an <tt><img .../></tt> tag.
-
-The type is provided in case a renderer wishes to be general and differentiate
-between different subtypes.
-
-Note that all renderer callbacks are called by Taverna Player in a context that
-includes the {ActionView::Helpers}[http://api.rubyonrails.org/classes/ActionView/Helpers.html]
+All renderer callbacks are called by Taverna Player in a context that includes
+the {ActionView::Helpers}[http://api.rubyonrails.org/classes/ActionView/Helpers.html]
 so your callbacks have access to them too, including helpers from third-party
 gems that register their helpers correctly.
 
@@ -515,9 +509,9 @@ Taverna Player provides a plain text renderer that formats text with a
 monospaced font, converts URI-like things to clickable links and respects
 carriage returns and newlines. It looks something like this:
 
-  def format_text(content, type)
+  def format_text(port, index = [])
     # Use CodeRay to format text so that newlines are respected.
-    content = CodeRay.scan(content, :text).div(:css => :class)
+    content = CodeRay.scan(port.value(index), :text).div(:css => :class)
 
     # Use auto_link to turn URI-like text into links.
     auto_link(content, :html => { :target => '_blank' }, :sanitize => false)
@@ -534,10 +528,10 @@ This renderer is registered as the default for all "text" media types.
 
 This renderer catches "text/XML" outputs:
 
-  def format_xml(content, type)
+  def format_xml(port, index = [])
     # Make sure XML is indented consistently.
     out = String.new
-    REXML::Document.new(content).write(out, 1)
+    REXML::Document.new(port.value(index)).write(out, 1)
     CodeRay.scan(out, :xml).div(:css => :class, :line_numbers => :table)
   end
 
@@ -554,24 +548,59 @@ the XML declaration, e.g.:
 
 As described above, images are just dropped into an <tt><img ../></tt> tag:
 
-  def show_image(content, type)
+  def show_image(port, index = [])
     # Can't use image_tag() here because the image doesn't really exist (it's
     # in a zip file, really) and this confuses the Rails asset pipeline.
-    tag("img", :src => content)
+    tag("img", :src => port.path(index))
   end
 
 Note the comment about the Rails asset pipeline in there if you are writing
 your own image renderer and are using the asset pipeline.
 
-The content parameter here gives the path to the image to be displayed.
+==== Lists
+
+Unless you can be absolutely sure that the workflows that will be run within
+your installation of Taverna Player will only have lists of a certain depth
+the lists renderer will need to be able to cope with anything that is thrown
+at it. The supplied renderer uses recursion to cope with what could, at least
+in theory, be infinitely deep lists:
+
+  def list_port(port, index = [], types = nil)
+    types = port.metadata[:type] if types.nil?
+
+    content = "<ol>"
+    i = 0
+    types.each do |type|
+      if type.is_a?(Array)
+        content += "<li><br />" +
+        list_port(port, index + [i], type) + "</li>"
+      else
+        content += "<li>(#{type})<p>" +
+          TavernaPlayer.port_renderer.render(port, index + [i]) +
+          "</p></li>"
+      end
+      i += 1
+    end
+
+    content += "</ol>"
+  end
+
+This method has an extra parameter that is used to drive the recursion. The
++types+ parameter contains the list structure of the whole port so can be used
+to loop over, or recurse into, each level as required.
+
+Lists are simply rendered as a numbered list along with their type
+information. Other registered renderers are called as necessary to render
+individual values.
 
 ==== Other types catch-all
 
 The default renderer for other, or unknown types, is:
 
-  def cannot_inline(content, type)
+  def cannot_inline(port, index = [])
     "Sorry but we cannot show this type of content in the browser. Please " +
-      link_to("download it", content) + " to view it on your local machine."
+      link_to("download it", port.path(index)) + " to view it on your " +
+      "local machine."
   end
 
 == Service Credentials

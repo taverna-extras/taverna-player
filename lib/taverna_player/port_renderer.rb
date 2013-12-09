@@ -12,14 +12,14 @@
 
 module TavernaPlayer
 
-  # This class manages the rendering of many different output types that could
-  # be produced by a workflow. It can be configured with new types and the
+  # This class manages the rendering of many different port types that could
+  # be associated with a workflow. It can be configured with new types and the
   # example renderers for each type can also be changed. An example of how to
   # set it up can be found in the taverna_player initializer.
   #
   # Each renderer has all of the ActionView::Helpers (such as link_to, tag,
   # etc) available to them.
-  class OutputRenderer
+  class PortRenderer
     include TavernaPlayer::Concerns::Callback
     include TavernaPlayer::Concerns::Utils
 
@@ -80,28 +80,28 @@ module TavernaPlayer
     # :call-seq:
     #   list(method)
     #
-    # Set a renderer to handle list outputs. This will typically format the
+    # Set a renderer to handle list ports. This will typically format the
     # list somehow and render the list items with further calls to
-    # TavernaPlayer.output_renderer.render.
+    # TavernaPlayer.port_renderer.render.
     def list(method)
       @hash[:list] = method
     end
 
     # :call-seq:
-    #   render(output) -> markup
+    #   render(port) -> markup
     #
-    # This is the method that calls the correct renderer for the given output
+    # This is the method that calls the correct renderer for the given port
     # and returns the resultant rendering.
-    def render(output, index = [])
-      if output.depth > 0 && index.empty?
+    def render(port, index = [])
+      if port.depth > 0 && index.empty?
         renderer = @hash[:list]
       else
-        type = MIME::Types[recurse_into_lists(output.metadata[:type], index.dup)].first
+        type = MIME::Types[recurse_into_lists(port.metadata[:type], index.dup)].first
         renderer = @hash[type.media_type][type.sub_type] ||
           @hash[type.media_type][:default] || @hash[:default]
       end
 
-      raw(callback(renderer, output, index))
+      raw(callback(renderer, port, index))
     end
 
   end

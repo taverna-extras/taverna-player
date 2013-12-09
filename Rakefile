@@ -40,7 +40,7 @@ RDoc::Task.new(:rdoc) do |rdoc|
     "app/models/taverna_player/run_port.rb",
     "app/models/taverna_player/service_credential.rb",
     "lib/taverna-player.rb",
-    "lib/taverna_player/output_renderer.rb"
+    "lib/taverna_player/port_renderer.rb"
     ]
 
   rdoc.rdoc_files.include(files)
