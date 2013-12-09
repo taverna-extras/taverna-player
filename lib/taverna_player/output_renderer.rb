@@ -21,6 +21,7 @@ module TavernaPlayer
   # etc) available to them.
   class OutputRenderer
     include TavernaPlayer::Concerns::Callback
+    include TavernaPlayer::Concerns::Utils
 
     # The renderers are all called in the scope of this class so we include
     # ActionView::Helpers here so that they are all available to them.
@@ -101,14 +102,6 @@ module TavernaPlayer
       end
 
       raw(callback(renderer, output, index))
-    end
-
-    private
-
-    def recurse_into_lists(list, indexes)
-      return list if indexes.empty? || !list.is_a?(Array)
-      i = indexes.shift
-      return recurse_into_lists(list[i], indexes)
     end
 
   end
