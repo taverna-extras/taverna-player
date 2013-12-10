@@ -18,6 +18,7 @@ module TavernaPlayer
         extend ActiveSupport::Concern
 
         include TavernaPlayer::Concerns::Callback
+        include TavernaPlayer::Concerns::Utils
 
         included do
           respond_to :html, :json, :js
@@ -76,13 +77,6 @@ module TavernaPlayer
             Zip::ZipFile.open(@run.results.path) do |zip|
               zip.read(file)
             end
-          end
-
-          # This is here because of Taverna's infinitely deep output ports :-(
-          def recurse_into_lists(list, indexes)
-            return list if indexes.empty? || !list.is_a?(Array)
-            i = indexes.shift
-            return recurse_into_lists(list[i], indexes)
           end
 
           # Choose a layout for the page depending on action and embedded status.

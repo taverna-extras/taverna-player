@@ -77,6 +77,17 @@ module TavernaPlayer
             end
           end
 
+          def deep_value(index)
+            path = index.map { |j| j += 1 }.join("/")
+
+            data = String.new
+            Zip::ZipFile.open(file.path) do |zip|
+              data = zip.read("#{path}")
+            end
+
+            data
+          end
+
         end # included
 
         def display_name
@@ -87,10 +98,20 @@ module TavernaPlayer
           self[:value]
         end
 
-        def value
-          v = self[:value]
+        def value(*indices)
+          if depth == 0
+            v = self[:value]
 
-          (!v.blank? && !file.path.blank?) ? File.read(file.path) : v
+            (!v.blank? && !file.path.blank?) ? File.read(file.path) : v
+          else
+            deep_value([*indices].flatten)
+          end
+        end
+
+        def path(*indices)
+          index = [*indices].flatten
+          path = index.empty? ? "" : "/" + index.join("/")
+          file_url_via_run + path
         end
 
       end

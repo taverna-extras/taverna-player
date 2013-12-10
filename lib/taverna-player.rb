@@ -69,29 +69,30 @@ module TavernaPlayer
   mattr_accessor :current_user_callback
   @@current_user_callback = nil
 
-  # Setup default output render callbacks.
-  mattr_reader :output_renderer
-  @@output_renderer = OutputRenderer.new
-  @@output_renderer.default(:cannot_inline_tp_default)
-  @@output_renderer.add("text/plain", :format_text_tp_default, true)
-  @@output_renderer.add("text/xml", :format_xml_tp_default)
-  @@output_renderer.add("image/jpeg", :show_image_tp_default)
-  @@output_renderer.add("image/png", :show_image_tp_default)
-  @@output_renderer.add("image/gif", :show_image_tp_default)
-  @@output_renderer.add("image/bmp", :show_image_tp_default)
-  @@output_renderer.add("application/x-error", :workflow_error_tp_default)
-  @@output_renderer.add("application/x-empty", :empty_tp_default)
-  @@output_renderer.add("inode/x-empty", :empty_tp_default)
+  # Setup default port render callbacks.
+  mattr_reader :port_renderer
+  @@port_renderer = PortRenderer.new
+  @@port_renderer.default(:cannot_inline_tp_default)
+  @@port_renderer.list(:list_tp_default)
+  @@port_renderer.add("text/plain", :format_text_tp_default, true)
+  @@port_renderer.add("text/xml", :format_xml_tp_default)
+  @@port_renderer.add("image/jpeg", :show_image_tp_default)
+  @@port_renderer.add("image/png", :show_image_tp_default)
+  @@port_renderer.add("image/gif", :show_image_tp_default)
+  @@port_renderer.add("image/bmp", :show_image_tp_default)
+  @@port_renderer.add("application/x-error", :workflow_error_tp_default)
+  @@port_renderer.add("application/x-empty", :empty_tp_default)
+  @@port_renderer.add("inode/x-empty", :empty_tp_default)
 
   # :call-seq:
-  #   output_renderers {|renderer| ...}
+  #   port_renderers {|renderer| ...}
   #
   # Set up the renderers for each MIME type that you want to be able to show
   # in the browser. In most cases the supplied defaults will be sufficient.
   #
   # See the taverna_player initializer for more information.
-  def self.output_renderers
-    yield @@output_renderer if block_given?
+  def self.port_renderers
+    yield @@port_renderer if block_given?
   end
 
   # Path to place where files should be stored.

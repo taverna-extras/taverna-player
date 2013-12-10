@@ -11,15 +11,20 @@
 #------------------------------------------------------------------------------
 
 module TavernaPlayer
-  module RunsHelper
+  module Concerns
+    module Utils
 
-    def interaction_redirect(interaction)
-      if interaction.page_uri.blank?
-        run_url(interaction.run) + "/interaction/#{interaction.serial}"
-      else
-        interaction.page_uri
+      extend ActiveSupport::Concern
+
+      # Taverna can have arbitrary (therefore effectively "infinite") port
+      # depths so we need to recurse into them. This code is common across a
+      # number of other modules.
+      def recurse_into_lists(list, indexes)
+        return list if indexes.empty? || !list.is_a?(Array)
+        i = indexes.shift
+        recurse_into_lists(list[i], indexes)
       end
-    end
 
+    end
   end
 end
