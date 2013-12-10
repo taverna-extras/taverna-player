@@ -1,5 +1,15 @@
 = Changes log for Taverna Player
 
+== Version 0.3.0
+
+* Refactor callback code out into its own module.
+* Fix classname typo in port model templates.
+* Enable getting deep list outputs from the port models.
+* Add a method to get a route (path) to a port.
+* [TAV-465] Refactor renderers and add list rendering.
+* Factor out common list handling code for sharing.
+* Rename and re-document renderers.
+
 == Version 0.2.1
 
 * Fix classname typo in port model templates.
