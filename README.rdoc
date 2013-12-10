@@ -339,6 +339,9 @@ your own needs.
 
 You can override the following core components:
 * Run (model)
+* RunPort (model)
+* RunPort::Input (model)
+* RunPort::Output (model)
 * RunsController
 * ServiceCredentialsController
 
