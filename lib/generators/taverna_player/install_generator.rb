@@ -22,7 +22,7 @@ module TavernaPlayer
           "config/initializers/taverna_player.rb"
 
         copy_file "server_initializer.rb",
-          "config/initializers/taverna_server.example.rb"
+          "config/initializers/taverna_server.rb.example"
       end
 
       def show_readme

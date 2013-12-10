@@ -182,12 +182,19 @@ They will be saved to <tt>lib/taverna_player_renderers.rb</tt>. Don't forget to
 then require and register them in the Taverna Player initializer. There is more
 information on renderers below.
 
-== Taverna Player initializer
+== Taverna Player initializers
 
-The {default initializer}[https://github.com/myGrid/taverna-player/blob/master/lib/generators/templates/initializer.rb]
-that is installed by the install generator requires minimal configuration for
-simple set ups. It is fully commented with everything that needs to be set but
-further explanations are given below.
+Two initializers are installed by the install generator:
+* {taverna_player.rb}[https://github.com/myGrid/taverna-player/blob/master/lib/generators/templates/player_initializer.rb]:
+  This contains configuration of Taverna Player.
+* {taverna_server.rb.example}[https://github.com/myGrid/taverna-player/blob/master/lib/generators/templates/server_initializer.rb]:
+  This is used to configure Taverna Player's connection to a Taverna Server.
+  It is initially set up as an example file as you will need to distribute
+  this with your application but you must not check in the contents of the
+  configured version to your repository.
+
+Both of these files require minimal configuration for simple set ups and are
+fully commented with everything that needs to be set - more details below.
 
 === Essential (required) configuration
 
