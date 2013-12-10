@@ -6,6 +6,8 @@ if @run.outputs.size > 0
   json.outputs @run.outputs do |output|
     json.name output.name
     json.depth output.depth
+    json.type output.metadata[:type]
+    json.size output.metadata[:size]
     json.uri run_path(@run) + "/output/#{output.name}"
   end
 
