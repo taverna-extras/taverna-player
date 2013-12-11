@@ -37,6 +37,15 @@ module TavernaPlayer
     # nil if the port has a file instead of a value.
 
     ##
+    # :method: value_size
+    # :call-seq:
+    #   value_size -> string
+    #   value_size(indices) -> string
+    #
+    # Get the size (in bytes) of the value held in this port. Pass in a list
+    # of indices if it is a list port.
+
+    ##
     # :method: value_type
     # :call-seq:
     #   value_type -> string

@@ -327,5 +327,13 @@ module TavernaPlayer
       assert @port6.value_is_text?([1, 1]), "Value not detected as text"
       refute @port2.value_is_text?(2), "Value detected as text"
     end
+
+    test "get value sizes" do
+      assert_equal 13, @port1.value_size, "Value size not 13"
+      assert_equal 974, @port2.value_size(2), "Value size not 974"
+      assert_equal 3, @port3.value_size, "Value size not 3"
+      assert_equal 15, @port6.value_size([0, 0]), "Value size not 15"
+      assert_equal 24, @port6.value_size([2, 1]), "Value size not 24"
+    end
   end
 end

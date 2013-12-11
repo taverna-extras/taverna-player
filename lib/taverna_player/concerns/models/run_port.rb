@@ -90,6 +90,11 @@ module TavernaPlayer
             data
           end
 
+          def value_metadata(field, *indices)
+            index = [*indices].flatten
+            recurse_into_lists(metadata[field], index)
+          end
+
         end # included
 
         def display_name
@@ -97,12 +102,15 @@ module TavernaPlayer
         end
 
         def value_type(*indices)
-          index = [*indices].flatten
-          recurse_into_lists(metadata[:type], index)
+          value_metadata(:type, *indices)
         end
 
         def value_is_text?(*indices)
           value_type(*indices).starts_with?("text")
+        end
+
+        def value_size(*indices)
+          value_metadata(:size, *indices)
         end
 
         def value_preview
