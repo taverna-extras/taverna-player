@@ -19,7 +19,7 @@ module TavernaPlayer
         "customization."
 
       def copy_models
-        ["run.rb", "run_port.rb", "input.rb", "output.rb"].each do |file|
+        ["run.rb", "run_port.rb"].each do |file|
           copy_file file, "app/models/taverna_player/#{file}"
         end
       end
