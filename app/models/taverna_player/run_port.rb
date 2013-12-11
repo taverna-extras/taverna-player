@@ -37,6 +37,25 @@ module TavernaPlayer
     # nil if the port has a file instead of a value.
 
     ##
+    # :method: value_type
+    # :call-seq:
+    #   value_type -> string
+    #   value_type(indices) -> string
+    #
+    # Get the MIME type of the value held in this port. Pass in a list of
+    # indices if it is a list port.
+
+    ##
+    # :method: value_is_text?
+    # :call-seq:
+    #   value_is_text? -> string
+    #   value_is_text?(indices) -> string
+    #
+    # Is the type of the value held in this port some sort of text? This
+    # returns true if the media type section of the MIME type is "text". Pass
+    # in a list of indices if it is a list port.
+
+    ##
     # :method: value
     # :call-seq:
     #   value -> string

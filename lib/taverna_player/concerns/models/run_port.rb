@@ -17,6 +17,8 @@ module TavernaPlayer
 
         extend ActiveSupport::Concern
 
+        include TavernaPlayer::Concerns::Utils
+
         included do
 
           MAXIMUM_DATABASE_VALUE_SIZE = 255
@@ -92,6 +94,15 @@ module TavernaPlayer
 
         def display_name
           name.gsub('_', ' ')
+        end
+
+        def value_type(*indices)
+          index = [*indices].flatten
+          recurse_into_lists(metadata[:type], index)
+        end
+
+        def value_is_text?(*indices)
+          value_type(*indices).starts_with?("text")
         end
 
         def value_preview

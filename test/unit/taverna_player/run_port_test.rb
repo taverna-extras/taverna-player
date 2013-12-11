@@ -19,6 +19,7 @@ module TavernaPlayer
       @port2 = taverna_player_run_ports(:two)
       @port3 = taverna_player_run_ports(:three)
       @port5 = taverna_player_run_ports(:five)
+      @port6 = taverna_player_run_ports(:six)
     end
 
     test "run port inheritance types" do
@@ -304,6 +305,27 @@ module TavernaPlayer
       port.save
       assert_nil port.value, "Port value not nil"
       assert port.file.blank?, "File not present"
+    end
+
+    test "get value types" do
+      assert_equal "text/plain", @port1.value_type, "Type not text/plain"
+      assert_equal "text/plain", @port2.value_type(1), "Type not text/plain"
+      assert_equal "application/x-error", @port2.value_type(2),
+        "Type not application/x-error"
+      assert_equal "text/plain", @port3.value_type, "Type not text/plain"
+      assert_equal "text/plain", @port6.value_type(0, 0),
+        "Type not text/plain"
+      assert_equal "text/plain", @port6.value_type([2, 1]),
+        "Type not text/plain"
+    end
+
+    test "detecting text values" do
+      assert @port1.value_is_text?, "Value not detected as text"
+      assert @port2.value_is_text?(0), "Value not detected as text"
+      assert @port3.value_is_text?, "Value not detected as text"
+      assert @port6.value_is_text?(0, 0), "Value not detected as text"
+      assert @port6.value_is_text?([1, 1]), "Value not detected as text"
+      refute @port2.value_is_text?(2), "Value detected as text"
     end
   end
 end
