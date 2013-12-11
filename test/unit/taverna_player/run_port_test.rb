@@ -317,6 +317,13 @@ module TavernaPlayer
         "Type not text/plain"
       assert_equal "text/plain", @port6.value_type([2, 1]),
         "Type not text/plain"
+
+      # Test when there is no metadata
+      port = RunPort::Input.create(:name => "test_port", :value => "Test")
+      assert_equal "text/plain", port.value_type,
+        "Unspecified type should return \"text/plain\""
+      assert port.value_is_text?, "Unspecified type should be text"
+      assert_nil port.value_size, "Unspecified size should return nil"
     end
 
     test "detecting text values" do

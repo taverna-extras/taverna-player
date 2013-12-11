@@ -43,7 +43,8 @@ module TavernaPlayer
     #   value_size(indices) -> string
     #
     # Get the size (in bytes) of the value held in this port. Pass in a list
-    # of indices if it is a list port.
+    # of indices if it is a list port. Returns nil if there is no port
+    # metadata.
 
     ##
     # :method: value_type
@@ -52,7 +53,9 @@ module TavernaPlayer
     #   value_type(indices) -> string
     #
     # Get the MIME type of the value held in this port. Pass in a list of
-    # indices if it is a list port.
+    # indices if it is a list port. Returns "text/plain" if there is no port
+    # metadata so if you create a port and put any other type of data in then
+    # you should adjust the metadata to match.
 
     ##
     # :method: value_is_text?
