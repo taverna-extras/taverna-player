@@ -372,6 +372,11 @@ clashes.
 If you wanted to add a before filter to authenticate your users you would add
 that line before the +include+ statement, for example.
 
+<b>Important note!</b> If you override the RunPort model then you _must_
+override the RunPort::Input and RunPort::Output models too (even if you just
+leave the generated stubs unedited). This is because they are subclasses of
+RunPort and the inheritances must be re-established with the overridden model.
+
 == Run callbacks
 
 Taverna Player provides four points around a workflow run for you to specify
