@@ -121,9 +121,11 @@ module TavernaPlayer
 
         def value(*indices)
           if depth == 0
-            v = self[:value]
-
-            (!v.blank? && !file.path.blank?) ? File.read(file.path) : v
+            if file.path.blank?
+              self[:value]
+            else
+              value_is_text? ? File.read(file.path) : File.binread(file.path)
+            end
           else
             deep_value([*indices].flatten)
           end

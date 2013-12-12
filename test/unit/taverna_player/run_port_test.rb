@@ -176,7 +176,7 @@ module TavernaPlayer
       port = RunPort::Input.create(:name => "test_port", :value => "test",
         :file => file)
 
-      assert port.value.blank?, "Value should be blank"
+      assert port[:value].blank?, "Value should be blank"
       refute port.file.blank?, "File should be present"
     end
 
@@ -185,7 +185,7 @@ module TavernaPlayer
       port = RunPort::Output.create(:name => "test_port", :value => "test",
         :file => file)
 
-      assert port.value.blank?, "Value should be blank"
+      assert port[:value].blank?, "Value should be blank"
       refute port.file.blank?, "File should be present"
     end
 
@@ -197,7 +197,7 @@ module TavernaPlayer
       port.value = "test"
       port.save
 
-      assert port.value.blank?, "Value should be blank"
+      assert port[:value].blank?, "Value should be blank"
       refute port.file.blank?, "File should be present"
     end
 
@@ -209,7 +209,7 @@ module TavernaPlayer
       port.value = "test"
       port.save
 
-      assert port.value.blank?, "Value should be blank"
+      assert port[:value].blank?, "Value should be blank"
       refute port.file.blank?, "File should be present"
     end
 
@@ -284,7 +284,7 @@ module TavernaPlayer
 
       port.file = fixture_file_upload "/files/crassostrea_gigas.csv"
       port.save
-      assert_nil port.value, "Port value not nil"
+      assert_nil port[:value], "Port value not nil"
       refute port.file.blank?, "File not present"
     end
 
