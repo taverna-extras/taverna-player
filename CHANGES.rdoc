@@ -1,5 +1,16 @@
 = Changes log for Taverna Player
 
+== Version 0.4.0
+
+* [TAV-466] Add port metadata to JSON output.
+* [TAV-472] Fix port model overriding stubs.
+* Add methods to query a port value's type.
+* Add a method to get a port value's size.
+* Add protection for value size and type methods.
+* Check that index lists are not altered.
+* Use the new port value methods in the port renderer.
+* [TAV-473] Get all values types directly from a port.
+
 == Version 0.3.0
 
 * Refactor callback code out into its own module.
