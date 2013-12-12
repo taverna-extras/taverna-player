@@ -21,7 +21,6 @@ module TavernaPlayer
   # etc) available to them.
   class PortRenderer
     include TavernaPlayer::Concerns::Callback
-    include TavernaPlayer::Concerns::Utils
 
     # The renderers are all called in the scope of this class so we include
     # ActionView::Helpers here so that they are all available to them.
@@ -96,7 +95,7 @@ module TavernaPlayer
       if port.depth > 0 && index.empty?
         renderer = @hash[:list]
       else
-        type = MIME::Types[recurse_into_lists(port.metadata[:type], index.dup)].first
+        type = MIME::Types[port.value_type(index)].first
         renderer = @hash[type.media_type][type.sub_type] ||
           @hash[type.media_type][:default] || @hash[:default]
       end
