@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -45,6 +45,15 @@ module TavernaPlayer
     # Get the size (in bytes) of the value held in this port. Pass in a list
     # of indices if it is a list port. Returns nil if there is no port
     # metadata.
+
+    ##
+    # :method: value_size=
+    # :call-seq:
+    #   value_size=
+    #
+    # Set the size (in bytes) of the value held in this port. Pass in a list
+    # of sizes if it is a list port. This method does nothing if the depth of
+    # the input list does not match that of the port itself.
 
     ##
     # :method: value_type

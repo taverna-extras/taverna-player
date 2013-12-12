@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -341,6 +341,32 @@ module TavernaPlayer
       assert_equal 3, @port3.value_size, "Value size not 3"
       assert_equal 15, @port6.value_size([0, 0]), "Value size not 15"
       assert_equal 24, @port6.value_size([2, 1]), "Value size not 24"
+    end
+
+    test "set singleton value sizes" do
+      port = RunPort::Input.create(:depth => 0, :name => "test_port")
+      assert_nil port.value_size, "Unspecified size should return nil"
+
+      port.value_size = 12
+      port.save
+      assert_equal 12, port.value_size, "Value size was not set correctly"
+
+      port.value_size = [1, 2]
+      port.save
+      assert_equal 12, port.value_size, "Value size was changed incorrectly"
+    end
+
+    test "set deep value sizes" do
+      port = RunPort::Input.create(:depth => 1, :name => "test_port")
+      assert_nil port.value_size, "Unspecified size should return nil"
+
+      port.value_size = [1, 2]
+      port.save
+      assert_equal [1, 2], port.value_size, "Value size was not set correctly"
+
+      port.value_size = 12
+      port.save
+      assert_equal [1, 2], port.value_size, "Value size was changed incorrectly"
     end
 
     test "value methods should not alter input parameters" do

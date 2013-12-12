@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -96,6 +96,15 @@ module TavernaPlayer
             recurse_into_lists(metadata[field], index)
           end
 
+          def set_value_metadata(field, value)
+            return unless depth == list_depth(value)
+
+            md = metadata
+            md = Hash.new if md.nil?
+            md[field] = value
+            update_attribute(:metadata, md)
+          end
+
         end # included
 
         def display_name
@@ -113,6 +122,10 @@ module TavernaPlayer
 
         def value_size(*indices)
           value_metadata(:size, *indices)
+        end
+
+        def value_size=(size)
+          set_value_metadata(:size, size)
         end
 
         def value_preview

@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -23,6 +23,13 @@ module TavernaPlayer
         return list if indexes.empty? || !list.is_a?(Array)
         i = indexes.shift
         recurse_into_lists(list[i], indexes)
+      end
+
+      # Sometimes we need to test an array's depth to check that it matches a
+      # port's depth. An empty list has depth 1, because it is a list.
+      def list_depth(list, depth = 0)
+        return depth if !list.is_a?(Array)
+        list.empty? ? depth + 1 : list.map { |l| list_depth(l, depth + 1) }.max
       end
 
     end
