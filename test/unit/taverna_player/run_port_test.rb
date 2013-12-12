@@ -342,5 +342,19 @@ module TavernaPlayer
       assert_equal 15, @port6.value_size([0, 0]), "Value size not 15"
       assert_equal 24, @port6.value_size([2, 1]), "Value size not 24"
     end
+
+    test "value methods should not alter input parameters" do
+      index = [1, 1]
+      index_saved = index.dup
+
+      @port6.value_type(index)
+      assert_equal index_saved, index, "Parameter index was altered"
+
+      @port6.value_is_text?(index)
+      assert_equal index_saved, index, "Parameter index was altered"
+
+      @port6.value_size(index)
+      assert_equal index_saved, index, "Parameter index was altered"
+    end
   end
 end
