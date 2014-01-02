@@ -39,8 +39,8 @@ module TavernaPlayer
     ##
     # :method: value_size
     # :call-seq:
-    #   value_size -> string
-    #   value_size(indices) -> string
+    #   value_size -> integer
+    #   value_size(indices) -> integer
     #
     # Get the size (in bytes) of the value held in this port. Pass in a list
     # of indices if it is a list port. Returns nil if there is no port
@@ -137,9 +137,12 @@ module TavernaPlayer
     #    :type => ["text/plain", "image/png"]
     #  }
     #
-    # <b>Note:</b> By default Taverna Player only uses this field on outputs.
+    # <b>Note 1:</b> By default Taverna Player only uses this field on outputs.
     # It is provided as a field for inputs too as a convenience for
     # implementors and for possible future use.
+    #
+    # <b>Note 2:</b> It is preferable to use the #value_size= and #value_type=
+    # methods to set this information most of the time.
 
   end
 
