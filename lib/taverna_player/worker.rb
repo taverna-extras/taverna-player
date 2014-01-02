@@ -264,10 +264,9 @@ module TavernaPlayer
             output.file = File.new("#{tmp_file_name}.zip")
           end
 
-          output.metadata = {
-            :size => port.size,
-            :type => port.type
-          }
+          # Set the output port size and type metadata.
+          output.value_type = port.type
+          output.value_size = port.size
 
           outputs << output
         end
