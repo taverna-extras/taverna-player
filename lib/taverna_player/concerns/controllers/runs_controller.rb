@@ -72,6 +72,23 @@ module TavernaPlayer
             @interaction = Interaction.find_by_run_id_and_serial(@run.id, params[:serial])
           end
 
+          # Download an input or output port as an "attachment" (i.e. not
+          # "inline").
+          def download_port
+            port = RunPort.find_by_run_id_and_name(@run.id, params[:port])
+
+            # If there is no such port port then return a 404.
+            raise ActionController::RoutingError.new('Not Found') if port.nil?
+
+            if port.file.blank?
+              send_data port.value, :type => "text/plain",
+                :filename => "#{@run.name}-#{port.name}.txt"
+            else
+              send_file port.file.path, :type => port.file.content_type,
+                :filename => "#{@run.name}-#{port.file_file_name}"
+            end
+          end
+
           # Read the data from the results zip file.
           def read_from_zip(file)
             Zip::ZipFile.open(@run.results.path) do |zip|
@@ -185,18 +202,7 @@ module TavernaPlayer
 
         # GET /runs/1/download/output/:port
         def download_output
-          output = RunPort::Output.find_by_run_id_and_name(@run.id, params[:port])
-
-          # If there is no such output port then return a 404.
-          raise ActionController::RoutingError.new('Not Found') if output.nil?
-
-          if output.file.blank?
-            send_data output.value, :type => "text/plain",
-              :filename => "#{@run.name}-#{output.name}.txt"
-          else
-            send_file output.file.path, :type => output.file.content_type,
-              :filename => "#{@run.name}-#{output.file_file_name}"
-          end
+          download_port
         end
 
         # GET /runs/1/input/*
