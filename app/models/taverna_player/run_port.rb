@@ -67,6 +67,15 @@ module TavernaPlayer
     # you should adjust the metadata to match.
 
     ##
+    # :method: value_type=
+    # :call-seq:
+    #   value_type=
+    #
+    # Set the MIME type of the value held in this port. Pass in a list of
+    # types if it is a list port. This method does nothing if the depth of
+    # the input list does not match that of the port itself.
+
+    ##
     # :method: value_is_text?
     # :call-seq:
     #   value_is_text? -> string

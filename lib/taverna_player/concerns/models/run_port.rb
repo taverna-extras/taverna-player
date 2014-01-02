@@ -115,6 +115,10 @@ module TavernaPlayer
           value_metadata(:type, *indices) || "text/plain"
         end
 
+        def value_type=(type)
+          set_value_metadata(:type, type)
+        end
+
         def value_is_text?(*indices)
           type = value_type(*indices)
           type.starts_with?("text")

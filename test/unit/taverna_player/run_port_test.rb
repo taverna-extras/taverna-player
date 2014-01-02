@@ -326,6 +326,34 @@ module TavernaPlayer
       assert_nil port.value_size, "Unspecified size should return nil"
     end
 
+    test "set singleton value types" do
+      port = RunPort::Input.create(:depth => 0, :name => "test_port")
+
+      port.value_type = "text/html"
+      port.save
+      assert_equal "text/html", port.value_type,
+        "Value type was not set correctly"
+
+      port.value_type = ["text/plain", "text/plain"]
+      port.save
+      assert_equal "text/html", port.value_type,
+        "Value type was changed incorrectly"
+    end
+
+    test "set deep value types" do
+      port = RunPort::Input.create(:depth => 1, :name => "test_port")
+
+      port.value_type = ["text/plain", "text/plain"]
+      port.save
+      assert_equal ["text/plain", "text/plain"], port.value_type,
+        "Value type was not set correctly"
+
+      port.value_type = "text/html"
+      port.save
+      assert_equal ["text/plain", "text/plain"], port.value_type,
+        "Value type was changed incorrectly"
+    end
+
     test "detecting text values" do
       assert @port1.value_is_text?, "Value not detected as text"
       assert @port2.value_is_text?(0), "Value not detected as text"
