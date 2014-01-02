@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -47,6 +47,15 @@ module TavernaPlayer
     # metadata.
 
     ##
+    # :method: value_size=
+    # :call-seq:
+    #   value_size=
+    #
+    # Set the size (in bytes) of the value held in this port. Pass in a list
+    # of sizes if it is a list port. This method does nothing if the depth of
+    # the input list does not match that of the port itself.
+
+    ##
     # :method: value_type
     # :call-seq:
     #   value_type -> string
@@ -56,6 +65,15 @@ module TavernaPlayer
     # indices if it is a list port. Returns "text/plain" if there is no port
     # metadata so if you create a port and put any other type of data in then
     # you should adjust the metadata to match.
+
+    ##
+    # :method: value_type=
+    # :call-seq:
+    #   value_type=
+    #
+    # Set the MIME type of the value held in this port. Pass in a list of
+    # types if it is a list port. This method does nothing if the depth of
+    # the input list does not match that of the port itself.
 
     ##
     # :method: value_is_text?
