@@ -20,6 +20,7 @@ TavernaPlayer::Engine.routes.draw do
       scope "download" do
         get "log", :action => "download_log"
         get "results", :action => "download_results"
+        get "input/:port", :action => "download_input"
         get "output/:port", :action => "download_output"
       end
 

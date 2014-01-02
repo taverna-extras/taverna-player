@@ -94,6 +94,12 @@ module TavernaPlayer
           :id => "1" }, {}, {}, "Did not route correctly"
     end
 
+    test "should route to input port download" do
+      assert_routing "/runs/3/download/input/IN_Value",
+        { :controller => "taverna_player/runs", :action => "download_input",
+          :id => "3", :port => "IN_Value" }, {}, {}, "Did not route correctly"
+    end
+
     test "should route to output port download" do
       assert_routing "/runs/1/download/output/Message",
         { :controller => "taverna_player/runs", :action => "download_output",

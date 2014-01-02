@@ -200,6 +200,11 @@ module TavernaPlayer
             :filename => "#{@run.name}-all-results.zip"
         end
 
+        # GET /runs/1/download/input/:port
+        def download_input
+          download_port
+        end
+
         # GET /runs/1/download/output/:port
         def download_output
           download_port
