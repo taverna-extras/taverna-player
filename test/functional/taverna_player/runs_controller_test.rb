@@ -323,5 +323,35 @@ module TavernaPlayer
       assert_equal "New name", assigns(:run).name, "Run name not updated"
       assert_response :success, "Response was not success"
     end
+
+    test "should download run input" do
+      get :download_input, :id => @run3, :port => "IN_Value"
+      assert_response :success, "Response was not success"
+      assert_not_nil assigns(:run), "Did not assign a valid run instance"
+      assert_not_nil assigns(:port), "Did not assign a valid port instance"
+      assert_not_nil response.headers["Content-Disposition"],
+        "Content-Disposition header not set in response"
+      assert response.headers["Content-Disposition"].include?("attachment"),
+        "Content-Disposition should be set to 'attachment'"
+      assert response.headers["Content-Disposition"].include?("filename="),
+        "Content-Disposition should provide a filename"
+      assert_not_nil response.headers["Content-Type"],
+        "Content-Type header not set in response"
+    end
+
+    test "should download run output" do
+      get :download_output, :id => @run1, :port => "Message"
+      assert_response :success, "Response was not success"
+      assert_not_nil assigns(:run), "Did not assign a valid run instance"
+      assert_not_nil assigns(:port), "Did not assign a valid port instance"
+      assert_not_nil response.headers["Content-Disposition"],
+        "Content-Disposition header not set in response"
+      assert response.headers["Content-Disposition"].include?("attachment"),
+        "Content-Disposition should be set to 'attachment'"
+      assert response.headers["Content-Disposition"].include?("filename="),
+        "Content-Disposition should provide a filename"
+      assert_not_nil response.headers["Content-Type"],
+        "Content-Type header not set in response"
+    end
   end
 end

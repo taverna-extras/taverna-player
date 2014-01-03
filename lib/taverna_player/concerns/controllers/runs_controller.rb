@@ -26,6 +26,7 @@ module TavernaPlayer
           before_filter :find_runs, :only => [ :index ]
           before_filter :find_run, :except => [ :index, :new, :create ]
           before_filter :find_workflow, :only => [ :new ]
+          before_filter :find_port, :only => [ :download_input, :download_output ]
           before_filter :setup_new_run, :only => :new
           before_filter :set_run_user, :only => :create
           before_filter :filter_update_parameters, :only => :update
@@ -47,6 +48,10 @@ module TavernaPlayer
 
           def find_workflow
             @workflow = TavernaPlayer.workflow_proxy.class_name.find(params[:workflow_id])
+          end
+
+          def find_port
+            @port = RunPort.find_by_run_id_and_name(@run.id, params[:port])
           end
 
           def setup_new_run
@@ -75,17 +80,15 @@ module TavernaPlayer
           # Download an input or output port as an "attachment" (i.e. not
           # "inline").
           def download_port
-            port = RunPort.find_by_run_id_and_name(@run.id, params[:port])
+            # If there is no such port then return a 404.
+            raise ActionController::RoutingError.new('Not Found') if @port.nil?
 
-            # If there is no such port port then return a 404.
-            raise ActionController::RoutingError.new('Not Found') if port.nil?
-
-            if port.file.blank?
-              send_data port.value, :type => "text/plain",
-                :filename => "#{@run.name}-#{port.name}.txt"
+            if @port.file.blank?
+              send_data @port.value, :type => "text/plain",
+                :filename => "#{@run.name}-#{@port.name}.txt"
             else
-              send_file port.file.path, :type => port.file.content_type,
-                :filename => "#{@run.name}-#{port.file_file_name}"
+              send_file @port.file.path, :type => @port.file.content_type,
+                :filename => "#{@run.name}-#{@port.file_file_name}"
             end
           end
 
