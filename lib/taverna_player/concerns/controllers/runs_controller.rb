@@ -26,7 +26,7 @@ module TavernaPlayer
           before_filter :find_runs, :only => [ :index ]
           before_filter :find_run, :except => [ :index, :new, :create ]
           before_filter :find_workflow, :only => [ :new ]
-          before_filter :find_port, :only => [ :download_input, :download_output ]
+          before_filter :find_port, :only => [ :download_input, :download_output, :input ]
           before_filter :setup_new_run, :only => :new
           before_filter :set_run_user, :only => :create
           before_filter :filter_update_parameters, :only => :update
@@ -215,15 +215,13 @@ module TavernaPlayer
 
         # GET /runs/1/input/*
         def input
-          input = RunPort::Input.find_by_run_id_and_name(@run.id, params[:port])
-
           # If there is no such input port then return a 404.
-          raise ActionController::RoutingError.new('Not Found') if input.nil?
+          raise ActionController::RoutingError.new('Not Found') if @port.nil?
 
-          if input.file.blank?
-            send_data input.value, :disposition => "inline"
+          if @port.file.blank?
+            send_data @port.value, :disposition => "inline"
           else
-            send_file input.file.path, :disposition => "inline"
+            send_file @port.file.path, :disposition => "inline"
           end
         end
 
