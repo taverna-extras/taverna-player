@@ -26,7 +26,7 @@ module TavernaPlayer
           before_filter :find_runs, :only => [ :index ]
           before_filter :find_run, :except => [ :index, :new, :create ]
           before_filter :find_workflow, :only => [ :new ]
-          before_filter :find_port, :only => [ :download_input, :download_output, :input ]
+          before_filter :find_port, :only => [ :download_input, :download_output, :input, :output ]
           before_filter :setup_new_run, :only => :new
           before_filter :set_run_user, :only => :create
           before_filter :filter_update_parameters, :only => :update
@@ -234,27 +234,25 @@ module TavernaPlayer
             path = params[:path].split("/").map { |p| p.to_i }
           end
 
-          output = RunPort::Output.find_by_run_id_and_name(@run.id, params[:port])
-
           # If there is no such output port or the path is the wrong depth then
           # return a 404.
-          if output.nil? || path.length != output.depth
+          if @port.nil? || path.length != @port.depth
             raise ActionController::RoutingError.new('Not Found')
           end
 
           # A singleton should just return the value (if it's small enough) or the
           # file if it's bigger. If it's a value in the database then it'll always
           # be a text value, although not necessarily "plain".
-          if output.depth == 0 && !output.value.blank?
-            send_data output.value, :disposition => "inline",
-              :type => output.metadata[:type]
+          if @port.depth == 0 && !@port.value.blank?
+            send_data @port.value, :disposition => "inline",
+              :type => @port.metadata[:type]
           else
           # We need to rebuild the path indices into a string here (and can't
           # re-use the params[:path] variable directly) because files are
           # indexed from one in the zip we get back from Server, not zero.
             path_s = path.map { |p| p += 1 }.join("/")
-            file = path_s.blank? ? "#{output.name}" : "#{output.name}/#{path_s}"
-            type = recurse_into_lists(output.metadata[:type], path)
+            file = path_s.blank? ? "#{@port.name}" : "#{@port.name}/#{path_s}"
+            type = recurse_into_lists(@port.metadata[:type], path)
 
             # If it's an error, then we need to further hack the file path and
             # content type.

@@ -352,6 +352,19 @@ module TavernaPlayer
         "Content-Type header not set in response"
     end
 
+    test "should get run output" do
+      get :output, :id => @run1, :port => "Message"
+      assert_response :success, "Response was not success"
+      assert_not_nil assigns(:run), "Did not assign a valid run instance"
+      assert_not_nil assigns(:port), "Did not assign a valid port instance"
+      assert_not_nil response.headers["Content-Disposition"],
+        "Content-Disposition header not set in response"
+      assert_equal response.headers["Content-Disposition"], "inline",
+        "Content-Disposition should be set to 'inline'"
+      assert_not_nil response.headers["Content-Type"],
+        "Content-Type header not set in response"
+    end
+
     test "should download run output" do
       get :download_output, :id => @run1, :port => "Message"
       assert_response :success, "Response was not success"
