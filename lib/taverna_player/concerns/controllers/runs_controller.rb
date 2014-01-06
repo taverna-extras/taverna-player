@@ -83,13 +83,8 @@ module TavernaPlayer
             # If there is no such port then return a 404.
             raise ActionController::RoutingError.new('Not Found') if @port.nil?
 
-            if @port.file.blank?
-              send_data @port.value, :type => "text/plain",
-                :filename => "#{@run.name}-#{@port.name}.txt"
-            else
-              send_file @port.file.path, :type => @port.file.content_type,
-                :filename => "#{@run.name}-#{@port.file_file_name}"
-            end
+            type = @port.depth == 0 ? @port.value_type : "application/zip"
+            send_data @port.value, :type => type, :filename => @port.filename
           end
 
           # Choose a layout for the page depending on action and embedded status.
