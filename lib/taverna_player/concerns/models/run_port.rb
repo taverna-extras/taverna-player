@@ -81,7 +81,10 @@ module TavernaPlayer
           end
 
           def deep_value(index)
-            path = index.map { |j| j += 1 }.join("/")
+            # Need to mangle the path here in two ways:
+            # * Files are indexed from 1 (not zero) in the output zip files.
+            # * Errors are saved to a file with a '.error' suffix.
+            path = index.map { |i| i + 1 }.join("/")
             path += ".error" if value_is_error?(index)
 
             read_file_from_zip(file.path, path)
