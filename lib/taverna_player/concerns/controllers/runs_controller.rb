@@ -19,7 +19,6 @@ module TavernaPlayer
 
         include TavernaPlayer::Concerns::Callback
         include TavernaPlayer::Concerns::Utils
-        include TavernaPlayer::Concerns::Zip
 
         included do
           respond_to :html, :json, :js
@@ -234,30 +233,9 @@ module TavernaPlayer
             raise ActionController::RoutingError.new('Not Found')
           end
 
-          # A singleton should just return the value (if it's small enough) or the
-          # file if it's bigger. If it's a value in the database then it'll always
-          # be a text value, although not necessarily "plain".
-          if @port.depth == 0 && !@port.value.blank?
-            send_data @port.value, :disposition => "inline",
-              :type => @port.metadata[:type]
-          else
-          # We need to rebuild the path indices into a string here (and can't
-          # re-use the params[:path] variable directly) because files are
-          # indexed from one in the zip we get back from Server, not zero.
-            path_s = path.map { |p| p += 1 }.join("/")
-            file = path_s.blank? ? "#{@port.name}" : "#{@port.name}/#{path_s}"
-            type = recurse_into_lists(@port.metadata[:type], path)
-
-            # If it's an error, then we need to further hack the file path and
-            # content type.
-            if type == "application/x-error"
-              file += ".error"
-              type = "text/plain"
-            end
-
-            send_data read_file_from_zip(@run.results.path, file), :type => type,
-              :disposition => "inline"
-          end
+          # Just need to mangle the MIME type when sending error messages.
+          type = @port.value_is_error?(path) ? "text/plain" : @port.value_type(path)
+          send_data @port.value(path), :type => type, :disposition => "inline"
         end
 
         # GET /runs/1/interaction/:int_id
