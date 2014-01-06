@@ -18,6 +18,7 @@ module TavernaPlayer
         extend ActiveSupport::Concern
 
         include TavernaPlayer::Concerns::Utils
+        include TavernaPlayer::Concerns::Zip
 
         included do
 
@@ -82,12 +83,7 @@ module TavernaPlayer
           def deep_value(index)
             path = index.map { |j| j += 1 }.join("/")
 
-            data = String.new
-            Zip::ZipFile.open(file.path) do |zip|
-              data = zip.read("#{path}")
-            end
-
-            data
+            read_file_from_zip(file.path, path)
           end
 
           def value_metadata(field, *indices)

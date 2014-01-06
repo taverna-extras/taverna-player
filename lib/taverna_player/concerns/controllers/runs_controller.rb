@@ -19,6 +19,7 @@ module TavernaPlayer
 
         include TavernaPlayer::Concerns::Callback
         include TavernaPlayer::Concerns::Utils
+        include TavernaPlayer::Concerns::Zip
 
         included do
           respond_to :html, :json, :js
@@ -89,13 +90,6 @@ module TavernaPlayer
             else
               send_file @port.file.path, :type => @port.file.content_type,
                 :filename => "#{@run.name}-#{@port.file_file_name}"
-            end
-          end
-
-          # Read the data from the results zip file.
-          def read_from_zip(file)
-            Zip::ZipFile.open(@run.results.path) do |zip|
-              zip.read(file)
             end
           end
 
@@ -261,7 +255,7 @@ module TavernaPlayer
               type = "text/plain"
             end
 
-            send_data read_from_zip(file), :type => type,
+            send_data read_file_from_zip(@run.results.path, file), :type => type,
               :disposition => "inline"
           end
         end
