@@ -206,11 +206,8 @@ module TavernaPlayer
           # If there is no such input port then return a 404.
           raise ActionController::RoutingError.new('Not Found') if @port.nil?
 
-          if @port.file.blank?
-            send_data @port.value, :disposition => "inline"
-          else
-            send_file @port.file.path, :disposition => "inline"
-          end
+          send_data @port.value, :type => @port.value_type,
+            :disposition => "inline"
         end
 
         # GET /runs/1/output/*
