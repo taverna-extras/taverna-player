@@ -20,6 +20,7 @@ module TavernaPlayer
       @port3 = taverna_player_run_ports(:three)
       @port5 = taverna_player_run_ports(:five)
       @port6 = taverna_player_run_ports(:six)
+      @port7 = taverna_player_run_ports(:seven)
     end
 
     test "run port inheritance types" do
@@ -361,6 +362,14 @@ module TavernaPlayer
       assert @port6.value_is_text?(0, 0), "Value not detected as text"
       assert @port6.value_is_text?([1, 1]), "Value not detected as text"
       refute @port2.value_is_text?(2), "Value detected as text"
+    end
+
+    test "detecting error values" do
+      refute @port1.value_is_error?, "Value detected as an error"
+      refute @port2.value_is_error?(0), "Value detected as an error"
+      assert @port2.value_is_error?(2), "Value not detected as an error"
+      refute @port6.value_is_error?(0, 1), "Value detected as an error"
+      assert @port7.value_is_error?, "Value not detected as an error"
     end
 
     test "get value sizes" do

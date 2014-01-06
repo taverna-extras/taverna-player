@@ -86,6 +86,15 @@ module TavernaPlayer
     # in a list of indices if it is a list port.
 
     ##
+    # :method: value_is_error?
+    # :call-seq:
+    #   value_is_error? -> boolean
+    #   value_is_error?(indices) -> boolean
+    #
+    # Is the type of the value held in this port an error? Pass in a list of
+    # indices if it is a list port.
+
+    ##
     # :method: value
     # :call-seq:
     #   value -> string

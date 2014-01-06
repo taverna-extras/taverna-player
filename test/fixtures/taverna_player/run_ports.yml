@@ -60,3 +60,10 @@ six:
   run_id: 2
   depth: 2
   metadata: "---\n:size:\n- - 15\n  - 20\n- - 17\n  - 22\n- - 19\n  - 24\n:type:\n- - text/plain\n  - text/plain\n- - text/plain\n  - text/plain\n- - text/plain\n  - text/plain\n"
+
+seven:
+  name: OUT_Error
+  port_type: TavernaPlayer::RunPort::Output
+  run_id: 2
+  depth: 0
+  metadata: "---\n:size: 718\n:type: application/x-error"

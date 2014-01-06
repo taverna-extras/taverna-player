@@ -120,6 +120,10 @@ module TavernaPlayer
           type.starts_with?("text")
         end
 
+        def value_is_error?(*indices)
+          value_type(*indices) == "application/x-error"
+        end
+
         def value_size(*indices)
           value_metadata(:size, *indices)
         end
