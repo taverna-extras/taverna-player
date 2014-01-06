@@ -111,6 +111,11 @@ module TavernaPlayer
           name.gsub('_', ' ')
         end
 
+        def filename
+          port_file = depth == 0 ? name : "#{name}.zip"
+          "#{run.name}-#{port_file}"
+        end
+
         def value_type(*indices)
           value_metadata(:type, *indices) || "text/plain"
         end

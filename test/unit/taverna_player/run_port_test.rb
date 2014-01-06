@@ -419,5 +419,28 @@ module TavernaPlayer
       @port6.value_size(index)
       assert_equal index_saved, index, "Parameter index was altered"
     end
+
+    test "port filenames" do
+      assert_equal "Test run 1-Message", @port1.filename,
+        "Incorrect filename generated"
+      refute @port1.filename.ends_with?(".zip"), "Filename has 'zip' suffix"
+      assert_equal "Test run 2-OUT.zip", @port2.filename,
+        "Incorrect filename generated"
+      assert @port2.filename.ends_with?(".zip"),
+        "Filename missing 'zip' suffix"
+      assert_equal "Test run 3-IN_Value", @port3.filename,
+        "Incorrect filename generated"
+      refute @port3.filename.ends_with?(".zip"), "Filename has 'zip' suffix"
+      assert_equal "Test run 4-Long_N_unnecessary_Name_OUT", @port5.filename,
+        "Incorrect filename generated"
+      refute @port5.filename.ends_with?(".zip"), "Filename has 'zip' suffix"
+      assert_equal "Test run 2-Output.zip", @port6.filename,
+        "Incorrect filename generated"
+      assert @port6.filename.ends_with?(".zip"),
+        "Filename missing 'zip' suffix"
+      assert_equal "Test run 2-OUT_Error", @port7.filename,
+        "Incorrect filename generated"
+      refute @port7.filename.ends_with?(".zip"), "Filename has 'zip' suffix"
+    end
   end
 end
