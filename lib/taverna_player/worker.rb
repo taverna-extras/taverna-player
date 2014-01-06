@@ -13,6 +13,7 @@
 module TavernaPlayer
   class Worker
     include TavernaPlayer::Concerns::Callback
+    include TavernaPlayer::Concerns::Zip
 
     # How to get the interaction presentation frame out of the interaction page.
     INTERACTION_REGEX = /document\.getElementById\(\'presentationFrame\'\)\.src = \"(.+)\";/
@@ -249,13 +250,11 @@ module TavernaPlayer
           tmp_file_name = File.join(tmp_dir, port.name)
 
           if port.depth == 0
-            Zip::ZipFile.open(@run.results.path) do |zip|
-             if port.type =~ /text/
-                output.value = zip.read(port.name)
-              else
-                port_name = port.error? ? "#{port.name}.error" : port.name
-                output.file = singleton_output(port_name, tmp_file_name, zip)
-              end
+            if port.type =~ /text/
+              output.value = read_file_from_zip(@run.results.path, port.name)
+            else
+              port_name = port.error? ? "#{port.name}.error" : port.name
+              output.file = singleton_output(port_name, tmp_file_name)
             end
           else
             # TODO: Need to rework this so it's not just re-downloading the
@@ -275,9 +274,9 @@ module TavernaPlayer
       outputs
     end
 
-    def singleton_output(name, tmp_file, zip)
+    def singleton_output(name, tmp_file)
       File.open(tmp_file, "wb") do |file|
-        file.write zip.read(name)
+        file.write read_file_from_zip(@run.results.path, name)
       end
 
       File.new(tmp_file)
