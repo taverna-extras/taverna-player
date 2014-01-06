@@ -78,8 +78,8 @@ module TavernaPlayer
     ##
     # :method: value_is_text?
     # :call-seq:
-    #   value_is_text? -> string
-    #   value_is_text?(indices) -> string
+    #   value_is_text? -> boolean
+    #   value_is_text?(indices) -> boolean
     #
     # Is the type of the value held in this port some sort of text? This
     # returns true if the media type section of the MIME type is "text". Pass
