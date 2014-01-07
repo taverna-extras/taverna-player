@@ -1,5 +1,23 @@
 = Changes log for Taverna Player
 
+== Version 0.5.0
+
+* [TAV-480] Refactor output port downloading.
+* [TAV-480] Add a method to download input ports.
+* [TAV-475] Add RunPort::value_size= setter.
+* [TAV-475] Add RunPort::value_type= setter.
+* Use the new metadata setters in the worker code.
+* Add some tests for internal list code.
+* [TAV-482] Refactor Zip operations into a concern.
+* Fix typo in RunPort#value_is_text? documentation.
+* Add RunPort#value_is_error? method.
+* [TAV-483] Fix getting error values from deep values.
+* Minor fix in RunPort#deep_value.
+* [TAV-484] RunPort#value returns zipped lists.
+* Add RunPort#filename.
+* Refactor RunsController.
+* [TAV-482] Refactor worker code to use Zip concern.
+
 == Version 0.4.0
 
 * [TAV-466] Add port metadata to JSON output.
