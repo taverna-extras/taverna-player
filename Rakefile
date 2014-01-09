@@ -62,5 +62,11 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = false
 end
 
+Rake::TestTask.new(:"test:worker") do |t|
+  t.libs << 'lib'
+  t.libs << 'test'
+  t.test_files = ["test/integration/test_worker.rb"]
+  t.verbose = false
+end
 
 task :default => :test
