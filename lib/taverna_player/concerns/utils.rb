@@ -16,6 +16,8 @@ module TavernaPlayer
 
       extend ActiveSupport::Concern
 
+      LIST_REGEX = Regexp.new('\A\[[^\[\]]*\]\z')
+
       # Taverna can have arbitrary (therefore effectively "infinite") port
       # depths so we need to recurse into them. This code is common across a
       # number of other modules.
@@ -30,6 +32,18 @@ module TavernaPlayer
       def list_depth(list, depth = 0)
         return depth if !list.is_a?(Array)
         list.empty? ? depth + 1 : list.map { |l| list_depth(l, depth + 1) }.max
+      end
+
+      # Can this string be parsed into an array? See LIST_REGEX above for
+      # details.
+      def is_string_list?(string)
+        !LIST_REGEX.match(string.strip).nil?
+      end
+
+      # Parse a string into an array. This method assumes that the string has
+      # been tested for conformance by the is_string_list? method first.
+      def parse_string_into_array(string)
+        string.strip[1...-1].split(',').map! { |i| i.to_s.strip }
       end
 
     end
