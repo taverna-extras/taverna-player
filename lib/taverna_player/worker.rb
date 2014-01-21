@@ -118,7 +118,7 @@ module TavernaPlayer
 
           run.notifications(:requests).each do |note|
             if @run.has_parent?
-              next if note.has_reply?
+              next if note.has_reply? || note.is_notification?
               int = Interaction.find_by_run_id_and_serial(@run.parent_id, note.serial)
               new_int = Interaction.find_or_initialize_by_run_id_and_serial(@run.id, note.serial)
               if new_int.new_record?
@@ -154,6 +154,10 @@ module TavernaPlayer
                       int.page_uri = page_uri
                     end
                   end
+                end
+
+                if note.is_notification? && !int.new_record?
+                  int.replied = true
                 end
 
                 if int.data.blank?
