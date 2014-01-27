@@ -17,7 +17,7 @@ namespace :taverna_player do
     gone = 0
     TavernaPlayer::Run.all.each do |run|
       if run.cancelled?
-        gone += 1 #if run.destroy
+        gone += 1 if run.destroy
       end
     end
 
