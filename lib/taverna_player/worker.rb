@@ -71,7 +71,11 @@ module TavernaPlayer
         unless @run.inputs.size == 0
           status_message "Uploading run inputs"
           @run.inputs.each do |input|
-            run.input_port(input.name).value = input.value
+            unless input.file.blank?
+              run.input_port(input.name).file = input.file.path
+            else
+              run.input_port(input.name).value = input.value
+            end
           end
         end
 
