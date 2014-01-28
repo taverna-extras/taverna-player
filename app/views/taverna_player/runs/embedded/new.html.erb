@@ -21,7 +21,7 @@
   <%= f.hidden_field :name, :value => "#{workflow_title} (embedded)" %>
 
   <% workflow_inputs.each do |input| %>
-    <% input_param = params[input[:name].to_sym] %>
+    <% input_param = params[:input][input[:name].to_sym] %>
     <% if input_param.nil? %>
       <div>Input: <%= input[:name] %></div>
 
