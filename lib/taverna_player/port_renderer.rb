@@ -53,7 +53,7 @@ module TavernaPlayer
 
       @hash[type.media_type] ||= {}
       @hash[type.media_type][type.sub_type] = method
-      @hash[type.media_type][:default] = method if default
+      type_default(type.media_type, method) if default
     end
 
     # :call-seq:
