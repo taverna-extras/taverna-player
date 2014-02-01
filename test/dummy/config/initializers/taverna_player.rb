@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -15,7 +15,7 @@
 TavernaPlayer.setup do |config|
   config.workflow_model_proxy("Workflow")
   config.user_model_proxy = "User"
-  config.current_user_callback = :user_one
+  config.current_user_callback = Proc.new { User.find(1) }
 
   # Callbacks to be run at various points during a workflow run.
   require "callbacks"
