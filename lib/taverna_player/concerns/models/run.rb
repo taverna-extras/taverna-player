@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -106,7 +106,7 @@ module TavernaPlayer
 
           def enqueue
             worker = TavernaPlayer::Worker.new(self)
-            job = Delayed::Job.enqueue worker, :queue => "player"
+            job = Delayed::Job.enqueue worker, :queue => TavernaPlayer.job_queue_name
             update_attributes(:delayed_job => job, :status_message => "Queued")
           end
 

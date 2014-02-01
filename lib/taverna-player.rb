@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -110,6 +110,10 @@ module TavernaPlayer
   # Taverna Server connection parameters
   mattr_accessor :server_connection
   @@server_connection = T2Server::DefaultConnectionParameters.new
+
+  # Queue on which to create workflow execution jobs
+  mattr_accessor :job_queue_name
+  @@job_queue_name = "player"
 
   # Pre run callback
   mattr_accessor :pre_run_callback
