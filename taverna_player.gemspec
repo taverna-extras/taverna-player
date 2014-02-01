@@ -47,6 +47,7 @@ Gem::Specification.new do |s|
   s.add_dependency "pmrpc-rails", "~> 1.0.0"
 
   s.add_development_dependency "sqlite3"
+  s.add_development_dependency "coveralls"
 
   s.require_path = "lib"
 end
