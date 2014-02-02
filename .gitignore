@@ -11,6 +11,7 @@ test/dummy/config/initializers/taverna_server.rb
 
 *~
 rdoc/
+coverage/
 .buildpath
 .project
 .settings
