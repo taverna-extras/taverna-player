@@ -80,6 +80,10 @@ would start your workers like this:
 
   RAILS_ENV=production bundle exec ./script/delayed_job -n 20 --queue=player start
 
+By default Taverna Player puts its jobs into the "player" queue which is why
+this is specified above. If you change this configuration (see below) you will
+need to specify a different queue in the command above.
+
 See the documentation for {delayed_job}[https://rubygems.org/gems/delayed_job]
 for more options and information.
 
@@ -317,6 +321,15 @@ want it to store its files:
 
 Use ":rails_root" for the root of your application, or specify a full path for
 anywhere else.
+
+==== Jobs
+
+Taverna Player uses the "player" queue for its delayed jobs. You can change
+this with:
+
+  config.job_queue_name = "my_queue"
+
+Remember to start workers listening to the correct queue if you change it.
 
 ==== Run callbacks and renderers
 

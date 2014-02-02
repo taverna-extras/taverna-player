@@ -42,6 +42,10 @@ TavernaPlayer.setup do |config|
   # or use :rails_root for the root directory of your application.
   #config.file_store = ":rails_root/public/system"
 
+  # The queue name for Taverna Player's delayed jobs to be run. Whatever you
+  # use here be sure to start delayed job workers listening to this queue.
+  #config.job_queue_name = "player"
+
   # Callbacks to be run at various points during a workflow run. These can be
   # defined as Proc objects or as methods and referenced by name.
   #
