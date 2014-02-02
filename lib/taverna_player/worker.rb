@@ -18,9 +18,11 @@ module TavernaPlayer
     # How to get the interaction presentation frame out of the interaction page.
     INTERACTION_REGEX = /document\.getElementById\(\'presentationFrame\'\)\.src = \"(.+)\";/
 
-    def initialize(run)
+    # The workflow file to be run can be specified explicitly or it will be
+    # taken from the workflow model.
+    def initialize(run, workflow_file = nil)
       @run = run
-      @workflow = TavernaPlayer.workflow_proxy.class_name.find(@run.workflow_id)
+      @workflow = workflow_file || TavernaPlayer.workflow_proxy.file(@run.workflow)
     end
 
     # This tells delayed_job to only try and complete each run once.
@@ -43,7 +45,7 @@ module TavernaPlayer
 
       begin
         server = T2Server::Server.new(server_uri, conn_params)
-        wkf = File.read(TavernaPlayer.workflow_proxy.file(@workflow))
+        wkf = File.read(@workflow)
 
         # Try and create the run bearing in mind that the server might be at
         # the limit of runs that it can hold at once.
