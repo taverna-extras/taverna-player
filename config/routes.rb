@@ -32,4 +32,6 @@ TavernaPlayer::Engine.routes.draw do
   end
 
   resources :service_credentials
+
+  get "job_queue", :controller => :job_queue, :action => "index"
 end

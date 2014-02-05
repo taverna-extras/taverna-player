@@ -15,6 +15,8 @@ module TavernaPlayer
     include TavernaPlayer::Concerns::Callback
     include TavernaPlayer::Concerns::Zip
 
+    attr_reader :run
+
     # How to get the interaction presentation frame out of the interaction page.
     INTERACTION_REGEX = /document\.getElementById\(\'presentationFrame\'\)\.src = \"(.+)\";/
 

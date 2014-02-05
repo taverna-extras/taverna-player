@@ -358,6 +358,7 @@ You can override the following core components:
 * RunPort::Output (model)
 * RunsController
 * ServiceCredentialsController
+* JobQueueController
 
 Use the generators, detailed above, to create stubs for you to expand. These
 components have been designed for overriding with the decorator pattern using
