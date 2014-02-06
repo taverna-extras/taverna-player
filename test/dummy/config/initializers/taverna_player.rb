@@ -17,6 +17,9 @@ TavernaPlayer.setup do |config|
   config.user_model_proxy = "User"
   config.current_user_callback = Proc.new { User.find(1) }
 
+  # Move admin resources into their own namespace.
+  config.admin_scope = "admin"
+
   # Callbacks to be run at various points during a workflow run.
   require "callbacks"
 

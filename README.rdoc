@@ -93,6 +93,29 @@ Mount the Taverna Player engine in your <tt>config/routes.rb</tt>. For example:
 
   mount TavernaPlayer::Engine, :at => "/"
 
+Taverna Player provides three resources with paths:
+
+* <tt>/runs/*</tt>
+* <tt>/service_credentials/*</tt>
+* <tt>/job_queue</tt>
+
+Runs are what you will interact with most as this is the model that represents
+a workflow execution.
+
+Service credentials and the job queue are administrator resources. If you have
+users you may like to restrict access to these resources (see the section on
+overriding controllers, below). These two resources can be moved to a
+different namespace if you like. In the Taverna Player initializer you can
+set (for example):
+
+  config.admin_scope = "admin"
+
+And the resource paths would become:
+
+* <tt>/runs/*</tt>
+* <tt>/admin/service_credentials/*</tt>
+* <tt>/admin/job_queue</tt>
+
 You can also nest the Taverna Player runs resources within your workflows
 resources if you wish, like this:
 
@@ -358,6 +381,7 @@ You can override the following core components:
 * RunPort::Output (model)
 * RunsController
 * ServiceCredentialsController
+* JobQueueController
 
 Use the generators, detailed above, to create stubs for you to expand. These
 components have been designed for overriding with the decorator pattern using

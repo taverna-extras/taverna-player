@@ -31,5 +31,8 @@ TavernaPlayer::Engine.routes.draw do
     end
   end
 
-  resources :service_credentials
+  scope TavernaPlayer.admin_scope do
+    resources :service_credentials
+    get "job_queue", :controller => :job_queue, :action => "index"
+  end
 end
