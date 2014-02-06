@@ -19,7 +19,7 @@ module TavernaPlayer
     end
 
     test "should route to the job queue" do
-      assert_routing "/job_queue",
+      assert_routing "#{TavernaPlayer.admin_scope}/job_queue",
         { :controller => "taverna_player/job_queue",
           :action => "index" }, {}, {}, "Did not route correctly"
     end

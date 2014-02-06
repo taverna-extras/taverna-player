@@ -99,6 +99,10 @@ module TavernaPlayer
   mattr_accessor :file_store
   @@file_store = ":rails_root/public/system"
 
+  # Admin scope for system configuration routes.
+  mattr_accessor :admin_scope
+  @@admin_scope = ""
+
   # Taverna server polling interval (in seconds)
   mattr_accessor :server_poll_interval
   @@server_poll_interval = 5
