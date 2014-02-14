@@ -77,4 +77,18 @@ class WorkerTest < ActiveSupport::TestCase
     assert_not_nil @run.start_time, "Start time nil after starting"
     assert_not_nil @run.finish_time, "Finish time nil after finishing"
   end
+
+  test "workflow failure" do
+    # Stub the creation of a run on a Taverna Server which fails.
+    flexmock(T2Server::Server).new_instances do |s|
+      s.should_receive(:initialize_run).
+        and_raise(RuntimeError)
+    end
+
+    assert_equal :pending, @run.state, "Initial run state not ':pending'"
+
+    @worker.perform
+
+    assert_equal :failed, @run.state, "Final run state not ':failed'"
+  end
 end
