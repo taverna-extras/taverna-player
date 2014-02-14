@@ -22,8 +22,8 @@ class WorkerTest < ActiveSupport::TestCase
       config.server_address = "http://localhost:1111/taverna"
       config.server_username = "taverna"
       config.server_password = "taverna"
-      config.server_poll_interval = 1
-      config.server_retry_interval = 1
+      config.server_poll_interval = 0
+      config.server_retry_interval = 0
     end
 
     # Stuff we can't test yet in TavernaPlayer::Worker.
