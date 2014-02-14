@@ -17,6 +17,13 @@ class WorkerTest < ActiveSupport::TestCase
   include FlexMock::TestCase
 
   setup do
+    # Taverna Server config that we need to set here for Travis, etc.
+    TavernaPlayer.setup do |config|
+      config.server_address = "http://localhost:1111/taverna"
+      config.server_username = "taverna"
+      config.server_password = "taverna"
+    end
+
     # Stuff we can't test yet in TavernaPlayer::Worker.
     flexmock(TavernaPlayer::Worker).new_instances do |w|
       w.should_receive(:callback).and_return_undefined
