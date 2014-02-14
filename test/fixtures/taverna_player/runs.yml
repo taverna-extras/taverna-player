@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -66,4 +66,9 @@ six:
   saved_state: failed
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
+  workflow_id: 1
+
+seven:
+  name: Test run 7
+  saved_state: pending
   workflow_id: 1
