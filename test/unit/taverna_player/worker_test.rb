@@ -79,10 +79,15 @@ class WorkerTest < ActiveSupport::TestCase
   end
 
   test "workflow failure" do
-    # Stub the creation of a run on a Taverna Server which fails.
+    # Stub the creation of a run on a Taverna Server.
     flexmock(T2Server::Server).new_instances do |s|
       s.should_receive(:initialize_run).
-        and_raise(RuntimeError)
+        and_return(URI.parse("http://localhost/run/01"))
+    end
+
+    # Stub a Taverna Server run calls so it fails.
+    flexmock(T2Server::Run).new_instances do |r|
+      r.should_receive(:status).and_raise(RuntimeError)
     end
 
     assert_equal :pending, @run.state, "Initial run state not ':pending'"
