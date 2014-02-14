@@ -34,11 +34,6 @@ class WorkerTest < ActiveSupport::TestCase
       w.should_receive(:process_outputs).and_return([])
     end
 
-    # Stub the creation of a run on a Taverna Server.
-    flexmock(T2Server::Server).new_instances do |s|
-      s.should_receive(:initialize_run).once.and_return(URI.parse("http://localhost/run/01"))
-    end
-
     @run = taverna_player_runs(:seven)
     @worker = TavernaPlayer::Worker.new(@run)
   end
@@ -48,6 +43,13 @@ class WorkerTest < ActiveSupport::TestCase
   end
 
   test "run a workflow" do
+    # Stub the creation of a run on a Taverna Server with a failure first.
+    flexmock(T2Server::Server).new_instances do |s|
+      s.should_receive(:initialize_run).twice.
+        and_raise(T2Server::ServerAtCapacityError).
+        and_return(URI.parse("http://localhost/run/01"))
+    end
+
     # Stub the Taverna Server run calls.
     flexmock(T2Server::Run).new_instances do |r|
       r.should_receive(:status).times(4).and_return(:initialized, :running, :running, :finished)
