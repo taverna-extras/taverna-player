@@ -22,6 +22,8 @@ class WorkerTest < ActiveSupport::TestCase
       config.server_address = "http://localhost:1111/taverna"
       config.server_username = "taverna"
       config.server_password = "taverna"
+      config.server_poll_interval = 1
+      config.server_retry_interval = 1
     end
 
     # Stuff we can't test yet in TavernaPlayer::Worker.
@@ -52,7 +54,7 @@ class WorkerTest < ActiveSupport::TestCase
       r.should_receive(:create_time).and_return(Time.now)
       r.should_receive(:add_password_credential).and_return(true)
       r.should_receive(:name=).once.and_return(true)
-      r.should_receive(:start).once.and_return(true)
+      r.should_receive(:start).twice.and_return(false, true)
       r.should_receive(:start_time).and_return(Time.now)
       r.should_receive(:notifications).and_return([])
       r.should_receive(:finish_time).and_return(Time.now)
