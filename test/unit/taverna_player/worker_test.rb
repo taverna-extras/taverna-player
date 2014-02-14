@@ -91,4 +91,22 @@ class WorkerTest < ActiveSupport::TestCase
 
     assert_equal :failed, @run.state, "Final run state not ':failed'"
   end
+
+  test "cancelled run" do
+    # Stub the creation of a run on a Taverna Server with a failure.
+    flexmock(T2Server::Server).new_instances do |s|
+      s.should_receive(:initialize_run).once.
+        and_raise(T2Server::ServerAtCapacityError)
+    end
+
+    # Cancel the run.
+    @run.stop = true
+    @run.save
+
+    assert_equal :pending, @run.state, "Initial run state not ':pending'"
+
+    @worker.perform
+
+    assert_equal :cancelled, @run.state, "Final run state not ':cancelled'"
+  end
 end
