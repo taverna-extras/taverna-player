@@ -100,6 +100,7 @@ class WorkerTest < ActiveSupport::TestCase
     @worker.perform
 
     assert_equal :failed, @run.state, "Final run state not ':failed'"
+    assert_not_nil @run.failure_message, "Run's failure message is nil"
   end
 
   test "fail in failure handler" do
