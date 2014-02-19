@@ -190,27 +190,7 @@ module TavernaPlayer
 
         run.delete
       rescue => exception
-        begin
-          unless run.nil?
-            download_log(run)
-            run.delete
-          end
-        rescue
-          # Try and grab the log then delete the run from Taverna Server here,
-          # but at this point we don't care if we fail...
-        end
-
-        unless TavernaPlayer.run_failed_callback.nil?
-          status_message "Running post-failure tasks"
-          callback(TavernaPlayer.run_failed_callback, @run)
-        end
-
-        backtrace = exception.backtrace.join("\n")
-        @run.failure_message = "#{exception.message}\n#{backtrace}"
-
-        @run.state = :failed
-        @run.finish_time = Time.now
-        status_message "Failed"
+        failed(exception, run)
         return
       end
 
@@ -318,6 +298,30 @@ module TavernaPlayer
       @run.state = :cancelled
       @run.finish_time = Time.now
       status_message "Cancelled"
+    end
+
+    def failed(exception, run = nil)
+      begin
+        unless run.nil?
+          download_log(run)
+          run.delete
+        end
+      rescue
+        # Try and grab the log then delete the run from Taverna Server here,
+        # but at this point we don't care if we fail...
+      end
+
+      unless TavernaPlayer.run_failed_callback.nil?
+        status_message "Running post-failure tasks"
+        callback(TavernaPlayer.run_failed_callback, @run)
+      end
+
+      backtrace = exception.backtrace.join("\n")
+      @run.failure_message = "#{exception.message}\n#{backtrace}"
+
+      @run.state = :failed
+      @run.finish_time = Time.now
+      status_message "Failed"
     end
 
   end
