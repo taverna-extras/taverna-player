@@ -17,6 +17,8 @@ class WorkerTest < ActiveSupport::TestCase
   include FlexMock::TestCase
 
   setup do
+    @noop_callback = Proc.new { }
+
     # Taverna Server config that we need to set here for Travis, etc.
     TavernaPlayer.setup do |config|
       config.server_address = "http://localhost:1111/taverna"
@@ -24,11 +26,14 @@ class WorkerTest < ActiveSupport::TestCase
       config.server_password = "taverna"
       config.server_poll_interval = 0
       config.server_retry_interval = 0
+      config.pre_run_callback = @noop_callback
+      config.post_run_callback = @noop_callback
+      config.run_cancelled_callback = @noop_callback
+      config.run_failed_callback = @noop_callback
     end
 
     # Stuff we can't test yet in TavernaPlayer::Worker.
     flexmock(TavernaPlayer::Worker).new_instances do |w|
-      w.should_receive(:callback).and_return_undefined
       w.should_receive(:download_outputs).and_return_undefined
       w.should_receive(:download_log).and_return_undefined
       w.should_receive(:process_outputs).and_return([])
