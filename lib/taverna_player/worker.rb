@@ -201,7 +201,12 @@ module TavernaPlayer
 
       unless TavernaPlayer.post_run_callback.nil?
         status_message "Running post-run tasks"
-        callback(TavernaPlayer.post_run_callback, @run)
+        begin
+          callback(TavernaPlayer.post_run_callback, @run)
+        rescue => exception
+          failed(exception)
+          return
+        end
       end
 
       @run.state = :finished
