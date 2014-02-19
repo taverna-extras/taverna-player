@@ -160,4 +160,16 @@ class WorkerTest < ActiveSupport::TestCase
     assert_equal :failed, @run.state, "Final run state not ':failed'"
     assert_not_nil @run.failure_message, "Run's failure message is nil"
   end
+
+  test "fail in pre run callback" do
+    # Set a failing pre_run callback
+    TavernaPlayer.pre_run_callback = Proc.new { raise RuntimeError }
+
+    assert_equal :pending, @run.state, "Initial run state not ':pending'"
+
+    @worker.perform
+
+    assert_equal :failed, @run.state, "Final run state not ':failed'"
+    assert_not_nil @run.failure_message, "Run's failure message is nil"
+  end
 end

@@ -35,7 +35,12 @@ module TavernaPlayer
     def perform
       unless TavernaPlayer.pre_run_callback.nil?
         status_message "Running pre-run tasks"
-        callback(TavernaPlayer.pre_run_callback, @run)
+        begin
+          callback(TavernaPlayer.pre_run_callback, @run)
+        rescue => exception
+          failed(exception)
+          return
+        end
       end
 
       status_message "Connecting to Taverna Server"
