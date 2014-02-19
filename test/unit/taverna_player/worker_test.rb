@@ -102,6 +102,24 @@ class WorkerTest < ActiveSupport::TestCase
     assert_equal :failed, @run.state, "Final run state not ':failed'"
   end
 
+  test "fail in failure handler" do
+    # Stub the creation of a run on a Taverna Server with complete failure.
+    flexmock(T2Server::Server).new_instances do |s|
+      s.should_receive(:initialize_run).once.
+        and_raise(RuntimeError)
+    end
+
+    # Set a failing failure callback
+    TavernaPlayer.run_failed_callback = Proc.new { raise RuntimeError }
+
+    assert_equal :pending, @run.state, "Initial run state not ':pending'"
+
+    @worker.perform
+
+    assert_equal :failed, @run.state, "Final run state not ':failed'"
+    assert_not_nil @run.failure_message, "Run's failure message is nil"
+  end
+
   test "cancelled run" do
     # Stub the creation of a run on a Taverna Server with a failure.
     flexmock(T2Server::Server).new_instances do |s|

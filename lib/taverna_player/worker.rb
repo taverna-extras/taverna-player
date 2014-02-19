@@ -313,7 +313,12 @@ module TavernaPlayer
 
       unless TavernaPlayer.run_failed_callback.nil?
         status_message "Running post-failure tasks"
-        callback(TavernaPlayer.run_failed_callback, @run)
+
+        begin
+          callback(TavernaPlayer.run_failed_callback, @run)
+        rescue
+          # Again, nothing we can really do here, so...
+        end
       end
 
       backtrace = exception.backtrace.join("\n")
