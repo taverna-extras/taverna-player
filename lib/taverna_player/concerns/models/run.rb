@@ -107,7 +107,8 @@ module TavernaPlayer
           def enqueue
             worker = TavernaPlayer::Worker.new(self)
             job = Delayed::Job.enqueue worker, :queue => TavernaPlayer.job_queue_name
-            update_attributes(:delayed_job => job, :status_message => "Queued")
+            update_attributes(:delayed_job => job,
+              :status_message => I18n.t("taverna_player.status.queued"))
           end
 
         end # included
@@ -144,7 +145,8 @@ module TavernaPlayer
               if delayed_job.locked_by.nil?
                 delayed_job.destroy
                 update_attribute(:saved_state, "cancelled")
-                update_attribute(:status_message, "Cancelled")
+                update_attribute(:status_message,
+                  I18n.t("taverna_player.status.cancelled"))
               end
             end
           end
