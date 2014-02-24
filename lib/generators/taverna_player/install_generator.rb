@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -23,6 +23,11 @@ module TavernaPlayer
 
         copy_file "server_initializer.rb",
           "config/initializers/taverna_server.rb.example"
+      end
+
+      def copy_locale
+        copy_file "../../../config/locales/en.yml",
+          "config/locales/taverna_player.en.yml"
       end
 
       def show_readme
