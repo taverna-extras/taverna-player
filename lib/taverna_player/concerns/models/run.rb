@@ -20,7 +20,7 @@ module TavernaPlayer
         included do
           attr_accessible :create_time, :delayed_job, :embedded, :finish_time,
             :inputs_attributes, :log, :name, :parent_id, :results, :run_id,
-            :start_time, :status_message, :user_id, :workflow_id
+            :start_time, :status_message_key, :user_id, :workflow_id
 
           # Each run is spawned from a workflow. This provides the link to the
           # workflow model in the parent app, whatever it calls its model.
@@ -107,8 +107,7 @@ module TavernaPlayer
           def enqueue
             worker = TavernaPlayer::Worker.new(self)
             job = Delayed::Job.enqueue worker, :queue => TavernaPlayer.job_queue_name
-            update_attributes(:delayed_job => job,
-              :status_message => I18n.t("taverna_player.status.pending"))
+            update_attributes(:delayed_job => job, :status_message_key => "pending")
           end
 
         end # included
@@ -145,8 +144,7 @@ module TavernaPlayer
               if delayed_job.locked_by.nil?
                 delayed_job.destroy
                 update_attribute(:saved_state, "cancelled")
-                update_attribute(:status_message,
-                  I18n.t("taverna_player.status.cancelled"))
+                update_attribute(:status_message_key, "cancelled")
               end
             end
           end
@@ -173,6 +171,11 @@ module TavernaPlayer
           s = state.to_s.downcase
           return if s == "cancelled" && !stop
           self[:saved_state] = s
+        end
+
+        def status_message
+          key = status_message_key.nil? ? saved_state : status_message_key
+          I18n.t("taverna_player.status.#{key}")
         end
 
         def running?

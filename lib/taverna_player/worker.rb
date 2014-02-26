@@ -281,7 +281,7 @@ module TavernaPlayer
     end
 
     def status_message(key)
-      @run.status_message = I18n.t("taverna_player.status.#{key}")
+      @run.status_message_key = key
       @run.save!
     end
 
