@@ -31,3 +31,5 @@ en:
       cancelled: "Cancelled!"
       fail-callback: "Running post-failure tasks"
       failed: "Failed!"
+    errors:
+      invalid-parent: "Parents must have lower ids than their children"

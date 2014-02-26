@@ -65,7 +65,7 @@ module TavernaPlayer
           # needs to be checked on update because on create we don't have an
           # id for ourself.
           validates :parent_id, :numericality => { :less_than => :id,
-              :message => "Parents must have lower ids than children" },
+              :message => I18n.t("taverna_player.errors.invalid-parent") },
             :allow_nil => true, :on => :update
 
           has_attached_file :log,
