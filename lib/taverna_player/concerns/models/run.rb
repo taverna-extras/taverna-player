@@ -48,7 +48,8 @@ module TavernaPlayer
 
           accepts_nested_attributes_for :inputs
 
-          STATES = ["pending", "initialized", "running", "finished", "cancelled", "failed"]
+          STATES = ["pending", "initialized", "running", "finished",
+            "cancelled", "timeout", "failed"]
 
           validates :workflow_id, :presence => true
           validates :name, :presence => true
@@ -194,13 +195,18 @@ module TavernaPlayer
           state == :cancelling
         end
 
+        def timeout?
+          state == :timeout
+        end
+
         def failed?
           state == :failed
         end
 
-        # This is used as a catch-all for finished, cancelled and failed
+        # This is used as a catch-all for finished, cancelled, failed and
+        # timeout
         def complete?
-          finished? || cancelled? || failed?
+          finished? || cancelled? || failed? || timeout?
         end
 
         def has_parent?

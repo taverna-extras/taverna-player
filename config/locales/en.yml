@@ -29,6 +29,7 @@ en:
       cancel: "Cancelling"
       cancel-callback: "Running post-cancel tasks"
       cancelled: "Cancelled"
+      timeout: "Run execution timed out"
       fail-callback: "Running post-failure tasks"
       failed: "Failed"
     errors:

@@ -184,4 +184,18 @@ class WorkerTest < ActiveSupport::TestCase
     assert_equal :failed, @run.state, "Final run state not ':failed'"
     assert_not_nil @run.failure_message, "Run's failure message is nil"
   end
+
+  test "timed out run" do
+    # Stub the creation of a run on a Taverna Server with a timeout.
+    flexmock(T2Server::Server).new_instances do |s|
+      s.should_receive(:initialize_run).once.
+        and_raise(Delayed::WorkerTimeout)
+    end
+
+    assert_equal :pending, @run.state, "Initial run state not ':pending'"
+
+    @worker.perform
+
+    assert_equal :timeout, @run.state, "Final run state not ':timeout'"
+  end
 end

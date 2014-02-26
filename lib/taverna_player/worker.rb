@@ -334,9 +334,11 @@ module TavernaPlayer
       backtrace = exception.backtrace.join("\n")
       @run.failure_message = "#{exception.message}\n#{backtrace}"
 
-      @run.state = :failed
       @run.finish_time = Time.now
-      status_message("failed")
+
+      state = exception.instance_of?(Delayed::WorkerTimeout) ? :timeout : :failed
+      @run.state = state
+      status_message(state.to_s)
     end
 
   end
