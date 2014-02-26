@@ -70,7 +70,7 @@ module TavernaPlayer
           retry
         end
 
-        status_message("init")
+        status_message("initialized")
 
         @run.run_id = run.id
         @run.state = run.status

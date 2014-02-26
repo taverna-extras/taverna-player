@@ -108,7 +108,7 @@ module TavernaPlayer
             worker = TavernaPlayer::Worker.new(self)
             job = Delayed::Job.enqueue worker, :queue => TavernaPlayer.job_queue_name
             update_attributes(:delayed_job => job,
-              :status_message => I18n.t("taverna_player.status.queued"))
+              :status_message => I18n.t("taverna_player.status.pending"))
           end
 
         end # included
