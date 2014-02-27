@@ -13,11 +13,11 @@
 en:
   taverna_player:
     status:
-      queued: "Queued!"
+      pending: "Queued!"
       pre-callback: "Running pre-run tasks"
       connect: "Connecting to Taverna Server"
       full: "Server full - please wait; run will start soon"
-      init: "Initializing new workflow run"
+      initialized: "Initializing new workflow run"
       inputs: "Uploading run inputs"
       start: "Starting run"
       busy: "Server busy - please wait; run will start soon"
