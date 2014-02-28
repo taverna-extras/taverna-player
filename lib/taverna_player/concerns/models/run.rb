@@ -73,11 +73,13 @@ module TavernaPlayer
             :path => File.join(TavernaPlayer.file_store, ":class/:attachment/:id/:filename"),
             :url => "/runs/:id/download/log",
             :default_url => ""
+          do_not_validate_attachment_file_type :log
 
           has_attached_file :results,
             :path => File.join(TavernaPlayer.file_store, ":class/:attachment/:id/:filename"),
             :url => "/runs/:id/download/results",
             :default_url => ""
+          do_not_validate_attachment_file_type :results
 
           after_initialize :initialize_child_run, :if => "new_record? && has_parent?"
           after_create :populate_child_inputs, :if => :has_parent?
