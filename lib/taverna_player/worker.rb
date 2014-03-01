@@ -33,15 +33,7 @@ module TavernaPlayer
     end
 
     def perform
-      unless TavernaPlayer.pre_run_callback.nil?
-        status_message("pre-callback")
-        begin
-          callback(TavernaPlayer.pre_run_callback, @run)
-        rescue => exception
-          failed(exception)
-          return
-        end
-      end
+      return unless run_callback(TavernaPlayer.pre_run_callback, "pre-callback")
 
       status_message("connect")
 
@@ -199,21 +191,30 @@ module TavernaPlayer
         return
       end
 
-      unless TavernaPlayer.post_run_callback.nil?
-        status_message("post-callback")
-        begin
-          callback(TavernaPlayer.post_run_callback, @run)
-        rescue => exception
-          failed(exception)
-          return
-        end
-      end
+      return unless run_callback(TavernaPlayer.post_run_callback, "post-callback")
 
       @run.state = :finished
       status_message("finished")
     end
 
     private
+
+    # Run the specified callback and return false on error so that we know to
+    # return out of the worker code completely.
+    def run_callback(cb, message)
+      unless cb.nil?
+        status_message(message)
+        begin
+          callback(cb, @run)
+        rescue => exception
+          failed(exception)
+          return false
+        end
+      end
+
+      # no errors
+      true
+    end
 
     def download_log(run)
       Dir.mktmpdir(run.id, Rails.root.join("tmp")) do |tmp_dir|
@@ -300,10 +301,7 @@ module TavernaPlayer
         run.delete
       end
 
-      unless TavernaPlayer.run_cancelled_callback.nil?
-        status_message("cancel-callback")
-        callback(TavernaPlayer.run_cancelled_callback, @run)
-      end
+      return unless run_callback(TavernaPlayer.run_cancelled_callback, "cancel-callback")
 
       @run.state = :cancelled
       @run.finish_time = Time.now
