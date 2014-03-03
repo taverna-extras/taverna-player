@@ -1,0 +1,47 @@
+<%
+  # Copyright (c) 2014 The University of Manchester, UK.
+  #
+  # BSD Licenced. See LICENCE.rdoc for details.
+  #
+  # Taverna Player was developed in the BioVeL project, funded by the European
+  # Commission 7th Framework Programme (FP7), through grant agreement
+  # number 283359.
+  #
+  # Author: Robert Haines
+%>
+
+<h1>Taverna Player Jobs</h1>
+
+Number of jobs in the queue: <%= @jobs.count %>
+
+<table>
+  <tr>
+    <th>Job ID</th>
+    <th>Priority</th>
+    <th>Run at</th>
+    <th>Locked at</th>
+    <th>Failed at</th>
+    <th>Run ID</th>
+    <th>Workflow ID</th>
+    <th>Run state</th>
+    <th>Status message</th>
+  </tr>
+
+<% @jobs.each do |job| %>
+  <%
+    worker = job.payload_object
+    run = worker.run
+  %>
+  <tr>
+    <td><%= job.id %></td>
+    <td><%= job.priority %></td>
+    <td><%= job.run_at %></td>
+    <td><%= job.locked_at %></td>
+    <td><%= job.failed_at %></td>
+    <td><%= run.id %></td>
+    <td><%= run.workflow.id %></td>
+    <td><%= run.state %></td>
+    <td><%= run.status_message %></td>
+  </tr>
+<% end %>
+</table>
