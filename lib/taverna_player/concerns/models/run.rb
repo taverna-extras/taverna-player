@@ -44,7 +44,8 @@ module TavernaPlayer
 
           accepts_nested_attributes_for :inputs
 
-          STATES = ["pending", "initialized", "running", "finished", "cancelled", "failed"]
+          STATES = ["pending", "initialized", "running", "finished",
+            "cancelled", "timeout", "failed"]
 
           validates :workflow_id, :presence => true
           validates :name, :presence => true
@@ -61,18 +62,20 @@ module TavernaPlayer
           # needs to be checked on update because on create we don't have an
           # id for ourself.
           validates :parent_id, :numericality => { :less_than => :id,
-              :message => "Parents must have lower ids than children" },
+              :message => I18n.t("taverna_player.errors.invalid-parent") },
             :allow_nil => true, :on => :update
 
           has_attached_file :log,
             :path => File.join(TavernaPlayer.file_store, ":class/:attachment/:id/:filename"),
             :url => "/runs/:id/download/log",
             :default_url => ""
+          do_not_validate_attachment_file_type :log
 
           has_attached_file :results,
             :path => File.join(TavernaPlayer.file_store, ":class/:attachment/:id/:filename"),
             :url => "/runs/:id/download/results",
             :default_url => ""
+          do_not_validate_attachment_file_type :results
 
           after_initialize :initialize_child_run, :if => "new_record? && has_parent?"
           after_create :populate_child_inputs, :if => :has_parent?
@@ -103,7 +106,7 @@ module TavernaPlayer
           def enqueue
             worker = TavernaPlayer::Worker.new(self)
             job = Delayed::Job.enqueue worker, :queue => TavernaPlayer.job_queue_name
-            update_attributes(:delayed_job => job, :status_message => "Queued")
+            update_attributes(:delayed_job => job, :status_message_key => "pending")
           end
 
         end # included
@@ -140,7 +143,7 @@ module TavernaPlayer
               if delayed_job.locked_by.nil?
                 delayed_job.destroy
                 update_attribute(:saved_state, "cancelled")
-                update_attribute(:status_message, "Cancelled")
+                update_attribute(:status_message_key, "cancelled")
               end
             end
           end
@@ -169,6 +172,11 @@ module TavernaPlayer
           self[:saved_state] = s
         end
 
+        def status_message
+          key = status_message_key.nil? ? saved_state : status_message_key
+          I18n.t("taverna_player.status.#{key}")
+        end
+
         def running?
           state == :running
         end
@@ -185,13 +193,18 @@ module TavernaPlayer
           state == :cancelling
         end
 
+        def timeout?
+          state == :timeout
+        end
+
         def failed?
           state == :failed
         end
 
-        # This is used as a catch-all for finished, cancelled and failed
+        # This is used as a catch-all for finished, cancelled, failed and
+        # timeout
         def complete?
-          finished? || cancelled? || failed?
+          finished? || cancelled? || failed? || timeout?
         end
 
         def has_parent?

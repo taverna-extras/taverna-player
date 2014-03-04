@@ -23,6 +23,12 @@ Taverna Player configuration, leaving the sensitive parts out.
 In your application's install instructions remember to tell your users to copy
 the example initializer and configure their Taverna Server information.
 
+A locale file has also been installed to:
+
+  config/locales/taverna_player.en.yml
+
+Please edit this to suit your application if required.
+
 There is also some manual setup to do, if you haven't already done it:
 
   1. Mount the Taverna Player engine in your config/routes.rb. For example:

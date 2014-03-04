@@ -42,6 +42,10 @@ TavernaPlayer.setup do |config|
   # or use :rails_root for the root directory of your application.
   #config.file_store = ":rails_root/public/system"
 
+  # If you would like to use a different namespace for admin type resources
+  # you can configure it here. Defaults to the empty string.
+  #config.admin_scope = "admin"
+
   # The queue name for Taverna Player's delayed jobs to be run. Whatever you
   # use here be sure to start delayed job workers listening to this queue.
   #config.job_queue_name = "player"

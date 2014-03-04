@@ -9,6 +9,7 @@ Copyright::   (c) 2013, 2014 The University of Manchester, UK
 {<img src="https://badge.fury.io/rb/taverna-player.png" alt="Gem Version" />}[http://badge.fury.io/rb/taverna-player]
 {<img src="https://codeclimate.com/github/myGrid/taverna-player.png" />}[https://codeclimate.com/github/myGrid/taverna-player]
 {<img src="https://travis-ci.org/myGrid/taverna-player.png?branch=master" alt="Build Status" />}[https://travis-ci.org/myGrid/taverna-player]
+{<img src="https://coveralls.io/repos/myGrid/taverna-player/badge.png?branch=master" alt="Coverage Status" />}[https://coveralls.io/r/myGrid/taverna-player?branch=master]
 
 == Synopsis
 
@@ -42,9 +43,10 @@ Next you need to run the install generator:
 This installs two initializer files (into your application's
 <tt>config/initializers</tt> directory) which describe all of Taverna Player's
 configuration options; there are some things that MUST be configured before it
-will work - see below for more information. The install generator also prints
-out a list of other steps for setting up Taverna Player; these are repeated
-and detailed below.
+will work - see below for more information. The install generator also creates
+a locale file at <tt>config/locales/taverna_player.en.yml</tt> and prints out
+a list of other steps for setting up Taverna Player; these are repeated and
+detailed below.
 
 == Running Taverna Player
 
@@ -92,6 +94,29 @@ for more options and information.
 Mount the Taverna Player engine in your <tt>config/routes.rb</tt>. For example:
 
   mount TavernaPlayer::Engine, :at => "/"
+
+Taverna Player provides three resources with paths:
+
+* <tt>/runs/*</tt>
+* <tt>/service_credentials/*</tt>
+* <tt>/job_queue</tt>
+
+Runs are what you will interact with most as this is the model that represents
+a workflow execution.
+
+Service credentials and the job queue are administrator resources. If you have
+users you may like to restrict access to these resources (see the section on
+overriding controllers, below). These two resources can be moved to a
+different namespace if you like. In the Taverna Player initializer you can
+set (for example):
+
+  config.admin_scope = "admin"
+
+And the resource paths would become:
+
+* <tt>/runs/*</tt>
+* <tt>/admin/service_credentials/*</tt>
+* <tt>/admin/job_queue</tt>
 
 You can also nest the Taverna Player runs resources within your workflows
 resources if you wish, like this:
@@ -358,6 +383,7 @@ You can override the following core components:
 * RunPort::Output (model)
 * RunsController
 * ServiceCredentialsController
+* JobQueueController
 
 Use the generators, detailed above, to create stubs for you to expand. These
 components have been designed for overriding with the decorator pattern using
