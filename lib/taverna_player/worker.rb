@@ -119,7 +119,7 @@ module TavernaPlayer
             if @run.has_parent?
               next if note.has_reply? || note.is_notification?
               int = Interaction.find_by_run_id_and_serial(@run.parent_id, note.serial)
-              new_int = Interaction.find_or_initialize_by_run_id_and_serial(@run.id, note.serial)
+              new_int = Interaction.find_or_initialize_by(:run_id => @run.id, :serial => note.serial)
               if new_int.new_record?
                 note.reply(int.feed_reply, int.data)
                 new_int.displayed = true
@@ -130,7 +130,7 @@ module TavernaPlayer
               end
             else
               waiting = true unless note.has_reply?
-              int = Interaction.find_or_initialize_by_run_id_and_serial(@run.id, note.serial)
+              int = Interaction.find_or_initialize_by(:run_id => @run.id, :serial => note.serial)
 
               # Need to catch this here in case some other process has replied.
               if note.has_reply? && !int.replied?

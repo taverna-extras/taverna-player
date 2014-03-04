@@ -93,7 +93,7 @@ module TavernaPlayer
           # on the child. Copy the values/files of inputs that are missing.
           def populate_child_inputs
             parent.inputs.each do |i|
-              input = TavernaPlayer::RunPort::Input.find_or_initialize_by_run_id_and_name(id, i.name)
+              input = TavernaPlayer::RunPort::Input.find_or_initialize_by(:run_id => id, :name => i.name)
               if input.new_record?
                 input.value = i.value
                 input.file = i.file
