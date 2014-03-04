@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   root :to => "home#index"
 
   resources :workflows, :only => :index do
-    resources :runs, :controller => "TavernaPlayer::Runs", :except => :edit
+    resources :runs, :controller => "taverna_player/runs", :except => :edit
   end
 
   mount TavernaPlayer::Engine, :at => "/"
