@@ -12,7 +12,7 @@
 
 module TavernaPlayer
   class Interaction < ActiveRecord::Base
-    attr_accessible :displayed, :feed_reply, :page, :replied
+    #attr_accessible :displayed, :feed_reply, :page, :replied
 
     belongs_to :run, :class_name => "TavernaPlayer::Run",
       :inverse_of => :interactions

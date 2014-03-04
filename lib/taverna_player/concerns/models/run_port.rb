@@ -29,7 +29,7 @@ module TavernaPlayer
           validates_presence_of :name
           validates_uniqueness_of :name, :scope => [:run_id, :port_type]
 
-          attr_accessible :depth, :file, :metadata, :name, :value
+          #attr_accessible :depth, :file, :metadata, :name, :value
 
           serialize :metadata
 

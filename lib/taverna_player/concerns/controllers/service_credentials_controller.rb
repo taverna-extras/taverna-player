@@ -56,7 +56,7 @@ module TavernaPlayer
 
         # POST /service_credentials
         def create
-          @service_credential = ServiceCredential.new(params[:service_credential])
+          @service_credential = ServiceCredential.new(service_credential_params)
 
           if @service_credential.save
             flash[:notice] = "Service credential was successfully created."
@@ -67,7 +67,7 @@ module TavernaPlayer
 
         # PUT /service_credentials/1
         def update
-          if @service_credential.update_attributes(params[:service_credential])
+          if @service_credential.update_attributes(service_credential_params)
             flash[:notice] = "Service credential was successfully updated."
           end
 
@@ -81,6 +81,13 @@ module TavernaPlayer
           end
 
           respond_with(@service_credential)
+        end
+
+        private
+
+        def service_credential_params
+          params.require(:service_credential).permit(:description, :login, :name, :password,
+                                                     :password_confirmation, :uri)
         end
 
       end

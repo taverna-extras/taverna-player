@@ -18,10 +18,6 @@ module TavernaPlayer
         extend ActiveSupport::Concern
 
         included do
-          attr_accessible :create_time, :delayed_job, :embedded, :finish_time,
-            :inputs_attributes, :log, :name, :parent_id, :results, :run_id,
-            :start_time, :status_message, :user_id, :workflow_id
-
           # Each run is spawned from a workflow. This provides the link to the
           # workflow model in the parent app, whatever it calls its model.
           belongs_to :workflow, :class_name => TavernaPlayer.workflow_proxy.class_name.to_s

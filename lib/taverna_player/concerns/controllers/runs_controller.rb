@@ -136,7 +136,7 @@ module TavernaPlayer
 
         # POST /runs
         def create
-          @run = Run.new(params[:run])
+          @run = Run.new(run_params)
           if @run.save
             flash[:notice] = "Run was successfully created."
           end
@@ -243,6 +243,14 @@ module TavernaPlayer
           @interaction.save
 
           render :nothing => true, :status => 201
+        end
+
+        private
+
+        def run_params
+          params.require(:run).permit(:create_time, :delayed_job, :embedded, :finish_time,
+                                      :inputs_attributes, :log, :name, :parent_id, :results, :run_id,
+                                      :start_time, :status_message, :user_id, :workflow_id)
         end
 
       end

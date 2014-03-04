@@ -15,8 +15,6 @@ module TavernaPlayer
   # This class represents a credential for authentication to a service during
   # a workflow run.
   class ServiceCredential < ActiveRecord::Base
-    attr_accessible :description, :login, :name, :password,
-      :password_confirmation, :uri
 
     validates :uri, :presence => true
     validates :login, :presence => true
