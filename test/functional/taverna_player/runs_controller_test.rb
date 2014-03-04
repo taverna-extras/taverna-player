@@ -111,29 +111,28 @@ module TavernaPlayer
       assert_response :success, "Response was not success"
       assert_not_nil assigns(:runs), "Did not assign a valid runs instance"
       assert_not_nil assigns(:override)
-      assert_template "application", "Did not render with the correct layout"
+      assert_template({:layout => nil})
     end
 
     test "should get new and not be overridden" do
       get :new, :workflow_id => 1, :use_route => :taverna_player
       assert_response :success, "Response was not success"
       refute assigns(:override)
-      assert_template "application", "Did not render with the correct layout"
+      assert_template({:layout => nil})
     end
 
     test "should get new embedded" do
       get :new, :workflow_id => 1, :embedded => "true",
         :use_route => :taverna_player
       assert_response :success, "Response was not success"
-      assert_template "taverna_player/embedded",
-        "Did not render with the correct layout"
+      assert_template({:layout => "taverna_player/embedded"})
     end
 
     test "should show run with no interactions" do
       get :show, :id => @run1, :use_route => :taverna_player
       assert_response :success, "Response was not success"
       refute assigns(:interaction), "No interactions for this run"
-      assert_template "application", "Did not render with the correct layout"
+      assert_template({:layout => nil})
     end
 
     test "should show run with an undisplayed interaction" do
@@ -141,7 +140,7 @@ module TavernaPlayer
       assert_response :success, "Response was not success"
       assert assigns(:interaction), "Should have an interaction for this run"
       assert assigns(:new_interaction), "Should have new interaction flag"
-      assert_template "application", "Did not render with the correct layout"
+      assert_template({:layout => nil})
     end
 
     test "should show run with a displayed interaction" do
@@ -149,7 +148,7 @@ module TavernaPlayer
       assert_response :success, "Response was not success"
       assert assigns(:interaction), "Should have an interaction for this run"
       refute assigns(:new_interaction), "Should not have new interaction flag"
-      assert_template "application", "Did not render with the correct layout"
+      assert_template({:layout => nil})
     end
 
     test "should show run embedded ignoring replied interaction" do
@@ -157,8 +156,7 @@ module TavernaPlayer
       assert_response :success, "Response was not success"
       refute assigns(:interaction), "Should not show replied interaction"
       refute assigns(:new_interaction), "Should not have new interaction flag"
-      assert_template "taverna_player/embedded",
-        "Did not render with the correct layout"
+      assert_template({:layout => "taverna_player/embedded"})
     end
 
     test "should create run via browser" do
@@ -280,7 +278,7 @@ module TavernaPlayer
       assert_not_nil assigns(:runs), "Did not assign a valid runs instance"
       assert_not_nil assigns(:override)
       assert_not_equal Run.count, assigns(:runs).count, "Returned all runs"
-      assert_template "application", "Did not render with the correct layout"
+      assert_template({:layout => nil})
     end
 
     test "should update run name via browser" do

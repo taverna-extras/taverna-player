@@ -28,7 +28,7 @@ module TavernaPlayer
       get :index
       assert_response :success, "Response was not success"
       assert_not_nil assigns(:jobs), "Jobs not assigned"
-      assert_template "application", "Did not render with the correct layout"
+      assert_template({:layout => nil})
     end
 
   end
