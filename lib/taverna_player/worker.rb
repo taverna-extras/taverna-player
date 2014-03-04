@@ -16,6 +16,8 @@ module TavernaPlayer
     include TavernaPlayer::Concerns::Utils
     include TavernaPlayer::Concerns::Zip
 
+    attr_reader :run
+
     # How to get the interaction presentation frame out of the interaction page.
     INTERACTION_REGEX = /document\.getElementById\(\'presentationFrame\'\)\.src = \"(.+)\";/
 
@@ -32,12 +34,9 @@ module TavernaPlayer
     end
 
     def perform
-      unless TavernaPlayer.pre_run_callback.nil?
-        status_message "Running pre-run tasks"
-        callback(TavernaPlayer.pre_run_callback, @run)
-      end
+      return unless run_callback(TavernaPlayer.pre_run_callback, "pre-callback")
 
-      status_message "Connecting to Taverna Server"
+      status_message("connect")
 
       server_uri = URI.parse(TavernaPlayer.server_address)
       credentials = T2Server::HttpBasic.new(TavernaPlayer.server_username,
@@ -53,7 +52,7 @@ module TavernaPlayer
         begin
           run = server.create_run(wkf, credentials)
         rescue T2Server::ServerAtCapacityError
-          status_message "Server full - please wait; run will start soon"
+          status_message("full")
 
           if cancelled?
             cancel
@@ -64,7 +63,7 @@ module TavernaPlayer
           retry
         end
 
-        status_message "Initializing new workflow run"
+        status_message("initialized")
 
         @run.run_id = run.id
         @run.state = run.status
@@ -72,7 +71,7 @@ module TavernaPlayer
         @run.save
 
         unless @run.inputs.size == 0
-          status_message "Uploading run inputs"
+          status_message("inputs")
           @run.inputs.each do |input|
             unless input.file.blank?
               run.input_port(input.name).file = input.file.path
@@ -92,13 +91,13 @@ module TavernaPlayer
           run.add_password_credential(cred.uri, cred.login, cred.password)
         end
 
-        status_message "Starting run"
+        status_message("start")
         run.name = @run.name
 
         # Try and start the run bearing in mind that the server might be at
         # the limit of runs that it can run at once.
         while !run.start
-          status_message "Server busy - please wait; run will start soon"
+          status_message("busy")
 
           if cancelled?
             cancel(run)
@@ -112,7 +111,7 @@ module TavernaPlayer
         @run.start_time = run.start_time
         @run.save
 
-        status_message "Running"
+        status_message("running")
         until run.finished?
           sleep(TavernaPlayer.server_poll_interval)
           waiting = false
@@ -181,10 +180,10 @@ module TavernaPlayer
             end
           end
 
-          status_message(waiting ? "Waiting for user input" : "Running")
+          status_message(waiting ? "interact" : "running")
         end
 
-        status_message "Gathering run outputs and log"
+        status_message("outputs")
         download_outputs(run)
         download_log(run)
 
@@ -194,40 +193,34 @@ module TavernaPlayer
 
         run.delete
       rescue => exception
-        begin
-          unless run.nil?
-            download_log(run)
-            run.delete
-          end
-        rescue
-          # Try and grab the log then delete the run from Taverna Server here,
-          # but at this point we don't care if we fail...
-        end
-
-        unless TavernaPlayer.run_failed_callback.nil?
-          status_message "Running post-failure tasks"
-          callback(TavernaPlayer.run_failed_callback, @run)
-        end
-
-        backtrace = exception.backtrace.join("\n")
-        @run.failure_message = "#{exception.message}\n#{backtrace}"
-
-        @run.state = :failed
-        @run.finish_time = Time.now
-        status_message "Failed"
+        failed(exception, run)
         return
       end
 
-      unless TavernaPlayer.post_run_callback.nil?
-        status_message "Running post-run tasks"
-        callback(TavernaPlayer.post_run_callback, @run)
-      end
+      return unless run_callback(TavernaPlayer.post_run_callback, "post-callback")
 
       @run.state = :finished
-      status_message "Finished"
+      status_message("finished")
     end
 
     private
+
+    # Run the specified callback and return false on error so that we know to
+    # return out of the worker code completely.
+    def run_callback(cb, message)
+      unless cb.nil?
+        status_message(message)
+        begin
+          callback(cb, @run)
+        rescue => exception
+          failed(exception)
+          return false
+        end
+      end
+
+      # no errors
+      true
+    end
 
     def download_log(run)
       Dir.mktmpdir(run.id, Rails.root.join("tmp")) do |tmp_dir|
@@ -294,8 +287,8 @@ module TavernaPlayer
       File.new(tmp_file)
     end
 
-    def status_message(message)
-      @run.status_message = message
+    def status_message(key)
+      @run.status_message_key = key
       @run.save!
     end
 
@@ -307,21 +300,49 @@ module TavernaPlayer
     end
 
     def cancel(run = nil)
-      status_message "Cancelling"
+      status_message("cancel")
 
       unless run.nil?
         download_log(run)
         run.delete
       end
 
-      unless TavernaPlayer.run_cancelled_callback.nil?
-        status_message "Running post-cancel tasks"
-        callback(TavernaPlayer.run_cancelled_callback, @run)
-      end
+      return unless run_callback(TavernaPlayer.run_cancelled_callback, "cancel-callback")
 
       @run.state = :cancelled
       @run.finish_time = Time.now
-      status_message "Cancelled"
+      status_message("cancelled")
+    end
+
+    def failed(exception, run = nil)
+      begin
+        unless run.nil?
+          download_log(run)
+          run.delete
+        end
+      rescue
+        # Try and grab the log then delete the run from Taverna Server here,
+        # but at this point we don't care if we fail...
+      end
+
+      unless TavernaPlayer.run_failed_callback.nil?
+        status_message("fail-callback")
+
+        begin
+          callback(TavernaPlayer.run_failed_callback, @run)
+        rescue
+          # Again, nothing we can really do here, so...
+        end
+      end
+
+      backtrace = exception.backtrace.join("\n")
+      @run.failure_message = "#{exception.message}\n#{backtrace}"
+
+      @run.finish_time = Time.now
+
+      state = exception.instance_of?(Delayed::WorkerTimeout) ? :timeout : :failed
+      @run.state = state
+      status_message(state.to_s)
     end
 
   end

@@ -32,8 +32,6 @@ module TavernaPlayer
           before_filter :filter_update_parameters, :only => :update
           before_filter :find_interaction, :only => [ :read_interaction, :write_interaction ]
 
-          layout :choose_layout
-
           private
 
           def find_runs
@@ -87,15 +85,6 @@ module TavernaPlayer
             send_data @port.value, :type => type, :filename => @port.filename
           end
 
-          # Choose a layout for the page depending on action and embedded status.
-          def choose_layout
-            if (action_name == "new" || action_name == "show") && @run.embedded?
-              "taverna_player/embedded"
-            else
-              ApplicationController.new.send(:_layout).virtual_path
-            end
-          end
-
         end # included
 
         # GET /runs
@@ -119,7 +108,7 @@ module TavernaPlayer
           respond_with(@run) do |format|
             # Render show.{html|js}.erb unless the run is embedded.
             format.any(:html, :js) do
-              render "taverna_player/runs/embedded/show" if @run.embedded
+              render "taverna_player/runs/embedded/show", :layout => "taverna_player/embedded" if @run.embedded
             end
           end
         end
@@ -129,7 +118,7 @@ module TavernaPlayer
           respond_with(@run) do |format|
             # Render new.html.erb unless the run is embedded.
             format.html do
-              render "taverna_player/runs/embedded/new" if @run.embedded
+              render "taverna_player/runs/embedded/new", :layout => "taverna_player/embedded" if @run.embedded
             end
           end
         end

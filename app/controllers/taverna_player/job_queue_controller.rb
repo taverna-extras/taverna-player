@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013, 2014 The University of Manchester, UK.
+# Copyright (c) 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -11,6 +11,8 @@
 #------------------------------------------------------------------------------
 
 module TavernaPlayer
-  class ApplicationController < ::ApplicationController
+  class JobQueueController < TavernaPlayer::ApplicationController
+    # See lib/taverna_player/concerns/controllers/job_queue_controller.rb
+    include TavernaPlayer::Concerns::Controllers::JobQueueController
   end
 end

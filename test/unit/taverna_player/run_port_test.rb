@@ -117,6 +117,24 @@ module TavernaPlayer
       assert_nil port.file.path, "File present"
     end
 
+    test "should handle non ascii/utf-8 characters in small input values" do
+      test_value =
+        "\xC2"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "\xC2"
+
+      port = RunPort::Input.create(:name => "test_port")
+      port.value = test_value
+      assert port.save, "Port did not save"
+      assert_nil port.file.path, "File present"
+      assert_equal test_value, port.value, "Saved value does not match test"
+      assert_equal port.value_preview, port.value,
+        "Value and preview should be equal"
+    end
+
     test "should handle non ascii/utf-8 characters in large input values" do
       test_value =
         "\xC2"\
@@ -134,6 +152,24 @@ module TavernaPlayer
       assert_not_nil port.file.path, "File not present"
       assert_equal test_value, port.value, "Saved value does not match test"
       assert_not_equal port.value_preview, port.value, "Value and preview same"
+    end
+
+    test "should handle non ascii/utf-8 characters in small output values" do
+      test_value =
+        "\xC2"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "01234567890123456789012345678901234567890123456789"\
+        "\xC2"
+
+      port = RunPort::Output.create(:name => "test_port")
+      port.value = test_value
+      assert port.save, "Port did not save"
+      assert_nil port.file.path, "File present"
+      assert_equal test_value, port.value, "Saved value does not match test"
+      assert_equal port.value_preview, port.value,
+        "Value and preview should be equal"
     end
 
     test "should handle non ascii/utf-8 characters in large output values" do
@@ -173,7 +209,7 @@ module TavernaPlayer
     end
 
     test "should not allow both file and value on create input" do
-      file = fixture_file_upload "/files/crassostrea_gigas.csv"
+      file = fixture_file_upload "/files/non-ascii.csv"
       port = RunPort::Input.create(:name => "test_port", :value => "test",
         :file => file)
 
@@ -182,7 +218,7 @@ module TavernaPlayer
     end
 
     test "should not allow both file and value on create output" do
-      file = fixture_file_upload "/files/crassostrea_gigas.csv"
+      file = fixture_file_upload "/files/non-ascii.csv"
       port = RunPort::Output.create(:name => "test_port", :value => "test",
         :file => file)
 
@@ -191,7 +227,7 @@ module TavernaPlayer
     end
 
     test "should not allow both file and value on update input" do
-      file = fixture_file_upload "/files/crassostrea_gigas.csv"
+      file = fixture_file_upload "/files/non-ascii.csv"
       port = RunPort::Input.create(:name => "test_port")
 
       port.file = file
@@ -203,7 +239,7 @@ module TavernaPlayer
     end
 
     test "should not allow both file and value on update output" do
-      file = fixture_file_upload "/files/crassostrea_gigas.csv"
+      file = fixture_file_upload "/files/non-ascii.csv"
       port = RunPort::Output.create(:name => "test_port")
 
       port.file = file
@@ -283,7 +319,7 @@ module TavernaPlayer
       refute port.value.blank?, "Value is empty"
       refute port.file.blank?, "File not present"
 
-      port.file = fixture_file_upload "/files/crassostrea_gigas.csv"
+      port.file = fixture_file_upload "/files/non-ascii.csv"
       port.save
       assert_nil port[:value], "Port value not nil"
       refute port.file.blank?, "File not present"

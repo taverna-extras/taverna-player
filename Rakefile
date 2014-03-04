@@ -1,6 +1,6 @@
 #!/usr/bin/env rake
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -49,8 +49,6 @@ end
 APP_RAKEFILE = File.expand_path("../test/dummy/Rakefile", __FILE__)
 load 'rails/tasks/engine.rake'
 
-
-
 Bundler::GemHelper.install_tasks
 
 require 'rake/testtask'
@@ -59,13 +57,6 @@ Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.libs << 'test'
   t.pattern = 'test/**/*_test.rb'
-  t.verbose = false
-end
-
-Rake::TestTask.new(:"test:worker") do |t|
-  t.libs << 'lib'
-  t.libs << 'test'
-  t.test_files = ["test/integration/test_worker.rb"]
   t.verbose = false
 end
 
