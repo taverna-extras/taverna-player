@@ -23,7 +23,7 @@ module TavernaPlayer
           before_filter :find_jobs
 
           def find_jobs
-            @jobs = Delayed::Job.find_all_by_queue(TavernaPlayer.job_queue_name)
+            @jobs = Delayed::Job.where(:queue => TavernaPlayer.job_queue_name)
           end
         end # included
 

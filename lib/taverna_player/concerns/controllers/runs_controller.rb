@@ -37,7 +37,7 @@ module TavernaPlayer
           def find_runs
             select = { :embedded => false }
             select[:workflow_id] = params[:workflow_id] if params[:workflow_id]
-            @runs = Run.where(select).all
+            @runs = Run.where(select)
           end
 
           def find_run
