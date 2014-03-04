@@ -39,7 +39,7 @@ module TavernaPlayer
             :default_url => ""
           do_not_validate_attachment_file_type :file
 
-          default_scope order("lower(name) ASC")
+          default_scope { order("lower(name) ASC") }
 
           # If there is both a value and a file, then prefer the file. If the
           # file is changed, delete the value. This must be run before
