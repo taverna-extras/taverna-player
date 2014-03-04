@@ -37,14 +37,16 @@ module TavernaPlayer
       assert_response :success
       assert_not_nil assigns(:service_credentials)
       assert_not_nil assigns(:override)
-      assert_template({:layout => nil})
+      assert_template({ :layout => "application" },
+        "Did not render with the correct layout")
     end
 
     test "should get new" do
       get :new
       assert_response :success
       assert_not_nil assigns(:service_credential)
-      assert_template({:layout => nil})
+      assert_template({ :layout => "application" },
+        "Did not render with the correct layout")
     end
 
     test "should create service_credential" do
@@ -66,7 +68,8 @@ module TavernaPlayer
       get :show, :id => @sc1
       assert_response :success
       refute assigns(:override)
-      assert_template({:layout => nil})
+      assert_template({ :layout => "application" },
+        "Did not render with the correct layout")
     end
 
     test "should get edit" do
