@@ -10,16 +10,29 @@
 # Author: Robert Haines
 #------------------------------------------------------------------------------
 
-require 'test_helper'
+module TavernaPlayer
+  module Concerns
+    module Controllers
+      module JobQueueController
 
-class WorkerTest < ActiveSupport::TestCase
+        extend ActiveSupport::Concern
 
-  setup do
-    @worker = TavernaPlayer::Worker.new(taverna_player_runs(:one))
+        included do
+          respond_to :html
+
+          before_filter :find_jobs
+
+          def find_jobs
+            @jobs = Delayed::Job.find_all_by_queue(TavernaPlayer.job_queue_name)
+          end
+        end # included
+
+        # GET job_queue
+        def index
+
+        end
+
+      end
+    end
   end
-
-  test "truth" do
-    assert true
-  end
-
 end

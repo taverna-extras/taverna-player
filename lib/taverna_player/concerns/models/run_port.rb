@@ -37,6 +37,7 @@ module TavernaPlayer
             :path => File.join(TavernaPlayer.file_store, ":class/:attachment/:id/:filename"),
             :url => :file_url_via_run,
             :default_url => ""
+          do_not_validate_attachment_file_type :file
 
           default_scope order("lower(name) ASC")
 

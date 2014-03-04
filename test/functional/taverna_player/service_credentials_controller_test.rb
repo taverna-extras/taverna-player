@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -21,13 +21,13 @@ module TavernaPlayer
     end
 
     test "should route to service credentials" do
-      assert_routing "/service_credentials",
+      assert_routing "#{TavernaPlayer.admin_scope}/service_credentials",
         { :controller => "taverna_player/service_credentials",
           :action => "index" }, {}, {}, "Did not route correctly"
     end
 
     test "should route to a service credential" do
-      assert_routing "/service_credentials/1",
+      assert_routing "#{TavernaPlayer.admin_scope}/service_credentials/1",
         { :controller => "taverna_player/service_credentials",
           :action => "show", :id => "1" }, {}, {}, "Did not route correctly"
     end

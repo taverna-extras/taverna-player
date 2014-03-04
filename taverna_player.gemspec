@@ -34,20 +34,21 @@ Gem::Specification.new do |s|
   s.test_files  = `git ls-files -- test/*`.split("\n")
 
   s.add_dependency "rails", "~> 3.2.12"
-  s.add_dependency "jquery-rails", "~> 3.0.4"
-  s.add_dependency "paperclip", "~> 3.4.1"
+  s.add_dependency "jquery-rails", "~> 3.0"
+  s.add_dependency "paperclip", "~> 4.1"
   s.add_dependency "t2-server", "~> 1.0.0"
-  s.add_dependency "delayed_job_active_record", "~> 0.4.3"
+  s.add_dependency "delayed_job_active_record", "~> 4.0"
   s.add_dependency "daemons", "~> 1.1.9"
   s.add_dependency "rubyzip", "~> 0.9.9"
-  s.add_dependency "coderay", "~> 1.0.9"
+  s.add_dependency "coderay", "~> 1.1"
   s.add_dependency "rails_autolink", "~> 1.1.0"
   s.add_dependency "require_all", "~> 1.3.1"
-  s.add_dependency "jbuilder", "~> 1.5.2"
+  s.add_dependency "jbuilder", "~> 2.0"
   s.add_dependency "pmrpc-rails", "~> 1.0.0"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "coveralls"
+  s.add_development_dependency "flexmock", "~> 1.3"
 
   s.require_path = "lib"
 end
