@@ -172,6 +172,26 @@ module TavernaPlayer
       refute assigns(:run).user_id.nil?, "Run should have a user_id"
     end
 
+    test "should create inputs along with run" do
+      assert_difference("Run.count") do
+        assert_difference("RunPort.count") do
+          post :create, :run => { :workflow_id => workflows(:three).id,
+                                  :inputs_attributes => [{:value => 'test', :name => 'IN'}]
+          }
+        end
+      end
+
+      assert_redirected_to run_path(assigns(:run)),
+        "Did not redirect correctly"
+      assert_equal "Run was successfully created.", flash[:notice],
+        "Incorrect or missing flash notice"
+      assert assigns(:run).valid?, "Created run was invalid"
+      refute assigns(:run).user_id.nil?, "Run should have a user_id"
+
+      assert_equal 1, assigns(:run).inputs.size
+      assert_equal 'test', assigns(:run).inputs.first.value
+    end
+
     test "should create embedded run via browser" do
       assert_difference("Run.count") do
         post :create,

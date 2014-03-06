@@ -160,6 +160,10 @@ module TavernaPlayer
           end
         end
 
+        def value=(v)
+          self[:value] = v.force_encoding("BINARY")
+        end
+
         def path(*indices)
           index = [*indices].flatten
           path = index.empty? ? "" : "/" + index.join("/")
