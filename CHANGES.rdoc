@@ -1,5 +1,52 @@
 = Changes log for Taverna Player
 
+== Version 0.6.0
+
+* [TAV-485] Set up separate worker integration test.
+* [TAV-469] Fix notification interactions.
+* Delete cancelled runs rake task not working.
+* [TAV-495] Stop interactions from changing the document title.
+* [TAV-493] Namespace preset values for embedded runs.
+* Setup Travis-CI.
+* Add a travis badge to the readme.
+* Add Coveralls integration to the tests.
+* Allow configuration of the delayed_job queue name.
+* Update tests to properly test all callback code.
+* Add documentation for the job_queue_name option.
+* [TAV-496] Allow workflow file to be passed in to worker.
+* Guard against missing input presets in embedded view.
+* Add a job queue listing page.
+* Move admin type resources into their own namespace.
+* [TAV-485] Better tests for the worker code.
+* [TAV-485] Ensure run is backed-off before starting.
+* [TAV-485] Ensure run is backed-off before creation.
+* [TAV-485] Test a failing run.
+* [TAV-485] Test a cancelled run.
+* Add a coveralls badge to the readme.
+* Factor out the worker failure handler.
+* Add a worker test for failure within the failure callback.
+* Add a worker test for failure within the cancelled callback.
+* Assert that there is a run failure message on failure.
+* Add a worker test for failure within the pre_run callback.
+* Add a worker test for failure within the post_run callback.
+* [TAV-457] Add I18n file for run status messages.
+* [TAV-457] Install the locale file in the install generator.
+* Don't save translated run status message in the database.
+* Use the locale file for validation error message.
+* [TAV-499] Clean up timed out runs properly.
+* Update missed translation keys in the installed locale file.
+* Update the coderay dependency.
+* Update the delayed_job dependency.
+* Update Paperclip dependency.
+* Update the JBuilder dependency.
+* Allow use of latest jquery-rails gem.
+* Factor out running callbacks in the worker.
+* Simplified method of choosing which layout to use
+* Force input data to be treated as binary initially.
+* Add tests for small non-ascii/utf-8 values.
+* Make the controller dependency chain more explicit.
+* Added test to see if input RunPorts are created along with the run
+
 == Version 0.5.0
 
 * [TAV-480] Refactor output port downloading.
