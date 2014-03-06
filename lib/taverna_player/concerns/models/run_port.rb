@@ -64,9 +64,10 @@ module TavernaPlayer
             v = self[:value]
 
             if !v.blank? && v.size > MAXIMUM_DATABASE_VALUE_SIZE
-              self[:value] = v[0...MAXIMUM_DATABASE_VALUE_SIZE]
+              self[:value] = v[0...MAXIMUM_DATABASE_VALUE_SIZE].force_encoding("UTF-8")
               save_value_to_file(v)
             else
+              self[:value] = v.force_encoding("UTF-8")
               self.file = nil unless file.path.blank?
             end
           end
