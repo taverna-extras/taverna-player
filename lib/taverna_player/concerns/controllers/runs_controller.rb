@@ -239,7 +239,9 @@ module TavernaPlayer
         def run_params
           params.require(:run).permit(:create_time, :delayed_job, :embedded, :finish_time,
                                       :inputs_attributes, :log, :name, :parent_id, :results, :run_id,
-                                      :start_time, :status_message_key, :user_id, :workflow_id)
+                                      :start_time, :status_message_key, :user_id, :workflow_id,
+                                      :inputs_attributes => [:depth, :file, :metadata, :name, :value]
+          )
         end
 
       end
