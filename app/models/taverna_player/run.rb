@@ -36,8 +36,8 @@ module TavernaPlayer
     # :call-seq:
     #   complete? -> boolean
     #
-    # Is this run complete? If a run is finished or cancelled or failed then
-    # it is complete.
+    # Is this run complete? If a run is finished or cancelled or failed or
+    # has timed out then it is complete.
 
     ##
     # :method: embedded?
@@ -111,7 +111,14 @@ module TavernaPlayer
     #   state -> symbol
     #
     # The state of this run. Possible states are :pending, :initialized,
-    # :running, :finished, :cancelled or :failed.
+    # :running, :finished, :cancelled, :timeout or :failed.
+
+    ##
+    # :method: timeout?
+    # :call-seq:
+    #   timeout? -> boolean
+    #
+    # Did this run timeout?
 
   end
 end
