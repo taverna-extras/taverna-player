@@ -1,5 +1,7 @@
 json.partial! "info", :run => @run
 
+json.status_message @run.status_message
+
 json.partial! "inputs", :inputs => @run.inputs
 
 if @run.outputs.size > 0
