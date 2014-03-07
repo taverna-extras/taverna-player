@@ -1,3 +1,5 @@
 json.partial! "info", :run => @run
 
-json.partial! "inputs", :inputs => @run.inputs
+json.inputs @run.inputs do |input|
+  json.partial! "port", :port => input
+end
