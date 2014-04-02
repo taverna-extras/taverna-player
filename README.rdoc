@@ -687,7 +687,7 @@ running:
   https://example.com:8443/
 
 The above example shows a https server running on port 8443. If the service is
-on port 80 for http or port 443 for https then you don’t need to specify the
+on port 80 for http or port 443 for https then you don't need to specify the
 port.
 
 If there are services on the same host that require different credentials then
