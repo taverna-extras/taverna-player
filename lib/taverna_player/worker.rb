@@ -241,8 +241,10 @@ module TavernaPlayer
         tmp_file_name = File.join(tmp_dir, "log.txt")
         begin
           run.log(tmp_file_name)
-          @run.log = File.new(tmp_file_name)
-          @run.save
+          unless File.zero? tmp_file_name
+            @run.log = File.new(tmp_file_name)
+            @run.save
+          end
         rescue T2Server::AttributeNotFoundError
           # We don't care if there's no log but we do want to catch the error!
         end
