@@ -712,6 +712,12 @@ it is rserve:
 
   rserve://example.com:6311
 
+== The Taverna Player API
+
+There is more information about how you can more closely integrate Taverna
+Player into your host application in the
+{API Documentation}[http://mygrid.github.io/taverna-player].
+
 == Using Taverna Player as a Web Service
 
 As well as providing HTML views to the host application, Taverna Player also
