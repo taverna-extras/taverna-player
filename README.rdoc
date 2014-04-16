@@ -737,7 +737,6 @@ In no particular order:
 * Comprehensive Taverna Server administration panel. This would allow admin
   users to view and manage runs directly on the Taverna Server along with
   other such admin tasks.
-* I18n support.
 * oEmbed support (see http://oembed.com/ for more details).
 
 == Support
