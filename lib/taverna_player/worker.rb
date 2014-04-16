@@ -25,6 +25,13 @@ module TavernaPlayer
     def initialize(run, workflow_file = nil)
       @run = run
       @workflow = workflow_file || TavernaPlayer.workflow_proxy.file(@run.workflow)
+      @server = "Run not yet initialized"
+    end
+
+    # Return the server address that this worker is using. Used mainly for
+    # testing.
+    def server
+      @server.to_s
     end
 
     # This tells delayed_job to only try and complete each run once.
@@ -37,13 +44,12 @@ module TavernaPlayer
 
       status_message("connect")
 
-      server_uri = URI.parse(TavernaPlayer.server_address)
-      credentials = T2Server::HttpBasic.new(TavernaPlayer.server_username,
-        TavernaPlayer.server_password)
+      @server = URI.parse(ENV["TAVERNA_URI"] || TavernaPlayer.server_address)
+      credentials = server_credentials
       conn_params = TavernaPlayer.server_connection
 
       begin
-        server = T2Server::Server.new(server_uri, conn_params)
+        server = T2Server::Server.new(@server, conn_params)
         wkf = File.read(@workflow)
 
         # Try and create the run bearing in mind that the server might be at
@@ -199,6 +205,20 @@ module TavernaPlayer
 
     private
 
+    # Get the credentials for the server
+    def server_credentials
+      creds = ENV["TAVERNA_CREDENTIALS"]
+
+      if creds.nil?
+        user = TavernaPlayer.server_username
+        pass = TavernaPlayer.server_password
+      else
+        user, pass = creds.split(':')
+      end
+
+      T2Server::HttpBasic.new(user, pass)
+    end
+
     # Run the specified callback and return false on error so that we know to
     # return out of the worker code completely.
     def run_callback(cb, message)
@@ -221,8 +241,10 @@ module TavernaPlayer
         tmp_file_name = File.join(tmp_dir, "log.txt")
         begin
           run.log(tmp_file_name)
-          @run.log = File.new(tmp_file_name)
-          @run.save
+          unless File.zero? tmp_file_name
+            @run.log = File.new(tmp_file_name)
+            @run.save
+          end
         rescue T2Server::AttributeNotFoundError
           # We don't care if there's no log but we do want to catch the error!
         end
