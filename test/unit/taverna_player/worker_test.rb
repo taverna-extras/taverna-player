@@ -16,12 +16,14 @@ require 'test_helper'
 class WorkerTest < ActiveSupport::TestCase
   include FlexMock::TestCase
 
+  SERVER_ADDRESS = "http://localhost:1111/taverna"
+
   setup do
     @noop_callback = Proc.new { }
 
     # Taverna Server config that we need to set here for Travis, etc.
     TavernaPlayer.setup do |config|
-      config.server_address = "http://localhost:1111/taverna"
+      config.server_address = SERVER_ADDRESS
       config.server_username = "taverna"
       config.server_password = "taverna"
       config.server_poll_interval = 0
@@ -45,6 +47,40 @@ class WorkerTest < ActiveSupport::TestCase
 
   test "max attempts should be 1" do
     assert_equal 1, @worker.max_attempts, "Max attempts was not 1."
+  end
+
+  test "server address not set to a uri initially" do
+    assert_raise(URI::InvalidURIError) do
+      URI.parse(@worker.server)
+    end
+  end
+
+  test "server address from config" do
+    # Stub the creation of a run on a Taverna Server so it fails.
+    flexmock(T2Server::Server).new_instances do |s|
+      s.should_receive(:initialize_run).once.
+        and_raise(RuntimeError)
+    end
+
+    @worker.perform
+
+    assert_equal SERVER_ADDRESS, @worker.server.to_s,
+      "Server address not read from config."
+  end
+
+  test "server address from env" do
+    ENV["TAVERNA_URI"] = "https://localhost:8080/taverna"
+
+    # Stub the creation of a run on a Taverna Server so it fails.
+    flexmock(T2Server::Server).new_instances do |s|
+      s.should_receive(:initialize_run).once.
+        and_raise(RuntimeError)
+    end
+
+    @worker.perform
+
+    assert_equal ENV["TAVERNA_URI"], @worker.server.to_s,
+      "Server address not read from env."
   end
 
   test "run a workflow" do
