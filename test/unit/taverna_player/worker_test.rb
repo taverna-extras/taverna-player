@@ -54,7 +54,7 @@ class WorkerTest < ActiveSupport::TestCase
     end
   end
 
-  test "server address from config" do
+  test "server address and creds from config" do
     # Stub the creation of a run on a Taverna Server so it fails.
     flexmock(T2Server::Server).new_instances do |s|
       s.should_receive(:initialize_run).once.
@@ -67,8 +67,9 @@ class WorkerTest < ActiveSupport::TestCase
       "Server address not read from config."
   end
 
-  test "server address from env" do
+  test "server address and creds from env" do
     ENV["TAVERNA_URI"] = "https://localhost:8080/taverna"
+    ENV["TAVERNA_CREDENTIALS"] = "taverna:taverna"
 
     # Stub the creation of a run on a Taverna Server so it fails.
     flexmock(T2Server::Server).new_instances do |s|
