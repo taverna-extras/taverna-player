@@ -37,7 +37,6 @@ class WorkerTest < ActiveSupport::TestCase
     # Stuff we can't test yet in TavernaPlayer::Worker.
     flexmock(TavernaPlayer::Worker).new_instances do |w|
       w.should_receive(:download_outputs).and_return_undefined
-      w.should_receive(:download_log).and_return_undefined
       w.should_receive(:process_outputs).and_return([])
     end
 
@@ -55,7 +54,7 @@ class WorkerTest < ActiveSupport::TestCase
     end
   end
 
-  test "server address from config" do
+  test "server address and creds from config" do
     # Stub the creation of a run on a Taverna Server so it fails.
     flexmock(T2Server::Server).new_instances do |s|
       s.should_receive(:initialize_run).once.
@@ -68,8 +67,9 @@ class WorkerTest < ActiveSupport::TestCase
       "Server address not read from config."
   end
 
-  test "server address from env" do
+  test "server address and creds from env" do
     ENV["TAVERNA_URI"] = "https://localhost:8080/taverna"
+    ENV["TAVERNA_CREDENTIALS"] = "taverna:taverna"
 
     # Stub the creation of a run on a Taverna Server so it fails.
     flexmock(T2Server::Server).new_instances do |s|
@@ -101,6 +101,7 @@ class WorkerTest < ActiveSupport::TestCase
       r.should_receive(:start_time).and_return(Time.now)
       r.should_receive(:notifications).and_return([])
       r.should_receive(:finish_time).and_return(Time.now)
+      r.should_receive(:log).once.and_return(0)
       r.should_receive(:delete).and_return_undefined
     end
 

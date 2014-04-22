@@ -246,8 +246,9 @@ module TavernaPlayer
       Dir.mktmpdir(run.id, Rails.root.join("tmp")) do |tmp_dir|
         tmp_file_name = File.join(tmp_dir, "log.txt")
         begin
-          run.log(tmp_file_name)
-          unless File.zero? tmp_file_name
+          # Only save the log file if it's not empty so as not to confuse
+          # Paperclip
+          unless run.log(tmp_file_name) == 0
             @run.log = File.new(tmp_file_name)
             @run.save
           end
