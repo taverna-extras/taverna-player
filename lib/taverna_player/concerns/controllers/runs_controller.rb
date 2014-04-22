@@ -146,7 +146,7 @@ module TavernaPlayer
             flash[:notice] = "Run was deleted."
             respond_with(@run)
           else
-            flash[:error] = "Run must be cancelled before deletion."
+            flash[:alert] = "Run must be cancelled before deletion."
             respond_with(@run, :nothing => true, :status => :forbidden) do |format|
               format.html { redirect_to :back }
             end

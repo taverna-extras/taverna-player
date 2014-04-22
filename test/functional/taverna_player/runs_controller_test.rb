@@ -244,7 +244,7 @@ module TavernaPlayer
           delete :destroy, :id => @run1, :use_route => :taverna_player
       end
 
-      assert_equal "Run must be cancelled before deletion.", flash[:error],
+      assert_equal "Run must be cancelled before deletion.", flash[:alert],
         "Incorrect or missing flash notice"
       assert_response :redirect, "Response was not a redirect"
       assert_redirected_to runs_path, "Did not redirect correctly"
@@ -256,7 +256,7 @@ module TavernaPlayer
           delete :destroy, :id => @run1, :format => :json
       end
 
-      assert_equal "Run must be cancelled before deletion.", flash[:error],
+      assert_equal "Run must be cancelled before deletion.", flash[:alert],
         "Incorrect or missing flash notice"
       assert_response :forbidden, "Response was not forbidden"
     end
