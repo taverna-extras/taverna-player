@@ -126,11 +126,18 @@ module TavernaPlayer
         # POST /runs
         def create
           @run = Run.new(params[:run])
+
+          # Set workflow, just in case the create fails and needs to redirect
+          # back to the form
+          @workflow = @run.workflow
+
           if @run.save
             flash[:notice] = "Run was successfully created."
+            respond_with(@run, :status => :created, :location => @run)
+          else
+            flash[:alert] = "Run was not successfully created."
+            respond_with(@run)
           end
-
-          respond_with(@run, :status => :created, :location => @run)
         end
 
         # PUT /runs/1
@@ -146,7 +153,7 @@ module TavernaPlayer
             flash[:notice] = "Run was deleted."
             respond_with(@run)
           else
-            flash[:error] = "Run must be cancelled before deletion."
+            flash[:alert] = "Run must be cancelled before deletion."
             respond_with(@run, :nothing => true, :status => :forbidden) do |format|
               format.html { redirect_to :back }
             end
