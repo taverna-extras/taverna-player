@@ -161,6 +161,15 @@ module TavernaPlayer
         "Did not render with the correct layout"
     end
 
+    test "should fail to create run via browser" do
+      assert_no_difference("Run.count") do
+        post :create, :run => { :workflow_id => @workflow.id, :name => nil }
+      end
+
+      assert_equal "Run was not successfully created.", flash[:alert],
+        "Incorrect or missing flash notice"
+    end
+
     test "should create run via browser" do
       assert_difference("Run.count") do
         post :create, :run => { :workflow_id => @workflow.id }
