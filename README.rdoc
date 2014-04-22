@@ -154,8 +154,8 @@ And everything should be found by the asset pipeline automatically.
 Make sure you have flash messages in your main layout
 (usually <tt>app/views/layouts/application.html.erb</tt>). For example:
 
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
+  <p id="notice"><%= notice %></p>
+  <p id="alert"><%= alert %></p>
 
 Taverna Player uses delayed_job to run workflows on a Taverna Server. If your
 application is not already using delayed_job then you can install the
