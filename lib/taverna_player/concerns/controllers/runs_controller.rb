@@ -29,7 +29,6 @@ module TavernaPlayer
           before_filter :find_port, :only => [ :download_input, :download_output, :input, :output ]
           before_filter :setup_new_run, :only => :new
           before_filter :set_run_user, :only => :create
-          before_filter :filter_update_parameters, :only => :update
           before_filter :find_interaction, :only => [ :read_interaction, :write_interaction ]
 
           private
@@ -66,11 +65,6 @@ module TavernaPlayer
             end
           end
 
-          def filter_update_parameters
-            name = params[:run][:name]
-            @update_parameters = { :name => name } unless name.blank?
-          end
-
           def find_interaction
             @interaction = Interaction.find_by_run_id_and_serial(@run.id, params[:serial])
           end
@@ -83,6 +77,18 @@ module TavernaPlayer
 
             type = @port.depth == 0 ? @port.value_type : "application/zip"
             send_data @port.value, :type => type, :filename => @port.filename
+          end
+
+          def run_params
+            params.require(:run).permit(:create_time, :delayed_job, :embedded, :finish_time,
+                                        :inputs_attributes, :log, :name, :parent_id, :results, :run_id,
+                                        :start_time, :status_message_key, :user_id, :workflow_id,
+                                        :inputs_attributes => [:depth, :file, :metadata, :name, :value]
+            )
+          end
+
+          def update_params
+            params.require(:run).permit(:name)
           end
 
         end # included
@@ -135,7 +141,7 @@ module TavernaPlayer
 
         # PUT /runs/1
         def update
-          @run.update_attributes(@update_parameters)
+          @run.update_attributes(update_params)
 
           respond_with(@run)
         end
@@ -232,16 +238,6 @@ module TavernaPlayer
           @interaction.save
 
           render :nothing => true, :status => 201
-        end
-
-        private
-
-        def run_params
-          params.require(:run).permit(:create_time, :delayed_job, :embedded, :finish_time,
-                                      :inputs_attributes, :log, :name, :parent_id, :results, :run_id,
-                                      :start_time, :status_message_key, :user_id, :workflow_id,
-                                      :inputs_attributes => [:depth, :file, :metadata, :name, :value]
-          )
         end
 
       end

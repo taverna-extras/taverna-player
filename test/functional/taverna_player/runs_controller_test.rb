@@ -292,7 +292,6 @@ module TavernaPlayer
     test "should update run name via browser" do
       put :update, :id => @run1, :run => { :name => "New name" }
       assert_not_nil assigns(:run), "Did not assign a valid run instance"
-      assert_not_nil assigns(:update_parameters), "Did not filter params"
       assert_equal "New name", assigns(:run).name, "Run name not updated"
       assert_response :redirect, "Response was not a redirect"
       assert_redirected_to run_path(assigns(:run)),
@@ -303,7 +302,6 @@ module TavernaPlayer
       put :update, :id => @run1,
         :run => { :name => "New name", :run_id => "New id" }
       assert_not_nil assigns(:run), "Did not assign a valid run instance"
-      assert_not_nil assigns(:update_parameters), "Did not filter params"
       assert_equal "New name", assigns(:run).name, "Run name not updated"
       assert_not_equal "New id", assigns(:run).run_id, "Run ID updated"
       assert_response :redirect, "Response was not a redirect"
@@ -314,7 +312,6 @@ module TavernaPlayer
     test "should filter update parameters correctly" do
       put :update, :id => @run1, :run => { :run_id => "New id" }
       assert_not_nil assigns(:run), "Did not assign a valid run instance"
-      assert_nil assigns(:update_parameters), "Did not filter params"
       assert_not_equal "New id", assigns(:run).run_id, "Run ID updated"
       assert_response :redirect, "Response was not a redirect"
       assert_redirected_to run_path(assigns(:run)),
@@ -325,7 +322,6 @@ module TavernaPlayer
       put :update, :id => @run1, :run => { :name => "New name" },
         :format => :json
       assert_not_nil assigns(:run), "Did not assign a valid run instance"
-      assert_not_nil assigns(:update_parameters), "Did not filter params"
       assert_equal "New name", assigns(:run).name, "Run name not updated"
       assert_response :success, "Response was not success"
     end
