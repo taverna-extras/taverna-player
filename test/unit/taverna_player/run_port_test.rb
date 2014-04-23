@@ -478,5 +478,23 @@ module TavernaPlayer
         "Incorrect filename generated"
       refute @port7.filename.ends_with?(".zip"), "Filename has 'zip' suffix"
     end
+
+    test "non-standard extensions for plain text files on input ports" do
+      file = fixture_file_upload "/files/plain-text.bad-extension"
+      assert_difference("RunPort::Input.count", 1, "Port was not created") do
+        port = RunPort::Input.create(:name => "test_port", :file => file)
+        assert port.valid?, "Port is invalid"
+        refute port.file.blank?, "File should be present"
+      end
+    end
+
+    test "non-standard extensions for plain text files on output ports" do
+      file = fixture_file_upload "/files/plain-text.bad-extension"
+      assert_difference("RunPort::Output.count", 1, "Port was not created") do
+        port = RunPort::Output.create(:name => "test_port", :file => file)
+        assert port.valid?, "Port is invalid"
+        refute port.file.blank?, "File should be present"
+      end
+    end
   end
 end

@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
     "Workflows using Taverna Server. Taverna Player surfaces a workflow in "\
     "three ways: As a Web interface in the browser; As an embeddable widget "\
     "to be included in any other Web page; As a REST-based Web Service. All "\
-    "three modes provide functionality to fully configure a workflow’s "\
+    "three modes provide functionality to fully configure a workflow's "\
     "inputs; run the workflow on a Taverna Server; collect workflow outputs, "\
     "logs and messages; and present the results in an appropriate manner."
   s.license     = "BSD"

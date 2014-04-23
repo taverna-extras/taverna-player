@@ -154,8 +154,8 @@ And everything should be found by the asset pipeline automatically.
 Make sure you have flash messages in your main layout
 (usually <tt>app/views/layouts/application.html.erb</tt>). For example:
 
-  <p class="notice"><%= notice %></p>
-  <p class="alert"><%= alert %></p>
+  <p id="notice"><%= notice %></p>
+  <p id="alert"><%= alert %></p>
 
 Taverna Player uses delayed_job to run workflows on a Taverna Server. If your
 application is not already using delayed_job then you can install the
@@ -687,7 +687,7 @@ running:
   https://example.com:8443/
 
 The above example shows a https server running on port 8443. If the service is
-on port 80 for http or port 443 for https then you don’t need to specify the
+on port 80 for http or port 443 for https then you don't need to specify the
 port.
 
 If there are services on the same host that require different credentials then
@@ -712,6 +712,18 @@ it is rserve:
 
   rserve://example.com:6311
 
+== The Taverna Player API
+
+There is more information about how you can more closely integrate Taverna
+Player into your host application in the
+{API Documentation}[http://mygrid.github.io/taverna-player].
+
+== Using Taverna Player as a Web Service
+
+As well as providing HTML views to the host application, Taverna Player also
+provides a RESTful Web Service interface. Documentation for this interface
+{is available separately}[https://github.com/myGrid/taverna-player/wiki/JSON-API-Documentation].
+
 == Limitations and to-do list
 
 The most serious limitation is with the Service Credentials. Because Taverna
@@ -731,13 +743,10 @@ moment.
 
 In no particular order:
 
-* Taverna Player as a service. Allow usage of Taverna Player via a fully
-  RESTful interface with JSON and XML support (in progress).
 * User specific (and therefore private) credentials wallet for secure services.
 * Comprehensive Taverna Server administration panel. This would allow admin
   users to view and manage runs directly on the Taverna Server along with
   other such admin tasks.
-* I18n support.
 * oEmbed support (see http://oembed.com/ for more details).
 
 == Support
