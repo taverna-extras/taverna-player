@@ -718,6 +718,13 @@ There is more information about how you can more closely integrate Taverna
 Player into your host application in the
 {API Documentation}[http://mygrid.github.io/taverna-player].
 
+== Embedding a workflow into another Web site
+
+Workflow runs handled by Taverna Player can be embedded in other Web sites in
+much the same way that media like YouTube videos can be. Documentation on how
+to achieve this
+{is available separately[https://github.com/myGrid/taverna-player/wiki/Embedding].
+
 == Using Taverna Player as a Web Service
 
 As well as providing HTML views to the host application, Taverna Player also
