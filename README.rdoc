@@ -6,9 +6,9 @@ URL::         http://www.taverna.org.uk
 Licence::     BSD (See LICENCE or http://www.opensource.org/licenses/bsd-license.php)
 Copyright::   (c) 2013, 2014 The University of Manchester, UK
 
-{<img src="https://badge.fury.io/rb/taverna-player.png" alt="Gem Version" />}[http://badge.fury.io/rb/taverna-player]
+{<img src="https://badge.fury.io/rb/taverna-player.svg" alt="Gem Version" />}[http://badge.fury.io/rb/taverna-player]
 {<img src="https://codeclimate.com/github/myGrid/taverna-player.png" />}[https://codeclimate.com/github/myGrid/taverna-player]
-{<img src="https://travis-ci.org/myGrid/taverna-player.png?branch=master" alt="Build Status" />}[https://travis-ci.org/myGrid/taverna-player]
+{<img src="https://travis-ci.org/myGrid/taverna-player.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/myGrid/taverna-player]
 {<img src="https://coveralls.io/repos/myGrid/taverna-player/badge.png?branch=master" alt="Coverage Status" />}[https://coveralls.io/r/myGrid/taverna-player?branch=master]
 
 == Synopsis
