@@ -1,5 +1,24 @@
 = Changes log for Taverna Player
 
+== Version 0.7.0
+
+* Refactor full run JSON output.
+* Improve the runs/new JSON output.
+* Add more interaction fields to the JSON output.
+* Fix non-ASCII character in gemspec info.
+* Fix non-ASCII character in README.
+* [TAV-508] Allow workers to run against different servers.
+* [TAV-511] Don't save run log if it's an empty file.
+* Add note about JSON interface to the Readme.
+* Add a note about the API Docs to the Readme.
+* Rework the testing of an empty log file for better testing.
+* Add tests for taverna credentials in env variable.
+* [TAV-512] Fix overzealous file extension restrictions for inputs.
+* Add an alert flash to the test layout.
+* Use flash[:alert] not flash[:error].
+* Recover from failed run creation more gracefully.
+* Bump version of t2-server gem we are using.
+
 == Version 0.6.0
 
 * [TAV-485] Set up separate worker integration test.
