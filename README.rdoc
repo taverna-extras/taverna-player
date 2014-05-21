@@ -26,6 +26,12 @@ It, purposefully, does not:
 * Manage workflows
 * Manage users
 
+== Prerequisites
+
+Taverna Player requires access to a
+{Taverna Server}[http://www.taverna.org.uk/download/server/2-5/] version 2.5
+or later.
+
 == Getting started
 
 These instructions assume that you are familiar with Rails and its concepts.
