@@ -307,7 +307,7 @@ module TavernaPlayer
 
     def status_message(key)
       @run.status_message_key = key
-      @run.save!
+      @run.save
     end
 
     def cancelled?
