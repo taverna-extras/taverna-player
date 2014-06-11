@@ -208,6 +208,39 @@ class WorkerTest < ActiveSupport::TestCase
     assert_equal :cancelled, @run.state, "Final run state not ':cancelled'"
   end
 
+  test "run cancelled while running" do
+    # Stub the creation of a run on a Taverna Server.
+    flexmock(T2Server::Server).new_instances do |s|
+      s.should_receive(:initialize_run).once.
+        and_return(URI.parse("http://localhost/run/03"))
+    end
+
+    # Stub the Taverna Server run calls.
+    flexmock(T2Server::Run).new_instances do |r|
+      r.should_receive(:status).times(3).and_return(:initialized, :running, :running)
+      r.should_receive(:create_time).and_return(Time.now)
+      r.should_receive(:add_password_credential).and_return(true)
+      r.should_receive(:name=).once.and_return(true)
+      r.should_receive(:start).and_return(true)
+      r.should_receive(:start_time).and_return(Time.now)
+      r.should_receive(:log).once.and_return(0)
+      r.should_receive(:delete).and_return_undefined
+    end
+
+    # Stub the TavernaPlayer::Worker.cancelled? method and set the internal
+    # run model state stop to true.
+    worker = TavernaPlayer::Worker.new(@run)
+    flexmock(worker).should_receive(:cancelled?).once.and_return(true)
+    @run.stop = true
+    @run.save
+
+    assert_equal :pending, @run.state, "Initial run state not ':pending'"
+
+    worker.perform
+
+    assert_equal :cancelled, @run.state, "Final run state not ':cancelled'"
+  end
+
   test "fail in cancelled callback" do
     # Stub the creation of a run on a Taverna Server with a failure.
     flexmock(T2Server::Server).new_instances do |s|
