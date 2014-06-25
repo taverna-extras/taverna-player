@@ -26,6 +26,20 @@ It, purposefully, does not:
 * Manage workflows
 * Manage users
 
+== Prerequisites
+
+Taverna Player requires access to a
+{Taverna Server}[http://www.taverna.org.uk/download/server/2-5/] version 2.5
+or later.
+
+== A note about rubyzip
+
+This library uses the new {rubyzip}[https://rubygems.org/gems/rubyzip] API. If
+your code, or any of its dependencies, need the old API then please read the
+<em>Important note</em> in the
+{rubyzip ReadMe}[https://github.com/rubyzip/rubyzip/blob/master/README.md] for
+details of how to get everything working together.
+
 == Getting started
 
 These instructions assume that you are familiar with Rails and its concepts.

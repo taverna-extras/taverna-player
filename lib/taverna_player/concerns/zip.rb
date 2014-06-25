@@ -17,7 +17,7 @@ module TavernaPlayer
       extend ActiveSupport::Concern
 
       def read_file_from_zip(zip, file)
-        ::Zip::ZipFile.open(zip) do |z|
+        ::Zip::File.open(zip) do |z|
           z.read(file)
         end
       end
