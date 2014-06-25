@@ -1,5 +1,12 @@
 = Changes log for Taverna Player
 
+== Version 0.8.0
+
+* Add a note about Taverna Server compatibility to the ReadMe.
+* [SERVINF-457] Clear "waiting for user input" message.
+* Remove odd save! in worker code.
+* Move to use the rubyzip 1.0 API.
+
 == Version 0.7.0
 
 * Refactor full run JSON output.
