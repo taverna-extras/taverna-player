@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>CHANGES - Taverna Player</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body class="file">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="./CHANGES_rdoc.html">CHANGES</a>
+  
+    <li class="file"><a href="./LICENCE_rdoc.html">LICENCE</a>
+  
+    <li class="file"><a href="./README_rdoc.html">README</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./TavernaPlayer.html">TavernaPlayer</a>
+  
+    <li><a href="./TavernaPlayer/ApplicationHelper.html">TavernaPlayer::ApplicationHelper</a>
+  
+    <li><a href="./TavernaPlayer/PortRenderer.html">TavernaPlayer::PortRenderer</a>
+  
+    <li><a href="./TavernaPlayer/Run.html">TavernaPlayer::Run</a>
+  
+    <li><a href="./TavernaPlayer/RunPort.html">TavernaPlayer::RunPort</a>
+  
+    <li><a href="./TavernaPlayer/RunPort/Input.html">TavernaPlayer::RunPort::Input</a>
+  
+    <li><a href="./TavernaPlayer/RunPort/Output.html">TavernaPlayer::RunPort::Output</a>
+  
+    <li><a href="./TavernaPlayer/ServiceCredential.html">TavernaPlayer::ServiceCredential</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation" class="description">
+  
+<h1 id="label-Changes+log+for+Taverna+Player">Changes log for Taverna Player</h1>
+
+<h2 id="label-Version+0.8.0">Version 0.8.0</h2>
+<ul><li>
+<p>Add a note about Taverna Server compatibility to the ReadMe.</p>
+</li><li><dl class="rdoc-list label-list"><dt>SERVINF-457
+<dd>
+<p>Clear “waiting for user input” message.</p>
+</dd></dl>
+</li><li>
+<p>Remove odd save! in worker code.</p>
+</li><li>
+<p>Move to use the rubyzip 1.0 API.</p>
+</li></ul>
+
+<h2 id="label-Version+0.7.0">Version 0.7.0</h2>
+<ul><li>
+<p>Refactor full run JSON output.</p>
+</li><li>
+<p>Improve the runs/new JSON output.</p>
+</li><li>
+<p>Add more interaction fields to the JSON output.</p>
+</li><li>
+<p>Fix non-ASCII character in gemspec info.</p>
+</li><li>
+<p>Fix non-ASCII character in <a href="README_rdoc.html">README</a>.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-508
+<dd>
+<p>Allow workers to run against different servers.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-511
+<dd>
+<p>Don’t save run log if it’s an empty file.</p>
+</dd></dl>
+</li><li>
+<p>Add note about JSON interface to the Readme.</p>
+</li><li>
+<p>Add a note about the API Docs to the Readme.</p>
+</li><li>
+<p>Rework the testing of an empty log file for better testing.</p>
+</li><li>
+<p>Add tests for taverna credentials in env variable.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-512
+<dd>
+<p>Fix overzealous file extension restrictions for inputs.</p>
+</dd></dl>
+</li><li>
+<p>Add an alert flash to the test layout.</p>
+</li><li>
+<p>Use <a href="http://:alert">flash</a> not <a
+href="http://:error">flash</a>.</p>
+</li><li>
+<p>Recover from failed run creation more gracefully.</p>
+</li><li>
+<p>Bump version of t2-server gem we are using.</p>
+</li></ul>
+
+<h2 id="label-Version+0.6.0">Version 0.6.0</h2>
+<ul><li><dl class="rdoc-list label-list"><dt>TAV-485
+<dd>
+<p>Set up separate worker integration test.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-469
+<dd>
+<p>Fix notification interactions.</p>
+</dd></dl>
+</li><li>
+<p>Delete cancelled runs rake task not working.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-495
+<dd>
+<p>Stop interactions from changing the document title.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-493
+<dd>
+<p>Namespace preset values for embedded runs.</p>
+</dd></dl>
+</li><li>
+<p>Setup Travis-CI.</p>
+</li><li>
+<p>Add a travis badge to the readme.</p>
+</li><li>
+<p>Add Coveralls integration to the tests.</p>
+</li><li>
+<p>Allow configuration of the delayed_job queue name.</p>
+</li><li>
+<p>Update tests to properly test all callback code.</p>
+</li><li>
+<p>Add documentation for the job_queue_name option.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-496
+<dd>
+<p>Allow workflow file to be passed in to worker.</p>
+</dd></dl>
+</li><li>
+<p>Guard against missing input presets in embedded view.</p>
+</li><li>
+<p>Add a job queue listing page.</p>
+</li><li>
+<p>Move admin type resources into their own namespace.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-485
+<dd>
+<p>Better tests for the worker code.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-485
+<dd>
+<p>Ensure run is backed-off before starting.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-485
+<dd>
+<p>Ensure run is backed-off before creation.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-485
+<dd>
+<p>Test a failing run.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-485
+<dd>
+<p>Test a cancelled run.</p>
+</dd></dl>
+</li><li>
+<p>Add a coveralls badge to the readme.</p>
+</li><li>
+<p>Factor out the worker failure handler.</p>
+</li><li>
+<p>Add a worker test for failure within the failure callback.</p>
+</li><li>
+<p>Add a worker test for failure within the cancelled callback.</p>
+</li><li>
+<p>Assert that there is a run failure message on failure.</p>
+</li><li>
+<p>Add a worker test for failure within the pre_run callback.</p>
+</li><li>
+<p>Add a worker test for failure within the post_run callback.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-457
+<dd>
+<p>Add I18n file for run status messages.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-457
+<dd>
+<p>Install the locale file in the install generator.</p>
+</dd></dl>
+</li><li>
+<p>Don’t save translated run status message in the database.</p>
+</li><li>
+<p>Use the locale file for validation error message.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-499
+<dd>
+<p>Clean up timed out runs properly.</p>
+</dd></dl>
+</li><li>
+<p>Update missed translation keys in the installed locale file.</p>
+</li><li>
+<p>Update the coderay dependency.</p>
+</li><li>
+<p>Update the delayed_job dependency.</p>
+</li><li>
+<p>Update Paperclip dependency.</p>
+</li><li>
+<p>Update the JBuilder dependency.</p>
+</li><li>
+<p>Allow use of latest jquery-rails gem.</p>
+</li><li>
+<p>Factor out running callbacks in the worker.</p>
+</li><li>
+<p>Simplified method of choosing which layout to use</p>
+</li><li>
+<p>Force input data to be treated as binary initially.</p>
+</li><li>
+<p>Add tests for small non-ascii/utf-8 values.</p>
+</li><li>
+<p>Make the controller dependency chain more explicit.</p>
+</li><li>
+<p>Added test to see if input RunPorts are created along with the run</p>
+</li></ul>
+
+<h2 id="label-Version+0.5.0">Version 0.5.0</h2>
+<ul><li><dl class="rdoc-list label-list"><dt>TAV-480
+<dd>
+<p>Refactor output port downloading.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-480
+<dd>
+<p>Add a method to download input ports.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-475
+<dd>
+<p>Add RunPort::value_size= setter.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-475
+<dd>
+<p>Add RunPort::value_type= setter.</p>
+</dd></dl>
+</li><li>
+<p>Use the new metadata setters in the worker code.</p>
+</li><li>
+<p>Add some tests for internal list code.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-482
+<dd>
+<p>Refactor Zip operations into a concern.</p>
+</dd></dl>
+</li><li>
+<p>Fix typo in RunPort#value_is_text? documentation.</p>
+</li><li>
+<p>Add RunPort#value_is_error? method.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-483
+<dd>
+<p>Fix getting error values from deep values.</p>
+</dd></dl>
+</li><li>
+<p>Minor fix in RunPort#deep_value.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-484
+<dd>
+<p>RunPort#value returns zipped lists.</p>
+</dd></dl>
+</li><li>
+<p>Add RunPort#filename.</p>
+</li><li>
+<p>Refactor RunsController.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-482
+<dd>
+<p>Refactor worker code to use Zip concern.</p>
+</dd></dl>
+</li></ul>
+
+<h2 id="label-Version+0.4.0">Version 0.4.0</h2>
+<ul><li><dl class="rdoc-list label-list"><dt>TAV-466
+<dd>
+<p>Add port metadata to JSON output.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-472
+<dd>
+<p>Fix port model overriding stubs.</p>
+</dd></dl>
+</li><li>
+<p>Add methods to query a port value’s type.</p>
+</li><li>
+<p>Add a method to get a port value’s size.</p>
+</li><li>
+<p>Add protection for value size and type methods.</p>
+</li><li>
+<p>Check that index lists are not altered.</p>
+</li><li>
+<p>Use the new port value methods in the port renderer.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-473
+<dd>
+<p>Get all values types directly from a port.</p>
+</dd></dl>
+</li></ul>
+
+<h2 id="label-Version+0.3.0">Version 0.3.0</h2>
+<ul><li>
+<p>Refactor callback code out into its own module.</p>
+</li><li>
+<p>Fix classname typo in port model templates.</p>
+</li><li>
+<p>Enable getting deep list outputs from the port models.</p>
+</li><li>
+<p>Add a method to get a route (path) to a port.</p>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-465
+<dd>
+<p>Refactor renderers and add list rendering.</p>
+</dd></dl>
+</li><li>
+<p>Factor out common list handling code for sharing.</p>
+</li><li>
+<p>Rename and re-document renderers.</p>
+</li></ul>
+
+<h2 id="label-Version+0.2.1">Version 0.2.1</h2>
+<ul><li>
+<p>Fix classname typo in port model templates.</p>
+</li></ul>
+
+<h2 id="label-Version+0.2.0">Version 0.2.0</h2>
+<ul><li><dl class="rdoc-list label-list"><dt>TAV-461
+<dd>
+<p>Remove unique_id from the interaction table.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-353
+<dd>
+<p>Optimize table indexing.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-353
+<dd>
+<p>Set inverse relationships in the models.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-353
+<dd>
+<p>Remove unused Paperclip columns.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-462
+<dd>
+<p>Separate out the config for Taverna Server.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-463
+<dd>
+<p>Serialize metadata field on input port.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-464
+<dd>
+<p>Allow RunPort model to be overridden.</p>
+</dd></dl>
+</li><li><dl class="rdoc-list label-list"><dt>TAV-464
+<dd>
+<p>Allow overriding of Input and Output models.</p>
+</dd></dl>
+</li></ul>
+
+<h2 id="label-About+this+CHANGES+file">About this <a href="CHANGES_rdoc.html">CHANGES</a> file</h2>
+
+<p>This file is, at least in part, generated by the following command:</p>
+
+<pre>$ git log --pretty=format:&quot;* %s&quot; --reverse --no-merges &lt;commit-hash&gt;..</pre>
+
+</div>
+
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.2.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
