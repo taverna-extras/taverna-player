@@ -205,10 +205,14 @@ module TavernaPlayer
           state == :failed
         end
 
-        # This is used as a catch-all for finished, cancelled, failed and
-        # timeout
+        def job_failed?
+          !delayed_job.nil? && !delayed_job.failed_at.nil?
+        end
+
+        # This is used as a catch-all for finished, cancelled, failed,
+        # job_failed? and timeout
         def complete?
-          finished? || cancelled? || failed? || timeout?
+          finished? || cancelled? || failed? || job_failed? || timeout?
         end
 
         def has_parent?

@@ -20,6 +20,8 @@ module TavernaPlayer
       @run3 = taverna_player_runs(:three)
       @run4 = taverna_player_runs(:four)
       @run5 = taverna_player_runs(:five)
+      @run8 = taverna_player_runs(:eight)
+      @run9 = taverna_player_runs(:nine)
       @int = taverna_player_interactions(:one)
       @workflow = workflows(:one)
       @routes = TavernaPlayer::Engine.routes
@@ -268,6 +270,28 @@ module TavernaPlayer
       assert_equal "Run must be cancelled before deletion.", flash[:alert],
         "Incorrect or missing flash notice"
       assert_response :forbidden, "Response was not forbidden"
+    end
+
+    test "should not destroy running run with running delayed job" do
+      @request.env["HTTP_REFERER"] = "/runs"
+      assert_no_difference("Run.count", "Run count changed") do
+        delete :destroy, :id => @run8, :use_route => :taverna_player
+      end
+
+      assert_equal "Run must be cancelled before deletion.", flash[:alert],
+        "Incorrect or missing flash notice"
+      assert_response :redirect, "Response was not a redirect"
+      assert_redirected_to runs_path, "Did not redirect correctly"
+    end
+
+    test "should destroy running run with failed delayed job" do
+      @request.env["HTTP_REFERER"] = "/runs"
+      assert_difference("Run.count", -1, "Run count count did not reduce") do
+        delete :destroy, :id => @run9, :use_route => :taverna_player
+      end
+
+      assert_response :redirect, "Response was not a redirect"
+      assert_redirected_to runs_path, "Did not redirect correctly"
     end
 
     test "should cancel run and redirect to index via browser" do

@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -36,8 +36,8 @@ module TavernaPlayer
     # :call-seq:
     #   complete? -> boolean
     #
-    # Is this run complete? If a run is finished or cancelled or failed or
-    # has timed out then it is complete.
+    # Is this run complete? If a run is finished or cancelled or failed or its
+    # underlying worker has failed or it has timed out then it is complete.
 
     ##
     # :method: embedded?
@@ -75,6 +75,14 @@ module TavernaPlayer
     #   has_parent? -> boolean
     #
     # A run will have a parent if it is a child run as part of a sweep.
+
+    ##
+    # :method: job_failed?
+    # :call-seq:
+    #   job_failed? -> boolean
+    #
+    # Did the delayed_job worker running this run fail? This is primarily
+    # intended for internal use only at the moment.
 
     ##
     # :method: name

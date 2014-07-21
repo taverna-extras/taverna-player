@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -102,6 +102,8 @@ module TavernaPlayer
       refute taverna_player_runs(:four).complete?, "Run not complete"
       refute taverna_player_runs(:five).complete?, "Run not complete"
       assert taverna_player_runs(:six).complete?, "Run is complete"
+      refute taverna_player_runs(:eight).complete?, "Run not complete"
+      assert taverna_player_runs(:nine).complete?, "Run is complete"
     end
 
     test "a parent cannot be younger than its child" do
@@ -191,6 +193,26 @@ module TavernaPlayer
       # Reload child state
       run.reload
       assert_nil run.parent_id, "Child run still has a parent"
+    end
+
+    test "delayed job state affects run state" do
+      assert taverna_player_runs(:eight).running?, "Run should be running"
+      assert taverna_player_runs(:nine).running?, "Run should be running"
+
+      refute taverna_player_runs(:eight).job_failed?, "Job has not failed"
+      assert taverna_player_runs(:nine).job_failed?, "Job has failed"
+    end
+
+    test "can delete running run with failed delayed job" do
+      assert_difference("Run.count", -1) do
+        taverna_player_runs(:nine).destroy
+      end
+    end
+
+    test "cannot delete running run with running delayed job" do
+      assert_no_difference("Run.count") do
+        taverna_player_runs(:eight).destroy
+      end
     end
   end
 end
