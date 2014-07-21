@@ -85,6 +85,7 @@ module TavernaPlayer
           after_create :populate_child_inputs, :if => :has_parent?
           after_create :enqueue
           before_destroy :complete?
+          after_destroy :destroy_failed_delayed_jobs
 
           private
 
@@ -111,6 +112,10 @@ module TavernaPlayer
             worker = TavernaPlayer::Worker.new(self)
             job = Delayed::Job.enqueue worker, :queue => TavernaPlayer.job_queue_name
             update_attributes(:delayed_job => job, :status_message_key => "pending")
+          end
+
+          def destroy_failed_delayed_jobs
+            delayed_job.destroy unless delayed_job.nil?
           end
 
         end # included

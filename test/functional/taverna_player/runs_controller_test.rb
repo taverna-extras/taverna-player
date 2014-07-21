@@ -274,8 +274,9 @@ module TavernaPlayer
 
     test "should not destroy running run with running delayed job" do
       @request.env["HTTP_REFERER"] = "/runs"
-      assert_no_difference("Run.count", "Run count changed") do
-        delete :destroy, :id => @run8, :use_route => :taverna_player
+      assert_no_difference(["Run.count", "Delayed::Job.count"],
+        "Run and Delayed::Job count changed") do
+          delete :destroy, :id => @run8, :use_route => :taverna_player
       end
 
       assert_equal "Run must be cancelled before deletion.", flash[:alert],
@@ -286,8 +287,9 @@ module TavernaPlayer
 
     test "should destroy running run with failed delayed job" do
       @request.env["HTTP_REFERER"] = "/runs"
-      assert_difference("Run.count", -1, "Run count count did not reduce") do
-        delete :destroy, :id => @run9, :use_route => :taverna_player
+      assert_difference(["Run.count", "Delayed::Job.count"], -1,
+        "Run and Delayed::Job count did not reduce") do
+          delete :destroy, :id => @run9, :use_route => :taverna_player
       end
 
       assert_response :redirect, "Response was not a redirect"

@@ -204,13 +204,13 @@ module TavernaPlayer
     end
 
     test "can delete running run with failed delayed job" do
-      assert_difference("Run.count", -1) do
+      assert_difference(["Run.count", "Delayed::Job.count"], -1) do
         taverna_player_runs(:nine).destroy
       end
     end
 
     test "cannot delete running run with running delayed job" do
-      assert_no_difference("Run.count") do
+      assert_no_difference(["Run.count", "Delayed::Job.count"]) do
         taverna_player_runs(:eight).destroy
       end
     end
