@@ -1,0 +1,20 @@
+To cite Taverna-Player in your publication please use:
+
+Katherine Wolstencroft, Robert Haines, Donal Fellows, Alan Williams,
+David Withers, Stuart Owen, Stian Soiland-Reyes, Ian Dunlop,
+Aleksandra Nenadic, Paul Fisher, Jiten Bhagat, Khalid Belhajjame, Finn Bacall,
+Alex Hardisty, Abraham Nieva de la Hidalga, Maria P Balcazar Vargas,
+Shoaib Sufi, Carole Goble. The Taverna workflow suite: designing and
+executing workflows of Web Services on the desktop, web or in the cloud in
+Nucleic acids research, 2013, Volume 41, Issue W1, pp W557-W561.
+
+@article{wolstencroft2013taverna,
+  title={The Taverna workflow suite: designing and executing workflows of Web Services on the desktop, web or in the cloud},
+  author={Wolstencroft, Katherine and Haines, Robert and Fellows, Donal and Williams, Alan and Withers, David and Owen, Stuart and Soiland-Reyes, Stian and Dunlop, Ian and Nenadic, Aleksandra and Fisher, Paul and others},
+  journal={Nucleic acids research},
+  volume={41},
+  number={W1},
+  pages={W557--W561},
+  year={2013},
+  publisher={Oxford University Press}
+}
