@@ -92,6 +92,13 @@ module TavernaPlayer
     # The name (mnemonic) of this run.
 
     ##
+    # :method: pending?
+    # :call-seq:
+    #   pending? -> boolean
+    #
+    # Is this run in the queue?
+
+    ##
     # :method: root_ancestor
     # :call-seq:
     #   root_ancestor -> run

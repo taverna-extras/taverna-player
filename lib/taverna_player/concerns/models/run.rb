@@ -192,6 +192,10 @@ module TavernaPlayer
           I18n.t("taverna_player.status.#{key}")
         end
 
+        def pending?
+          state == :pending
+        end
+
         def running?
           state == :running
         end
