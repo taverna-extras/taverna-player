@@ -214,5 +214,13 @@ module TavernaPlayer
         taverna_player_runs(:eight).destroy
       end
     end
+
+    test "cancelling run where delayed job not locked" do
+      assert_no_difference("Run.count") do
+        assert_difference("Delayed::Job.count", -1) do
+          taverna_player_runs(:eight).cancel
+        end
+      end
+    end
   end
 end
