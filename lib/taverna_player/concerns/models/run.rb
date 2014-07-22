@@ -111,7 +111,10 @@ module TavernaPlayer
           def enqueue
             worker = TavernaPlayer::Worker.new(self)
             job = Delayed::Job.enqueue worker, :queue => TavernaPlayer.job_queue_name
-            update_attributes(:delayed_job => job, :status_message_key => "pending")
+
+            self.delayed_job = job
+            self.status_message_key = "pending"
+            save
           end
 
           def destroy_failed_delayed_jobs
@@ -144,6 +147,9 @@ module TavernaPlayer
         def cancel
           return if complete?
 
+          # Set the stop flag for all cases.
+          self.stop = true
+
           # If the run has a delayed job (still) and it hasn't been locked yet
           # then we just remove it from the queue directly and mark the run as
           # cancelled.
@@ -151,13 +157,13 @@ module TavernaPlayer
             delayed_job.with_lock do
               if delayed_job.locked_by.nil?
                 delayed_job.destroy
-                update_attribute(:saved_state, "cancelled")
-                update_attribute(:status_message_key, "cancelled")
+                self.state = :cancelled
+                self.status_message_key = "cancelled"
               end
             end
           end
 
-          update_attribute(:stop, true)
+          save
         end
 
         # Return state as a symbol. If a run is running, but has been asked to
