@@ -196,6 +196,10 @@ module TavernaPlayer
           state == :pending
         end
 
+        def initialized?
+          state == :initialized
+        end
+
         def running?
           state == :running
         end

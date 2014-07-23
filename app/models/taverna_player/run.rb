@@ -77,6 +77,13 @@ module TavernaPlayer
     # A run will have a parent if it is a child run as part of a sweep.
 
     ##
+    # :method: initialized?
+    # :call-seq:
+    #   initialized? -> boolean
+    #
+    # Is this run initialized on Taverna Server but not running yet?
+
+    ##
     # :method: job_failed?
     # :call-seq:
     #   job_failed? -> boolean
