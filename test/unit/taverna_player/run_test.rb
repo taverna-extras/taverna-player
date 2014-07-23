@@ -198,7 +198,7 @@ module TavernaPlayer
     end
 
     test "delayed job state affects run state" do
-      assert taverna_player_runs(:eight).pending?, "Run should be pending"
+      assert taverna_player_runs(:eight).initialized?, "Run should be initialized"
       assert taverna_player_runs(:nine).pending?, "Run should be pending"
 
       assert taverna_player_runs(:ten).running?, "Run should be running"
