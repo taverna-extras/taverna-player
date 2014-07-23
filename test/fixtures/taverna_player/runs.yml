@@ -11,67 +11,61 @@
 #------------------------------------------------------------------------------
 
 one:
-  id: 1
   run_id: 9dcfbaf1-4c55-40f0-9853-baa7f8410879
   name: Test run 1
   saved_state: pending
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:56:00
   finish_time: 2013-03-13 10:56:32
-  workflow_id: 1
+  workflow: one
 
 two:
-  id: 2
   run_id: 13246c77-ffa3-449f-9b18-0f085717f8eb
   name: Test run 2
   saved_state: running
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:55
   finish_time: 2013-03-13 10:57:07
-  workflow_id: 2
+  workflow: two
 
 three:
-  id: 3
   run_id: f8250afc-09c1-4129-ab28-e889a284594f
   name: Test run 3
   saved_state: finished
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
   finish_time: 2013-03-13 10:58:22
-  workflow_id: 3
+  workflow: three
   embedded: true
 
 four:
-  id: 4
   run_id: f8250afc-09c1-4129-ab28-e889a284594f
   name: Test run 4
   saved_state: running
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
 
 five:
-  id: 5
   run_id: f8250afc-09c1-4129-ab28-e889a284594f
   name: Test run 5
   saved_state: running
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
 
 six:
-  id: 6
   run_id: f8250afc-09c1-4129-ab28-e889a284594f
   name: Test run 6
   saved_state: failed
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
 
 seven:
   name: Test run 7
   saved_state: pending
-  workflow_id: 1
+  workflow: one
 
 eight:
   name: Test run 8
@@ -79,7 +73,7 @@ eight:
   saved_state: initialized
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
   delayed_job_id: 1
 
 nine:
@@ -88,7 +82,7 @@ nine:
   saved_state: pending
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
   delayed_job_id: 2
 
 ten:
@@ -97,7 +91,7 @@ ten:
   saved_state: running
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
   delayed_job_id: 3
 
 eleven:
@@ -106,5 +100,5 @@ eleven:
   saved_state: running
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
   delayed_job_id: 4

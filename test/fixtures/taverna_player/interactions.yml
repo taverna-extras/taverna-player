@@ -14,19 +14,19 @@ one:
   serial: ask0
   replied: false
   displayed: false
-  run_id: 4
+  run: four
   page_uri: ""
 
 two:
   serial: Nested_workflow:Interaction0
   replied: true
   displayed: true
-  run_id: 3
+  run: three
   page_uri: "http://www.example.com/interactions/1.html"
 
 three:
   serial: Nested_workflow:Interaction0
   replied: false
   displayed: true
-  run_id: 5
+  run: five
   page_uri: "http://www.example.com/interactions/2.html"

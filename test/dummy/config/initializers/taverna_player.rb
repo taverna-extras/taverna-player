@@ -17,7 +17,8 @@ TavernaPlayer.setup do |config|
     proxy.file_method_name = :file
   end
   config.user_model_proxy = "User"
-  config.current_user_callback = Proc.new { User.find(1) }
+  config.current_user_callback =
+    Proc.new { User.find(ActiveRecord::Fixtures.identify(:test_user)) }
 
   # Move admin resources into their own namespace.
   config.admin_scope = "admin"

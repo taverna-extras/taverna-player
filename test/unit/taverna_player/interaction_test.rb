@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -22,7 +22,7 @@ module TavernaPlayer
     test "should not allow two identical serial numbers for the same run" do
       int = Interaction.new
       int.serial = "ask0"
-      int.run_id = 4
+      int.run = taverna_player_runs(:four)
       refute int.save, "Saved the interaction with a non-unique serial number"
     end
 
