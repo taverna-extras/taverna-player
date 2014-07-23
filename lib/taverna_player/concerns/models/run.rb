@@ -228,6 +228,11 @@ module TavernaPlayer
           !delayed_job.nil? && !delayed_job.failed_at.nil?
         end
 
+        # This is used as a catch-all for pending?, initialized? and running?
+        def incomplete?
+          running? || pending? || initialized?
+        end
+
         # This is used as a catch-all for finished, cancelled, failed,
         # job_failed? and timeout
         def complete?

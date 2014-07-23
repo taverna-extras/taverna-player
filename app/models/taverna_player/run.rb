@@ -38,6 +38,7 @@ module TavernaPlayer
     #
     # Is this run complete? If a run is finished or cancelled or failed or its
     # underlying worker has failed or it has timed out then it is complete.
+    # #complete? is not quite the direct opposite of #incomplete?
 
     ##
     # :method: embedded?
@@ -75,6 +76,15 @@ module TavernaPlayer
     #   has_parent? -> boolean
     #
     # A run will have a parent if it is a child run as part of a sweep.
+
+    ##
+    # :method: incomplete?
+    # :call-seq:
+    #   incomplete? -> boolean
+    #
+    # Is this run incomplete? If a run is pending or initialized or running
+    # then it is incomplete. #incomplete? is not quite the direct opposite of
+    # #complete?
 
     ##
     # :method: initialized?
