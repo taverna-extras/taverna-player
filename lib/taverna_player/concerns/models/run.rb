@@ -145,17 +145,17 @@ module TavernaPlayer
         #
         # See the note above about the :cancelled state.
         def cancel
-          return if complete?
+          return unless incomplete?
 
           # Set the stop flag for all cases.
           self.stop = true
 
-          # If the run has a delayed job (still) and it hasn't been locked yet
-          # then we just remove it from the queue directly and mark the run as
-          # cancelled.
+          # If the run has a delayed job and it hasn't been locked yet, or it
+          # has failed, then we just remove it from the queue directly and
+          # mark the run as cancelled.
           unless delayed_job.nil?
             delayed_job.with_lock do
-              if delayed_job.locked_by.nil?
+              if delayed_job.locked_by.nil? || !delayed_job.failed_at.nil?
                 delayed_job.destroy
                 self.state = :cancelled
                 self.status_message_key = "cancelled"

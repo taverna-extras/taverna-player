@@ -22,3 +22,20 @@ two:
   failed_at: 2014-07-21 18:22:00
   created_at: 2014-07-21 18:20:00
   updated_at: 2014-07-21 18:22:00
+
+three:
+  id: 3
+  run_at: 2014-07-21 18:20:00
+  locked_at: 2014-07-21 18:21:00
+  locked_by: worker.0
+  failed_at: 2014-07-21 18:22:00
+  created_at: 2014-07-21 18:20:00
+  updated_at: 2014-07-21 18:22:00
+
+four:
+  id: 4
+  run_at: 2014-07-21 18:20:00
+  locked_at: 2014-07-21 18:21:00
+  locked_by: worker.0
+  created_at: 2014-07-21 18:20:00
+  updated_at: 2014-07-21 18:21:00

@@ -104,6 +104,8 @@ module TavernaPlayer
       assert taverna_player_runs(:six).complete?, "Run is complete"
       refute taverna_player_runs(:eight).complete?, "Run not complete"
       assert taverna_player_runs(:nine).complete?, "Run is complete"
+      assert taverna_player_runs(:ten).complete?, "Run is complete"
+      refute taverna_player_runs(:eleven).complete?, "Run not complete"
     end
 
     test "a parent cannot be younger than its child" do
@@ -199,8 +201,13 @@ module TavernaPlayer
       assert taverna_player_runs(:eight).pending?, "Run should be pending"
       assert taverna_player_runs(:nine).pending?, "Run should be pending"
 
+      assert taverna_player_runs(:ten).running?, "Run should be running"
+      assert taverna_player_runs(:eleven).running?, "Run should be running"
+
       refute taverna_player_runs(:eight).job_failed?, "Job has not failed"
       assert taverna_player_runs(:nine).job_failed?, "Job has failed"
+      assert taverna_player_runs(:ten).job_failed?, "Job has failed"
+      refute taverna_player_runs(:eleven).job_failed?, "Job has not failed"
     end
 
     test "can delete running run with failed delayed job" do
@@ -221,6 +228,34 @@ module TavernaPlayer
           taverna_player_runs(:eight).cancel
         end
       end
+
+      assert taverna_player_runs(:eight).cancelled?, "Run should be cancelled"
+    end
+
+    test "cancelling run where delayed job has failed" do
+      assert_no_difference("Run.count") do
+        assert_difference("Delayed::Job.count", -1) do
+          taverna_player_runs(:nine).cancel
+        end
+      end
+
+      assert taverna_player_runs(:nine).cancelled?, "Run should be cancelled"
+
+      assert_no_difference("Run.count") do
+        assert_difference("Delayed::Job.count", -1) do
+          taverna_player_runs(:ten).cancel
+        end
+      end
+
+      assert taverna_player_runs(:ten).cancelled?, "Run should be cancelled"
+    end
+
+    test "do not destroy running delayed job upon cancel" do
+      assert_no_difference(["Run.count", "Delayed::Job.count"]) do
+        taverna_player_runs(:eleven).cancel
+      end
+
+      assert taverna_player_runs(:eleven).cancelling?, "Run should be cancelling"
     end
   end
 end
