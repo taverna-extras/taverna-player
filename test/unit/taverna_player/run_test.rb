@@ -16,6 +16,16 @@ module TavernaPlayer
   class RunTest < ActiveSupport::TestCase
 
     setup do
+      @run1 = taverna_player_runs(:one)
+      @run2 = taverna_player_runs(:two)
+      @run3 = taverna_player_runs(:three)
+      @run4 = taverna_player_runs(:four)
+      @run5 = taverna_player_runs(:five)
+      @run6 = taverna_player_runs(:six)
+      @run8 = taverna_player_runs(:eight)
+      @run9 = taverna_player_runs(:nine)
+      @run10 = taverna_player_runs(:ten)
+      @run11 = taverna_player_runs(:eleven)
       @workflow = workflows(:one)
     end
 
@@ -101,16 +111,16 @@ module TavernaPlayer
     end
 
     test "complete run states" do
-      refute taverna_player_runs(:one).complete?, "Run not complete"
-      refute taverna_player_runs(:two).complete?, "Run not complete"
-      assert taverna_player_runs(:three).complete?, "Run is complete"
-      refute taverna_player_runs(:four).complete?, "Run not complete"
-      refute taverna_player_runs(:five).complete?, "Run not complete"
-      assert taverna_player_runs(:six).complete?, "Run is complete"
-      refute taverna_player_runs(:eight).complete?, "Run not complete"
-      assert taverna_player_runs(:nine).complete?, "Run is complete"
-      assert taverna_player_runs(:ten).complete?, "Run is complete"
-      refute taverna_player_runs(:eleven).complete?, "Run not complete"
+      refute @run1.complete?, "Run not complete"
+      refute @run2.complete?, "Run not complete"
+      assert @run3.complete?, "Run is complete"
+      refute @run4.complete?, "Run not complete"
+      refute @run5.complete?, "Run not complete"
+      assert @run6.complete?, "Run is complete"
+      refute @run8.complete?, "Run not complete"
+      assert @run9.complete?, "Run is complete"
+      assert @run10.complete?, "Run is complete"
+      refute @run11.complete?, "Run not complete"
     end
 
     test "a parent cannot be younger than its child" do
@@ -164,7 +174,7 @@ module TavernaPlayer
 
     test "create run from another run" do
       assert_difference(["Run.count", "RunPort::Input.count"]) do
-        parent = taverna_player_runs(:three)
+        parent = @run3
         run = Run.create(:parent_id => parent.id)
         assert run.valid?, "Run is invalid"
         refute run.new_record?, "Run was not saved"
@@ -176,7 +186,7 @@ module TavernaPlayer
 
     test "new run from another run" do
       assert_difference(["Run.count", "RunPort::Input.count"]) do
-        parent = taverna_player_runs(:three)
+        parent = @run3
         run = Run.new(:parent_id => parent.id)
         assert run.save, "Run was not saved"
         assert run.has_parent?, "Run should have a parent"
@@ -186,7 +196,7 @@ module TavernaPlayer
     end
 
     test "killing parent should orphan child" do
-      parent = taverna_player_runs(:three)
+      parent = @run3
       run = Run.create(:parent_id => parent.id)
       assert run.valid?, "Child run is invalid"
       assert_not_nil run.parent_id, "Child run has no parent"
@@ -203,64 +213,64 @@ module TavernaPlayer
     end
 
     test "delayed job state affects run state" do
-      assert taverna_player_runs(:eight).pending?, "Run should be pending"
-      assert taverna_player_runs(:nine).pending?, "Run should be pending"
+      assert @run8.pending?, "Run should be pending"
+      assert @run9.pending?, "Run should be pending"
 
-      assert taverna_player_runs(:ten).running?, "Run should be running"
-      assert taverna_player_runs(:eleven).running?, "Run should be running"
+      assert @run10.running?, "Run should be running"
+      assert @run11.running?, "Run should be running"
 
-      refute taverna_player_runs(:eight).job_failed?, "Job has not failed"
-      assert taverna_player_runs(:nine).job_failed?, "Job has failed"
-      assert taverna_player_runs(:ten).job_failed?, "Job has failed"
-      refute taverna_player_runs(:eleven).job_failed?, "Job has not failed"
+      refute @run8.job_failed?, "Job has not failed"
+      assert @run9.job_failed?, "Job has failed"
+      assert @run10.job_failed?, "Job has failed"
+      refute @run11.job_failed?, "Job has not failed"
     end
 
     test "can delete running run with failed delayed job" do
       assert_difference(["Run.count", "Delayed::Job.count"], -1) do
-        taverna_player_runs(:nine).destroy
+        @run9.destroy
       end
     end
 
     test "cannot delete running run with running delayed job" do
       assert_no_difference(["Run.count", "Delayed::Job.count"]) do
-        taverna_player_runs(:eight).destroy
+        @run8.destroy
       end
     end
 
     test "cancelling run where delayed job not locked" do
       assert_no_difference("Run.count") do
         assert_difference("Delayed::Job.count", -1) do
-          taverna_player_runs(:eight).cancel
+          @run8.cancel
         end
       end
 
-      assert taverna_player_runs(:eight).cancelled?, "Run should be cancelled"
+      assert @run8.cancelled?, "Run should be cancelled"
     end
 
     test "cancelling run where delayed job has failed" do
       assert_no_difference("Run.count") do
         assert_difference("Delayed::Job.count", -1) do
-          taverna_player_runs(:nine).cancel
+          @run9.cancel
         end
       end
 
-      assert taverna_player_runs(:nine).cancelled?, "Run should be cancelled"
+      assert @run9.cancelled?, "Run should be cancelled"
 
       assert_no_difference("Run.count") do
         assert_difference("Delayed::Job.count", -1) do
-          taverna_player_runs(:ten).cancel
+          @run10.cancel
         end
       end
 
-      assert taverna_player_runs(:ten).cancelled?, "Run should be cancelled"
+      assert @run10.cancelled?, "Run should be cancelled"
     end
 
     test "do not destroy running delayed job upon cancel" do
       assert_no_difference(["Run.count", "Delayed::Job.count"]) do
-        taverna_player_runs(:eleven).cancel
+        @run11.cancel
       end
 
-      assert taverna_player_runs(:eleven).cancelling?, "Run should be cancelling"
+      assert @run11.cancelling?, "Run should be cancelling"
     end
   end
 end

@@ -43,25 +43,25 @@ module TavernaPlayer
     test "should route to a run output" do
       assert_routing @run2.outputs[0].path,
         { :controller => "taverna_player/runs", :action => "output",
-          :id => "2", :port => "OUT" }, {}, {}, "Did not route correctly"
+          :id => "#{@run2.id}", :port => "OUT" }, {}, {}, "Did not route correctly"
     end
 
     test "should route to a deep run output" do
       assert_routing @run2.outputs[0].path(0, 0),
         { :controller => "taverna_player/runs", :action => "output",
-          :id => "2", :port => "OUT", :path => "0/0" }, {}, {},
+          :id => "#{@run2.id}", :port => "OUT", :path => "0/0" }, {}, {},
         "Did not route correctly"
 
       assert_routing @run2.outputs[0].path([1, 2]),
         { :controller => "taverna_player/runs", :action => "output",
-          :id => "2", :port => "OUT", :path => "1/2" }, {}, {},
+          :id => "#{@run2.id}", :port => "OUT", :path => "1/2" }, {}, {},
         "Did not route correctly"
     end
 
     test "should route to a run input" do
       assert_routing @run3.inputs[0].path,
         { :controller => "taverna_player/runs", :action => "input",
-          :id => "3", :port => "IN_Value" }, {}, {}, "Did not route correctly"
+          :id => "#{@run3.id}", :port => "IN_Value" }, {}, {}, "Did not route correctly"
     end
 
     test "should route to cancel on a run" do
@@ -306,7 +306,7 @@ module TavernaPlayer
     end
 
     test "should cancel run and redirect to show via browser" do
-      @request.env["HTTP_REFERER"] = "/runs/1"
+      @request.env["HTTP_REFERER"] = "/runs/#{@run1.id}"
       put :cancel, :id => @run1, :use_route => :taverna_player
 
       assert_response :redirect, "Response was not a redirect"
