@@ -11,7 +11,6 @@
 #------------------------------------------------------------------------------
 
 one:
-  id: 1
   name: Message
   value: Hello, World!
   port_type: TavernaPlayer::RunPort::Output
@@ -20,7 +19,6 @@ one:
   metadata: "---\n:size: 13\n:type: text/plain"
 
 two:
-  id: 2
   name: OUT
   port_type: TavernaPlayer::RunPort::Output
   run_id: 2
@@ -28,7 +26,6 @@ two:
   metadata: "---\n:size:\n- 7\n- 7\n- 974\n- 974\n- 7\n:type:\n- text/plain\n- text/plain\n- application/x-error\n- application/x-error\n- text/plain"
 
 three:
-  id: 3
   name: IN_Value
   value: Rob
   port_type: TavernaPlayer::RunPort::Input
@@ -37,7 +34,6 @@ three:
   metadata: "---\n:size: 3\n:type: text/plain"
 
 four:
-  id: 4
   name: OUT
   value: Rob
   port_type: TavernaPlayer::RunPort::Output
@@ -46,7 +42,6 @@ four:
   metadata: "---\n:size: 3\n:type: text/plain"
 
 five:
-  id: 5
   name: Long_N_unnecessary_Name_OUT
   value: (http://example.com/path?query=1)
   port_type: TavernaPlayer::RunPort::Output
