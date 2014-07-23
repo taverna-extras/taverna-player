@@ -23,7 +23,8 @@ module TavernaPlayer
       @run8 = taverna_player_runs(:eight)
       @run9 = taverna_player_runs(:nine)
       @int = taverna_player_interactions(:one)
-      @workflow = workflows(:one)
+      @workflow1 = workflows(:one)
+      @workflow3 = workflows(:three)
       @routes = TavernaPlayer::Engine.routes
     end
 
@@ -117,14 +118,14 @@ module TavernaPlayer
     end
 
     test "should get new and not be overridden" do
-      get :new, :workflow_id => 1, :use_route => :taverna_player
+      get :new, :workflow_id => @workflow1, :use_route => :taverna_player
       assert_response :success, "Response was not success"
       refute assigns(:override)
       assert_template "application", "Did not render with the correct layout"
     end
 
     test "should get new embedded" do
-      get :new, :workflow_id => 1, :embedded => "true",
+      get :new, :workflow_id => @workflow1, :embedded => "true",
         :use_route => :taverna_player
       assert_response :success, "Response was not success"
       assert_template "taverna_player/embedded",
@@ -165,7 +166,7 @@ module TavernaPlayer
 
     test "should fail to create run via browser" do
       assert_no_difference("Run.count") do
-        post :create, :run => { :workflow_id => @workflow.id, :name => nil }
+        post :create, :run => { :workflow_id => @workflow1.id, :name => nil }
       end
 
       assert_equal "Run was not successfully created.", flash[:alert],
@@ -174,7 +175,7 @@ module TavernaPlayer
 
     test "should create run via browser" do
       assert_difference("Run.count") do
-        post :create, :run => { :workflow_id => @workflow.id }
+        post :create, :run => { :workflow_id => @workflow1.id }
       end
 
       assert_redirected_to run_path(assigns(:run)),
@@ -188,7 +189,7 @@ module TavernaPlayer
     test "should create inputs along with run" do
       assert_difference("Run.count") do
         assert_difference("RunPort.count") do
-          post :create, :run => { :workflow_id => workflows(:three).id,
+          post :create, :run => { :workflow_id => @workflow3.id,
                                   :inputs_attributes => [{:value => 'test', :name => 'IN'}]
           }
         end
@@ -208,7 +209,7 @@ module TavernaPlayer
     test "should create embedded run via browser" do
       assert_difference("Run.count") do
         post :create,
-          :run => { :workflow_id => @workflow.id, :embedded => "true" }
+          :run => { :workflow_id => @workflow1.id, :embedded => "true" }
       end
 
       assert_redirected_to run_path(assigns(:run)),
@@ -222,7 +223,7 @@ module TavernaPlayer
 
     test "should create run via json" do
       assert_difference("Run.count") do
-        post :create, :run => { :workflow_id => @workflow.id },
+        post :create, :run => { :workflow_id => @workflow1.id },
           :format => :json
       end
 
@@ -236,7 +237,7 @@ module TavernaPlayer
     test "should create embedded run via json" do
       assert_difference("Run.count") do
         post :create,
-          :run => { :workflow_id => @workflow.id, :embedded => "true" },
+          :run => { :workflow_id => @workflow1.id, :embedded => "true" },
           :format => :json
       end
 
@@ -330,7 +331,7 @@ module TavernaPlayer
     end
 
     test "should only return runs from workflow id 1" do
-      get :index, :workflow_id => @workflow
+      get :index, :workflow_id => @workflow1
       assert_response :success, "Response was not success"
       assert_not_nil assigns(:runs), "Did not assign a valid runs instance"
       assert_not_nil assigns(:override)

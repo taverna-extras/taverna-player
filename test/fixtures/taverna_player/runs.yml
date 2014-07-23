@@ -18,7 +18,7 @@ one:
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:56:00
   finish_time: 2013-03-13 10:56:32
-  workflow_id: 1
+  workflow: one
 
 two:
   id: 2
@@ -28,7 +28,7 @@ two:
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:55
   finish_time: 2013-03-13 10:57:07
-  workflow_id: 2
+  workflow: two
 
 three:
   id: 3
@@ -38,7 +38,7 @@ three:
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
   finish_time: 2013-03-13 10:58:22
-  workflow_id: 3
+  workflow: three
   embedded: true
 
 four:
@@ -48,7 +48,7 @@ four:
   saved_state: running
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
 
 five:
   id: 5
@@ -57,7 +57,7 @@ five:
   saved_state: running
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
 
 six:
   id: 6
@@ -66,12 +66,12 @@ six:
   saved_state: failed
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
 
 seven:
   name: Test run 7
   saved_state: pending
-  workflow_id: 1
+  workflow: one
 
 eight:
   name: Test run 8
@@ -79,7 +79,7 @@ eight:
   saved_state: pending
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
   delayed_job_id: 1
 
 nine:
@@ -88,7 +88,7 @@ nine:
   saved_state: pending
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
   delayed_job_id: 2
 
 ten:
@@ -97,7 +97,7 @@ ten:
   saved_state: running
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
   delayed_job_id: 3
 
 eleven:
@@ -106,5 +106,5 @@ eleven:
   saved_state: running
   create_time: 2013-03-13 10:55:46
   start_time: 2013-03-13 10:55:48
-  workflow_id: 1
+  workflow: one
   delayed_job_id: 4

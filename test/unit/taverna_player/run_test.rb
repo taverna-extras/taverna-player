@@ -14,9 +14,14 @@ require 'test_helper'
 
 module TavernaPlayer
   class RunTest < ActiveSupport::TestCase
+
+    setup do
+      @workflow = workflows(:one)
+    end
+
     test "should not save run with an illegal state" do
       run = Run.new
-      run.workflow = workflows(:one)
+      run.workflow = @workflow
       run.state = :not_a_state
       assert !run.save, "Saved the run with an illegal state"
     end
@@ -37,7 +42,7 @@ module TavernaPlayer
 
     test "should not save run with cancelled state if not marked as stopped" do
       run = Run.new
-      run.workflow = workflows(:one)
+      run.workflow = @workflow
       run.saved_state = "cancelled"
       run.stop = false
       refute run.save, "Saved run with cancelled state when not stopped first"
@@ -45,7 +50,7 @@ module TavernaPlayer
 
     test "should cancel run if run set to stop first" do
       run = Run.new
-      run.workflow = workflows(:one)
+      run.workflow = @workflow
       refute run.stop, "Run's stop flag was set upon creation"
       run.cancel
       run.state = :cancelled
@@ -56,7 +61,7 @@ module TavernaPlayer
 
     test "should not be able to set state to cancelling directly" do
       run = Run.new
-      run.workflow = workflows(:one)
+      run.workflow = @workflow
       assert run.save, "Could not save run initially"
 
       run.state = :cancelling
@@ -65,7 +70,7 @@ module TavernaPlayer
 
     test "should be in cancelling state after being cancelled" do
       run = Run.new
-      run.workflow = workflows(:one)
+      run.workflow = @workflow
       run.state = :running
       assert run.save, "Could not save run initially."
       run.delayed_job_id = nil # Remove delayed job to pretend it is running.
@@ -109,26 +114,26 @@ module TavernaPlayer
     end
 
     test "a parent cannot be younger than its child" do
-      older = Run.create(:workflow_id => 1)
-      young = Run.create(:workflow_id => 1)
+      older = Run.create(:workflow_id => @workflow.id)
+      young = Run.create(:workflow_id => @workflow.id)
       older.parent = young
       refute older.save, "Run saved with a younger parent"
     end
 
     test "parent/child graph should be acyclic" do
-      parent = Run.create(:workflow_id => 1)
-      child = Run.create(:workflow_id => 1)
+      parent = Run.create(:workflow_id => @workflow.id)
+      child = Run.create(:workflow_id => @workflow.id)
       parent.children << child
       parent.parent = child
       refute parent.save, "Run saved with child as its parent"
     end
 
     test "finding root ancestor of a run" do
-      one = Run.create(:workflow_id => 1)
+      one = Run.create(:workflow_id => @workflow.id)
       assert_same one, one.root_ancestor, "Single run is not its own root"
       assert_equal 0, one.children.count, "Not a parent, should not have children"
 
-      two = Run.create(:workflow_id => 1)
+      two = Run.create(:workflow_id => @workflow.id)
       assert_same two, two.root_ancestor, "Single run is not its own root"
 
       two.parent = one
@@ -137,7 +142,7 @@ module TavernaPlayer
       assert_same one, two.root_ancestor, "Child run does not have parent as its root"
       assert_equal 1, one.children.count, "Parent should have one child"
 
-      three = Run.create(:workflow_id => 1)
+      three = Run.create(:workflow_id => @workflow.id)
       assert_same three, three.root_ancestor, "Single run is not its own root"
 
       three.parent = two
@@ -148,7 +153,7 @@ module TavernaPlayer
       assert_equal 1, two.children.count, "Parent should have one child"
       assert_equal 1, one.children.count, "Grandparent should have one child"
 
-      four = Run.create(:workflow_id => 1)
+      four = Run.create(:workflow_id => @workflow.id)
       assert_same four, four.root_ancestor, "Single run is not its own root"
 
       four.parent = one
