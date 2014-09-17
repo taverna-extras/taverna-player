@@ -13,7 +13,7 @@
 # Taverna Player configuration
 
 TavernaPlayer.setup do |config|
-  config.workflow_model_proxy("Workflow") do |proxy|
+  config.workflow_model_proxy("TavernaPlayer::Workflow") do |proxy|
     proxy.file_method_name = :file
   end
   config.user_model_proxy = "User"

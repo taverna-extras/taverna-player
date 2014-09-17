@@ -11,6 +11,10 @@
 #------------------------------------------------------------------------------
 
 TavernaPlayer::Engine.routes.draw do
+  resources :workflows, :only => :index do
+    resources :runs, :controller => :runs, :except => :edit
+  end
+
   resources :runs, :except => :edit do
     member do
       put "cancel", :action => "cancel"

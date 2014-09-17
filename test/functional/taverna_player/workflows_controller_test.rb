@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -12,10 +12,15 @@
 
 require 'test_helper'
 
-class WorkflowsControllerTest < ActionController::TestCase
-  test "should get index" do
-    get :index
-    assert_response :success
-  end
+module TavernaPlayer
+  class WorkflowsControllerTest < ActionController::TestCase
+    setup do
+      @routes = TavernaPlayer::Engine.routes
+    end
 
+    test "should get index" do
+      get :index
+      assert_response :success
+    end
+  end
 end
