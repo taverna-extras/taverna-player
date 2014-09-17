@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -15,17 +15,19 @@ module TavernaPlayer
     attr_reader :class_name
 
     def initialize(class_name, method_names = [])
-      if class_name.is_a?(String)
-        begin
-          @class_name = Object.const_get(class_name)
-        rescue NameError
-          @class_name = class_name.constantize
-        end
-      end
+      @class_name = class_name.to_s
 
       method_names.each do |name|
         add_method(name.to_sym)
       end
+    end
+
+    def class_const
+      @const ||= begin
+                   Object.const_get(@class_name)
+                 rescue NameError
+                   @class_name.constantize
+                 end
     end
 
     private

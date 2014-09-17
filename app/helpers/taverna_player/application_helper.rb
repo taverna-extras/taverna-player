@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -44,7 +44,7 @@ module TavernaPlayer
       case id_or_model
       when TavernaPlayer::Run
         id_or_model.workflow_id
-      when TavernaPlayer.workflow_proxy.class_name
+      when TavernaPlayer.workflow_proxy.class_const
         id_or_model.id
       else
         id_or_model

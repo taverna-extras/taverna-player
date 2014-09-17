@@ -45,7 +45,7 @@ module TavernaPlayer
           end
 
           def find_workflow
-            @workflow = TavernaPlayer.workflow_proxy.class_name.find(params[:workflow_id])
+            @workflow = TavernaPlayer.workflow_proxy.class_const.find(params[:workflow_id])
           end
 
           def find_port
