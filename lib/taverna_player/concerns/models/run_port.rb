@@ -104,7 +104,8 @@ module TavernaPlayer
             md = metadata
             md = Hash.new if md.nil?
             md[field] = value
-            update_attribute(:metadata, md)
+            self.metadata = md
+            save
           end
 
         end # included

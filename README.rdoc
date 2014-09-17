@@ -32,6 +32,14 @@ Taverna Player requires access to a
 {Taverna Server}[http://www.taverna.org.uk/download/server/2-5/] version 2.5
 or later.
 
+== A note about rubyzip
+
+This library uses the new {rubyzip}[https://rubygems.org/gems/rubyzip] API. If
+your code, or any of its dependencies, need the old API then please read the
+<em>Important note</em> in the
+{rubyzip ReadMe}[https://github.com/rubyzip/rubyzip/blob/master/README.md] for
+details of how to get everything working together.
+
 == Getting started
 
 These instructions assume that you are familiar with Rails and its concepts.
@@ -221,16 +229,17 @@ information on renderers below.
 == Taverna Player initializers
 
 Two initializers are installed by the install generator:
-* {taverna_player.rb}[https://github.com/myGrid/taverna-player/blob/master/lib/generators/templates/player_initializer.rb]:
+* {config/initializers/taverna_player.rb}[https://github.com/myGrid/taverna-player/blob/master/lib/generators/templates/player_initializer.rb]:
   This contains configuration of Taverna Player.
-* {taverna_server.rb.example}[https://github.com/myGrid/taverna-player/blob/master/lib/generators/templates/server_initializer.rb]:
+* {config/initializers/taverna_server.rb.example}[https://github.com/myGrid/taverna-player/blob/master/lib/generators/templates/server_initializer.rb]:
   This is used to configure Taverna Player's connection to a Taverna Server.
   It is initially set up as an example file as you will need to distribute
   this with your application but you must not check in the contents of the
   configured version to your repository.
 
-Both of these files require minimal configuration for simple set ups and are
-fully commented with everything that needs to be set - more details below.
+Both of these files <b>require minimal configuration</b> for simple set ups
+and are fully commented with everything that needs to be set - more details
+below.
 
 === Essential (required) configuration
 

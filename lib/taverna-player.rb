@@ -18,9 +18,8 @@ require "paperclip"
 require "pmrpc-rails"
 require "rails_autolink"
 require "t2-server"
-require "taverna-t2flow"
 require "tmpdir"
-require "zip/zip"
+require "zip"
 
 # Grab everything in the taverna_player directory using the require_all gem.
 require_rel "taverna_player"

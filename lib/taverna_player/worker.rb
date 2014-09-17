@@ -135,7 +135,6 @@ module TavernaPlayer
                 new_int.save
               end
             else
-              waiting = true unless note.has_reply?
               int = Interaction.find_or_initialize_by(:run_id => @run.id, :serial => note.serial)
 
               # Need to catch this here in case some other process has replied.
@@ -177,6 +176,8 @@ module TavernaPlayer
 
                 int.save
               end
+
+              waiting = true unless int.replied?
             end
           end
 
@@ -306,7 +307,7 @@ module TavernaPlayer
 
     def status_message(key)
       @run.status_message_key = key
-      @run.save!
+      @run.save
     end
 
     def cancelled?
