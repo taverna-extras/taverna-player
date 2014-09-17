@@ -33,8 +33,11 @@ module TavernaPlayer
   mattr_accessor :server_address, :server_password, :server_username
 
   # This should be set to the name of the workflow model class in the main
-  # application via the workflow_model_proxy method below.
+  # application via the workflow_model_proxy method below. Defaults to the
+  # internal Taverna Player Workflow model (TavernaPlayer::Workflow).
   mattr_reader :workflow_proxy
+  @@workflow_proxy =
+    ModelProxy.new("TavernaPlayer::Workflow", [:file, :title, :inputs])
 
   # :call-seq:
   #   workflow_model_proxy(workflow_class) {|proxy| ...}
