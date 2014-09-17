@@ -237,8 +237,9 @@ Two initializers are installed by the install generator:
   this with your application but you must not check in the contents of the
   configured version to your repository.
 
-Both of these files *require minimal configuration* for simple set ups and are
-fully commented with everything that needs to be set - more details below.
+Both of these files <b>require minimal configuration</b> for simple set ups
+and are fully commented with everything that needs to be set - more details
+below.
 
 === Essential (required) configuration
 
