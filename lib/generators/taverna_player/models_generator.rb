@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -19,8 +19,8 @@ module TavernaPlayer
         "customization."
 
       def copy_models
-        ["run.rb", "run_port.rb"].each do |file|
-          copy_file file, "app/models/taverna_player/#{file}"
+        %w(run run_port workflow).each do |file|
+          copy_file "#{file}.rb", "app/models/taverna_player/#{file}.rb"
         end
       end
     end
