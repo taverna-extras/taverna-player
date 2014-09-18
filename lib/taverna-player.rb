@@ -40,6 +40,7 @@ module TavernaPlayer
     ModelProxy.new("TavernaPlayer::Workflow", [:file, :title, :inputs])
 
   # :call-seq:
+  #   workflow_model_proxy = workflow_class
   #   workflow_model_proxy(workflow_class) {|proxy| ...}
   #
   # Set up a proxy to the main application's workflow model. The class name
@@ -50,6 +51,12 @@ module TavernaPlayer
     @@workflow_proxy = ModelProxy.new(workflow_class, [:file, :title, :inputs])
     yield @@workflow_proxy if block_given?
   end
+
+  # :stopdoc:
+  def self.workflow_model_proxy=(workflow_class)
+    TavernaPlayer.workflow_model_proxy(workflow_class)
+  end
+  # :startdoc:
 
   # This should be set to the name of the user model class in the main
   # application via the user_model_proxy method below. Defaults to nil.
