@@ -22,9 +22,8 @@ Taverna Player handles all aspects of running a workflow including:
 * Presenting workflow interactions to the user
 * Gathering and download of workflow outputs
 
-It, purposefully, does not:
-* Manage workflows
-* Manage users
+It, purposefully, does not manage users and its default workflow model is
+intentionally oversimplified.
 
 == Prerequisites
 
@@ -109,9 +108,10 @@ Mount the Taverna Player engine in your <tt>config/routes.rb</tt>. For example:
 
   mount TavernaPlayer::Engine, :at => "/"
 
-Taverna Player provides three resources with paths:
+Taverna Player provides four resources with paths:
 
 * <tt>/runs/*</tt>
+* <tt>/workflows/*</tt>
 * <tt>/service_credentials/*</tt>
 * <tt>/job_queue</tt>
 
@@ -129,11 +129,18 @@ set (for example):
 And the resource paths would become:
 
 * <tt>/runs/*</tt>
+* <tt>/workflows/*</tt>
 * <tt>/admin/service_credentials/*</tt>
 * <tt>/admin/job_queue</tt>
 
-You can also nest the Taverna Player runs resources within your workflows
-resources if you wish, like this:
+The supplied workflow model also nests the run resources within it:
+
+* <tt>/workflows</tt>
+* <tt>/workflows/{workflow-id}/runs/*</tt>
+
+If you override the default workflow model (see below for details) you can
+also nest the Taverna Player runs resources within your workflows resources if
+you wish, like this (within your application's <tt>config/routes.rb</tt>):
 
   resources :workflows do
     resources :runs, :controller => "TavernaPlayer::Runs", :except => :edit
@@ -198,13 +205,13 @@ so that they take precedence over the default ones. You can delete any that you
 do not need to customize but there are no penalties for leaving them there.
 There is more information on overriding controllers below.
 
-If you need to override the Taverna Player Run model, to add columns to the
-table for example, you can copy a customizable stub with:
+If you need to override any Taverna Player models, to add columns to a table
+for example, you can copy customizable stubs with:
 
   rails generate taverna_player:models
 
-The stub is copied to the <tt>app/models/taverna_player</tt> directory so that
-it takes precedence over the default one. There is more information on
+The stubs are copied to the <tt>app/models/taverna_player</tt> directory so
+that they take precedence over the defaults. There is more information on
 overriding models below.
 
 If you want to use pre- and post-run callbacks you can setup some basic stubs
@@ -252,6 +259,10 @@ called "file_name" then the following will configure this correctly:
   config.workflow_model_proxy("Workflow") do |proxy|
     proxy.file_method_name = :file_name
   end
+
+Taverna Player has a very simple internal workflow model
+(TavernaPlayer::Workflow) that you can extend (see below) or replace with the
+above code.
 
 Secondly, Taverna Player needs to know where your Taverna Server is and how to
 authenticate to it:
@@ -396,7 +407,9 @@ You can override the following core components:
 * RunPort (model)
 * RunPort::Input (model)
 * RunPort::Output (model)
+* Workflow (model)
 * RunsController
+* WorkflowController
 * ServiceCredentialsController
 * JobQueueController
 
@@ -467,7 +480,7 @@ An example callback that just prints out the run's name and workflow id would
 be:
 
   def player_run_callback(run)
-    w = Workflow.find(run.workflow_id)
+    w = TavernaPlayer::Workflow.find(run.workflow_id)
     puts "Callback called for run '#{run.name}' of workflow '#{w.id}'"
   end
 
