@@ -12,8 +12,7 @@
 
 module TavernaPlayer
   class WorkflowsController < TavernaPlayer::ApplicationController
-    def index
-      @workflows = Workflow.all
-    end
+    # See lib/taverna_player/concerns/controllers/workflows_controller.rb
+    include TavernaPlayer::Concerns::Controllers::WorkflowsController
   end
 end
