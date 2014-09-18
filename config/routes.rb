@@ -11,8 +11,13 @@
 #------------------------------------------------------------------------------
 
 TavernaPlayer::Engine.routes.draw do
-  resources :workflows, :only => :index do
-    resources :runs, :controller => :runs, :except => :edit
+
+  # Only add the Taverna Player Workflow route if the host app is actually
+  # using it.
+  if TavernaPlayer.workflow_proxy.class_name == "TavernaPlayer::Workflow"
+    resources :workflows, :only => :index do
+      resources :runs, :controller => :runs, :except => :edit
+    end
   end
 
   resources :runs, :except => :edit do
