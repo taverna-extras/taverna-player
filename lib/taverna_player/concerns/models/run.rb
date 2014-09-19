@@ -24,10 +24,10 @@ module TavernaPlayer
 
           # Each run is spawned from a workflow. This provides the link to the
           # workflow model in the parent app, whatever it calls its model.
-          belongs_to :workflow, :class_name => TavernaPlayer.workflow_proxy.class_name.to_s
+          belongs_to :workflow, :class_name => TavernaPlayer.workflow_proxy.class_name
 
           unless TavernaPlayer.user_proxy.nil?
-            belongs_to :user, :class_name => TavernaPlayer.user_proxy.class_name.to_s
+            belongs_to :user, :class_name => TavernaPlayer.user_proxy.class_name
           end
 
           has_many :inputs, :class_name => "TavernaPlayer::RunPort::Input",

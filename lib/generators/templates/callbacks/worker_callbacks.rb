@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -11,21 +11,21 @@
 #------------------------------------------------------------------------------
 
 def player_pre_run_callback(run)
-  w = Workflow.find(run.workflow_id)
+  w = TavernaPlayer::Workflow.find(run.workflow_id)
   puts "Pre-run callback called for run '#{run.name}' of workflow '#{w.id}'"
 end
 
 def player_post_run_callback(run)
-  w = Workflow.find(run.workflow_id)
+  w = TavernaPlayer::Workflow.find(run.workflow_id)
   puts "Post-run callback called for run '#{run.name}' of workflow '#{w.id}'"
 end
 
 def player_run_cancelled_callback(run)
-  w = Workflow.find(run.workflow_id)
+  w = TavernaPlayer::Workflow.find(run.workflow_id)
   puts "Run-cancelled callback called for run '#{run.name}' of workflow '#{w.id}'"
 end
 
 def player_run_failed_callback(run)
-  w = Workflow.find(run.workflow_id)
+  w = TavernaPlayer::Workflow.find(run.workflow_id)
   puts "Run-failed callback called for run '#{run.name}' of workflow '#{w.id}'"
 end

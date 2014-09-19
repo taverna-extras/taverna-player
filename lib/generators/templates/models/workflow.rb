@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -10,12 +10,11 @@
 # Author: Robert Haines
 #------------------------------------------------------------------------------
 
-require 'test_helper'
+module TavernaPlayer
+  class Workflow < ActiveRecord::Base
+    # Do not remove the next line.
+    include TavernaPlayer::Concerns::Models::Workflow
 
-class WorkflowsControllerTest < ActionController::TestCase
-  test "should get index" do
-    get :index
-    assert_response :success
+    # Extend the Workflow model here.
   end
-
 end

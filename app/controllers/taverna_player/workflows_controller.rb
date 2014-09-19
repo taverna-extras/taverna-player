@@ -11,18 +11,8 @@
 #------------------------------------------------------------------------------
 
 module TavernaPlayer
-  module Generators
-    class ModelsGenerator < Rails::Generators::Base
-      source_root File.expand_path("../../templates/models", __FILE__)
-
-      desc "Copy the Taverna Player models into the main app for "\
-        "customization."
-
-      def copy_models
-        %w(run run_port workflow).each do |file|
-          copy_file "#{file}.rb", "app/models/taverna_player/#{file}.rb"
-        end
-      end
-    end
+  class WorkflowsController < TavernaPlayer::ApplicationController
+    # See lib/taverna_player/concerns/controllers/workflows_controller.rb
+    include TavernaPlayer::Concerns::Controllers::WorkflowsController
   end
 end

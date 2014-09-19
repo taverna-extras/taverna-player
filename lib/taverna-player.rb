@@ -19,6 +19,7 @@ require "paperclip"
 require "pmrpc-rails"
 require "rails_autolink"
 require "t2-server"
+require "taverna-t2flow"
 require "tmpdir"
 require "zip"
 
@@ -32,10 +33,14 @@ module TavernaPlayer
   mattr_accessor :server_address, :server_password, :server_username
 
   # This should be set to the name of the workflow model class in the main
-  # application via the workflow_model_proxy method below.
+  # application via the workflow_model_proxy method below. Defaults to the
+  # internal Taverna Player Workflow model (TavernaPlayer::Workflow).
   mattr_reader :workflow_proxy
+  @@workflow_proxy =
+    ModelProxy.new("TavernaPlayer::Workflow", [:file, :title, :inputs])
 
   # :call-seq:
+  #   workflow_model_proxy = workflow_class
   #   workflow_model_proxy(workflow_class) {|proxy| ...}
   #
   # Set up a proxy to the main application's workflow model. The class name
@@ -46,6 +51,12 @@ module TavernaPlayer
     @@workflow_proxy = ModelProxy.new(workflow_class, [:file, :title, :inputs])
     yield @@workflow_proxy if block_given?
   end
+
+  # :stopdoc:
+  def self.workflow_model_proxy=(workflow_class)
+    TavernaPlayer.workflow_model_proxy(workflow_class)
+  end
+  # :startdoc:
 
   # This should be set to the name of the user model class in the main
   # application via the user_model_proxy method below. Defaults to nil.

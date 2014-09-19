@@ -2,10 +2,11 @@
 
 TavernaPlayer.setup do |config|
 
-  # This should be set to the name of the workflow model class in the main
-  # application and the listed methods should also be mapped if necessary.
-  config.workflow_model_proxy("Workflow")
-  #config.workflow_model_proxy("Workflow") do |proxy|
+  # This can be set to the name of a workflow model class in the main
+  # application and the listed methods should also be mapped if necessary. The
+  # default behaviour is to use the Workflow model provided by Taverna Player.
+  config.workflow_model_proxy = "TavernaPlayer::Workflow"
+  #config.workflow_model_proxy("TavernaPlayer::Workflow") do |proxy|
     # This is the method that returns the name of the workflow file. Your
     # model MUST provide this otherwise a workflow cannot be run.
     #proxy.file_method_name = :file
