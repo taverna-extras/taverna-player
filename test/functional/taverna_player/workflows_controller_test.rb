@@ -18,8 +18,13 @@ module TavernaPlayer
       @routes = TavernaPlayer::Engine.routes
     end
 
-    test "should get index" do
+    test "should get index html" do
       get :index
+      assert_response :success
+    end
+
+    test "should get index json" do
+      get :index, :format => :json
       assert_response :success
     end
   end

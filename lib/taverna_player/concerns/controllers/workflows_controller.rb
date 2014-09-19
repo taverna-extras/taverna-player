@@ -18,7 +18,7 @@ module TavernaPlayer
         extend ActiveSupport::Concern
 
         included do
-          respond_to :html
+          respond_to :html, :json
 
           before_filter :find_workflows, :only => :index
 
