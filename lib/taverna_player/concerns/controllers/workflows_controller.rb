@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013, 2014 The University of Manchester, UK.
+# Copyright (c) 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -11,17 +11,30 @@
 #------------------------------------------------------------------------------
 
 module TavernaPlayer
-  module Generators
-    class ModelsGenerator < Rails::Generators::Base
-      source_root File.expand_path("../../templates/models", __FILE__)
+  module Concerns
+    module Controllers
+      module WorkflowsController
 
-      desc "Copy the Taverna Player models into the main app for "\
-        "customization."
+        extend ActiveSupport::Concern
 
-      def copy_models
-        %w(run run_port workflow).each do |file|
-          copy_file "#{file}.rb", "app/models/taverna_player/#{file}.rb"
+        included do
+          respond_to :html, :json
+
+          before_filter :find_workflows, :only => :index
+
+          private
+
+          def find_workflows
+            @workflows = Workflow.all
+          end
+
+        end # included
+
+        # GET /workflows
+        def index
+
         end
+
       end
     end
   end

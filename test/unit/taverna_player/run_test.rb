@@ -26,7 +26,7 @@ module TavernaPlayer
       @run9 = taverna_player_runs(:nine)
       @run10 = taverna_player_runs(:ten)
       @run11 = taverna_player_runs(:eleven)
-      @workflow = workflows(:one)
+      @workflow = taverna_player_workflows(:one)
     end
 
     test "should not save run with an illegal state" do

@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -10,8 +10,11 @@
 # Author: Robert Haines
 #------------------------------------------------------------------------------
 
-class WorkflowsController < ApplicationController
-  def index
-    @workflows = Workflow.all
+module TavernaPlayer
+  class WorkflowsController < TavernaPlayer::ApplicationController
+    # Do not remove the next line.
+    include TavernaPlayer::Concerns::Controllers::WorkflowsController
+
+    # Extend the WorkflowsController here.
   end
 end

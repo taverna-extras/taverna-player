@@ -16,7 +16,7 @@ module TavernaPlayer
   class ApplicationHelperTest < ActionView::TestCase
     setup do
       @run = taverna_player_runs(:one)
-      @workflow = workflows(:one)
+      @workflow = taverna_player_workflows(:one)
     end
 
     test "should output embedded run path from id" do
