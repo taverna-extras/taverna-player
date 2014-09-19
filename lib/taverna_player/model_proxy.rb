@@ -15,7 +15,7 @@ module TavernaPlayer
     attr_reader :class_name
 
     def initialize(class_name, method_names = [])
-      @class_name = class_name.to_s
+      @class_name = root_name(class_name.to_s)
 
       method_names.each do |name|
         add_method(name.to_sym)
@@ -31,6 +31,10 @@ module TavernaPlayer
     end
 
     private
+
+    def root_name(name)
+      name.start_with?("::") ? name : "::#{name}"
+    end
 
     def add_method(name)
       setter = "#{name}_method_name=".to_sym
