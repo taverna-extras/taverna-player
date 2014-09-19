@@ -18,6 +18,12 @@ module TavernaPlayer
       @routes = TavernaPlayer::Engine.routes
     end
 
+    test "should route to workflows" do
+      assert_routing "/workflows",
+        { :controller => "taverna_player/workflows", :action => "index" }, {},
+        {}, "Did not route correctly"
+    end
+
     test "should get index html" do
       get :index
       assert_response :success
