@@ -281,6 +281,26 @@ class WorkerTest < ActiveSupport::TestCase
     # Set a failing post_run callback
     TavernaPlayer.post_run_callback = Proc.new { raise RuntimeError }
 
+    # Stub the creation of a run on a Taverna Server.
+    flexmock(T2Server::Server).new_instances do |s|
+      s.should_receive(:initialize_run).once.
+        and_return(URI.parse("http://localhost/run/01"))
+    end
+
+    # Stub the Taverna Server run calls.
+    flexmock(T2Server::Run).new_instances do |r|
+      r.should_receive(:status).times(3).and_return(:initialized, :running, :finished)
+      r.should_receive(:create_time).and_return(Time.now)
+      r.should_receive(:add_password_credential).and_return(true)
+      r.should_receive(:name=).once.and_return(true)
+      r.should_receive(:start).once.and_return(true)
+      r.should_receive(:start_time).and_return(Time.now)
+      r.should_receive(:notifications).and_return([])
+      r.should_receive(:finish_time).and_return(Time.now)
+      r.should_receive(:log).once.and_return(0)
+      r.should_receive(:delete).and_return_undefined
+    end
+
     assert_equal :pending, @run.state, "Initial run state not ':pending'"
 
     @worker.perform
