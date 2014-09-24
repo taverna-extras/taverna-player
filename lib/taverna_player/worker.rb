@@ -50,23 +50,11 @@ module TavernaPlayer
 
       begin
         server = T2Server::Server.new(@server, conn_params)
-        wkf = File.read(@workflow)
+        workflow = File.read(@workflow)
+        run = create_run(server, workflow, credentials)
 
-        # Try and create the run bearing in mind that the server might be at
-        # the limit of runs that it can hold at once.
-        begin
-          run = server.create_run(wkf, credentials)
-        rescue T2Server::ServerAtCapacityError
-          status_message("full")
-
-          if cancelled?
-            cancel
-            return
-          end
-
-          sleep(TavernaPlayer.server_retry_interval)
-          retry
-        end
+        # If run is nil here then we could have failed or have been cancelled.
+        return if run.nil?
 
         status_message("initialized")
 
@@ -218,6 +206,22 @@ module TavernaPlayer
       end
 
       T2Server::HttpBasic.new(user, pass)
+    end
+
+    # Try and create the run bearing in mind that the server might be at
+    # the limit of runs that it can hold at once.
+    def create_run(server, workflow, credentials)
+      server.create_run(workflow, credentials)
+    rescue T2Server::ServerAtCapacityError
+      status_message("full")
+
+      if cancelled?
+        cancel
+        return
+      end
+
+      sleep(TavernaPlayer.server_retry_interval)
+      retry
     end
 
     # Run the specified callback and return false on error so that we know to
