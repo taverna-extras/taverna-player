@@ -222,6 +222,16 @@ module TavernaPlayer
 
       sleep(TavernaPlayer.server_retry_interval)
       retry
+    rescue T2Server::ConnectionError
+      status_message("network-error")
+
+      if cancelled?
+        cancel
+        return
+      end
+
+      sleep(TavernaPlayer.server_retry_interval)
+      retry
     end
 
     # Run the specified callback and return false on error so that we know to
