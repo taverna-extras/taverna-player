@@ -39,6 +39,7 @@ class WorkerTest < ActiveSupport::TestCase
 
     # Stuff we can't test yet in TavernaPlayer::Worker.
     flexmock(TavernaPlayer::Worker).new_instances do |w|
+      w.should_receive(:interactions).and_return(false)
       w.should_receive(:download_outputs).and_return_undefined
       w.should_receive(:process_outputs).and_return([])
     end
@@ -102,7 +103,6 @@ class WorkerTest < ActiveSupport::TestCase
       r.should_receive(:name=).once.and_return(true)
       r.should_receive(:start).twice.and_return(false, true)
       r.should_receive(:start_time).and_return(Time.now)
-      r.should_receive(:notifications).and_return([])
       r.should_receive(:finish_time).and_return(Time.now)
       r.should_receive(:log).once.and_return(0)
       r.should_receive(:delete).and_return_undefined
@@ -296,7 +296,6 @@ class WorkerTest < ActiveSupport::TestCase
       r.should_receive(:name=).once.and_return(true)
       r.should_receive(:start).once.and_return(true)
       r.should_receive(:start_time).and_return(Time.now)
-      r.should_receive(:notifications).and_return([])
       r.should_receive(:finish_time).and_return(Time.now)
       r.should_receive(:log).once.and_return(0)
       r.should_receive(:delete).and_return_undefined
@@ -341,7 +340,6 @@ class WorkerTest < ActiveSupport::TestCase
       r.should_receive(:name=).once.and_return(true)
       r.should_receive(:start).once.and_return(true)
       r.should_receive(:start_time).and_return(Time.now)
-      r.should_receive(:notifications).and_return([])
       r.should_receive(:finish_time).and_return(Time.now)
       r.should_receive(:log).once.and_return(0)
       r.should_receive(:delete).and_return_undefined
