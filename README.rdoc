@@ -313,7 +313,19 @@ that make use of interactions (so you have users watching the workflows
 running) then it should probably be set lower.
 
 There are a number of options for configuring the connection to the Taverna
-Server. These are actually provided by the underlying
+Server. The first specifies how many times an initial connection to Taverna
+Server will be retried if there are any low level network errors.
+
+  config.server_connection_error_retries = 5
+
+These can be events such as timeouts, broken connections, refused connections
+or anything else out of our control. If such an error is detected Taverna
+Player will back off for the amount of time specified by
+<tt>config.server_retry_interval</tt> before retrying. If the maximum number of
+retries is reached and there is still an error then the run will fail; the
+network error message will be recorded as the reason for the run's failure.
+
+The rest of the connection options are actually provided by the underlying
 {t2-server client library}[https://rubygems.org/gems/t2-server] and surfaced
 here for extra control. They are
 {documented in more detail}[http://mygrid.github.io/t2-server-gem/] elsewhere
