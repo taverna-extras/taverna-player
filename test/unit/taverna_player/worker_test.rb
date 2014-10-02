@@ -28,6 +28,7 @@ class WorkerTest < ActiveSupport::TestCase
       config.server_password = "taverna"
       config.server_poll_interval = 0
       config.server_retry_interval = 0
+      config.server_connection_error_retries = 2
       config.pre_run_callback = @noop_callback
       config.post_run_callback = @noop_callback
       config.run_cancelled_callback = @noop_callback
@@ -351,6 +352,22 @@ class WorkerTest < ActiveSupport::TestCase
     @worker.perform
 
     assert_equal :finished, @run.state, "Final run state not ':finished'"
+  end
+
+  test "network error with no recovery" do
+    # Stub the creation of a run on a Taverna Server with a network error
+    # first.
+    flexmock(T2Server::Server).new_instances do |s|
+      # Connection retries are set to 2 so this should be called 3 times.
+      s.should_receive(:initialize_run).times(3).
+        and_raise(T2Server::ConnectionError, Timeout::Error.new)
+    end
+
+    assert_equal :pending, @run.state, "Initial run state not ':pending'"
+
+    @worker.perform
+
+    assert_equal :failed, @run.state, "Final run state not ':finished'"
   end
 
 end

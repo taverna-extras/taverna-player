@@ -211,6 +211,7 @@ module TavernaPlayer
     # Try and create the run bearing in mind that the server might be at
     # the limit of runs that it can hold at once.
     def create_run(server, workflow, credentials)
+      retries ||= TavernaPlayer.server_connection_error_retries
       server.create_run(workflow, credentials)
     rescue T2Server::ServerAtCapacityError
       status_message("full")
@@ -222,7 +223,7 @@ module TavernaPlayer
 
       sleep(TavernaPlayer.server_retry_interval)
       retry
-    rescue T2Server::ConnectionError
+    rescue T2Server::ConnectionError => ce
       status_message("network-error")
 
       if cancelled?
@@ -231,7 +232,13 @@ module TavernaPlayer
       end
 
       sleep(TavernaPlayer.server_retry_interval)
-      retry
+      unless retries.zero?
+        retries -= 1
+        retry
+      end
+
+      # If we're out of retries, fail the run.
+      failed(ce)
     end
 
     # Run the specified callback and return false on error so that we know to
