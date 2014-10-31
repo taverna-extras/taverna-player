@@ -1,5 +1,15 @@
 = Changes log for Taverna Player
 
+== Version 0.10.0
+
+* Use the latest t2-server client library.
+* Factor out run creation in the worker.
+* Fix the "fail in post run callback" worker test.
+* [TAV-522] Handle network level errors (retry).
+* [TAV-522] Configure number of network error retries.
+* Document the new connection configuration option.
+* Factor out the interactions handler in the worker code.
+
 == Version 0.9.0
 
 * Add a test to check if a Run's delayed_job has failed.
