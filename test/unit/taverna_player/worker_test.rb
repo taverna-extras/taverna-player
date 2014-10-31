@@ -28,6 +28,7 @@ class WorkerTest < ActiveSupport::TestCase
       config.server_password = "taverna"
       config.server_poll_interval = 0
       config.server_retry_interval = 0
+      config.server_connection_error_retries = 2
       config.pre_run_callback = @noop_callback
       config.post_run_callback = @noop_callback
       config.run_cancelled_callback = @noop_callback
@@ -38,6 +39,7 @@ class WorkerTest < ActiveSupport::TestCase
 
     # Stuff we can't test yet in TavernaPlayer::Worker.
     flexmock(TavernaPlayer::Worker).new_instances do |w|
+      w.should_receive(:interactions).and_return(false)
       w.should_receive(:download_outputs).and_return_undefined
       w.should_receive(:process_outputs).and_return([])
     end
@@ -101,7 +103,6 @@ class WorkerTest < ActiveSupport::TestCase
       r.should_receive(:name=).once.and_return(true)
       r.should_receive(:start).twice.and_return(false, true)
       r.should_receive(:start_time).and_return(Time.now)
-      r.should_receive(:notifications).and_return([])
       r.should_receive(:finish_time).and_return(Time.now)
       r.should_receive(:log).once.and_return(0)
       r.should_receive(:delete).and_return_undefined
@@ -281,6 +282,25 @@ class WorkerTest < ActiveSupport::TestCase
     # Set a failing post_run callback
     TavernaPlayer.post_run_callback = Proc.new { raise RuntimeError }
 
+    # Stub the creation of a run on a Taverna Server.
+    flexmock(T2Server::Server).new_instances do |s|
+      s.should_receive(:initialize_run).once.
+        and_return(URI.parse("http://localhost/run/01"))
+    end
+
+    # Stub the Taverna Server run calls.
+    flexmock(T2Server::Run).new_instances do |r|
+      r.should_receive(:status).times(3).and_return(:initialized, :running, :finished)
+      r.should_receive(:create_time).and_return(Time.now)
+      r.should_receive(:add_password_credential).and_return(true)
+      r.should_receive(:name=).once.and_return(true)
+      r.should_receive(:start).once.and_return(true)
+      r.should_receive(:start_time).and_return(Time.now)
+      r.should_receive(:finish_time).and_return(Time.now)
+      r.should_receive(:log).once.and_return(0)
+      r.should_receive(:delete).and_return_undefined
+    end
+
     assert_equal :pending, @run.state, "Initial run state not ':pending'"
 
     @worker.perform
@@ -302,4 +322,50 @@ class WorkerTest < ActiveSupport::TestCase
 
     assert_equal :timeout, @run.state, "Final run state not ':timeout'"
   end
+
+  test "network error with recovery" do
+    # Stub the creation of a run on a Taverna Server with a network error
+    # first.
+    flexmock(T2Server::Server).new_instances do |s|
+      s.should_receive(:initialize_run).twice.
+        and_raise(T2Server::ConnectionError, Timeout::Error.new).
+        and_return(URI.parse("http://localhost/run/01"))
+    end
+
+    # Stub the Taverna Server run calls.
+    flexmock(T2Server::Run).new_instances do |r|
+      r.should_receive(:status).times(3).and_return(:initialized, :running, :finished)
+      r.should_receive(:create_time).and_return(Time.now)
+      r.should_receive(:add_password_credential).and_return(true)
+      r.should_receive(:name=).once.and_return(true)
+      r.should_receive(:start).once.and_return(true)
+      r.should_receive(:start_time).and_return(Time.now)
+      r.should_receive(:finish_time).and_return(Time.now)
+      r.should_receive(:log).once.and_return(0)
+      r.should_receive(:delete).and_return_undefined
+    end
+
+    assert_equal :pending, @run.state, "Initial run state not ':pending'"
+
+    @worker.perform
+
+    assert_equal :finished, @run.state, "Final run state not ':finished'"
+  end
+
+  test "network error with no recovery" do
+    # Stub the creation of a run on a Taverna Server with a network error
+    # first.
+    flexmock(T2Server::Server).new_instances do |s|
+      # Connection retries are set to 2 so this should be called 3 times.
+      s.should_receive(:initialize_run).times(3).
+        and_raise(T2Server::ConnectionError, Timeout::Error.new)
+    end
+
+    assert_equal :pending, @run.state, "Initial run state not ':pending'"
+
+    @worker.perform
+
+    assert_equal :failed, @run.state, "Final run state not ':finished'"
+  end
+
 end

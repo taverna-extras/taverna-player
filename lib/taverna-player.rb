@@ -121,6 +121,10 @@ module TavernaPlayer
   mattr_accessor :server_retry_interval
   @@server_retry_interval = 10
 
+  # Number of times to retry on a low-level connection error.
+  mattr_accessor :server_connection_error_retries
+  @@server_connection_error_retries = 5
+
   # Taverna Server connection parameters
   mattr_accessor :server_connection
   @@server_connection = T2Server::DefaultConnectionParameters.new
