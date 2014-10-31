@@ -1,5 +1,43 @@
 = Changes log for Taverna Player
 
+== Version 0.10.0
+
+* Use the latest t2-server client library.
+* Factor out run creation in the worker.
+* Fix the "fail in post run callback" worker test.
+* [TAV-522] Handle network level errors (retry).
+* [TAV-522] Configure number of network error retries.
+* Document the new connection configuration option.
+* Factor out the interactions handler in the worker code.
+
+== Version 0.9.0
+
+* Add a test to check if a Run's delayed_job has failed.
+* Destroy failed delayed_jobs when destroying Runs.
+* Add a CITATION file.
+* Test cancelling a Run before it starts running.
+* Add Run#pending?
+* Add Run#initialized?
+* Add Run#incomplete?
+* Allow cancelling a run if its delayed_job fails.
+* Add a test for Run#initialized?
+* Use the latest t2flow gem for the tests.
+* Add a default Workflow model.
+* Fix up the user proxy for tests vs the dev app.
+* Update the installer templates.
+* Refactor ModelProxy so constantization is delayed.
+* Set the internal Workflow model to be the default.
+* Only route TavernaPlayer::Workflow if it is in use.
+* Allow extending of the internal Workflow model.
+* Allow extending of the internal Workflow controller.
+* Add the internal Workflow stubs to the generators.
+* Set the workflow model proxy more simply.
+* Update the ReadMe with new workflow model infomation.
+* Ensure the proxied models use a rooted (::) namespace.
+* Add specific tests for the ModelProxy class.
+* Output JSON for the workflows controller.
+* Add a routing test for the workflows controller.
+
 == Version 0.8.0
 
 * Add a note about Taverna Server compatibility to the ReadMe.

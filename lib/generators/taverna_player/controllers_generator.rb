@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -19,11 +19,10 @@ module TavernaPlayer
         "customization."
 
       def copy_controllers
-        copy_file "runs_controller.rb",
-          "app/controllers/taverna_player/runs_controller.rb"
-
-        copy_file "service_credentials_controller.rb",
-          "app/controllers/taverna_player/service_credentials_controller.rb"
+        %w(runs service_credentials workflows).each do |file|
+          copy_file "#{file}_controller.rb",
+            "app/controllers/taverna_player/#{file}_controller.rb"
+        end
       end
     end
   end

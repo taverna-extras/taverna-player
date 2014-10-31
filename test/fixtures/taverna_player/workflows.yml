@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -11,21 +11,18 @@
 #------------------------------------------------------------------------------
 
 one:
-  id: 1
   title: Hello, World!
   author: Robert Haines
   description: Say "Hello, World!"
   file: test/workflows/hello.t2flow
 
 two:
-  id: 2
   title: List of Fail
   author: Robert Haines
   description: Produce a list littered with errors
   file: test/workflows/list_with_errors.t2flow
 
 three:
-  id: 3
   title: Pass Through
   author: Robert Haines
   description: Pass the input straight through to the output

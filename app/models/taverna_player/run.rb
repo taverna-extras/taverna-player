@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -36,8 +36,9 @@ module TavernaPlayer
     # :call-seq:
     #   complete? -> boolean
     #
-    # Is this run complete? If a run is finished or cancelled or failed or
-    # has timed out then it is complete.
+    # Is this run complete? If a run is finished or cancelled or failed or its
+    # underlying worker has failed or it has timed out then it is complete.
+    # #complete? is not quite the direct opposite of #incomplete?
 
     ##
     # :method: embedded?
@@ -77,11 +78,42 @@ module TavernaPlayer
     # A run will have a parent if it is a child run as part of a sweep.
 
     ##
+    # :method: incomplete?
+    # :call-seq:
+    #   incomplete? -> boolean
+    #
+    # Is this run incomplete? If a run is pending or initialized or running
+    # then it is incomplete. #incomplete? is not quite the direct opposite of
+    # #complete?
+
+    ##
+    # :method: initialized?
+    # :call-seq:
+    #   initialized? -> boolean
+    #
+    # Is this run initialized on Taverna Server but not running yet?
+
+    ##
+    # :method: job_failed?
+    # :call-seq:
+    #   job_failed? -> boolean
+    #
+    # Did the delayed_job worker running this run fail? This is primarily
+    # intended for internal use only at the moment.
+
+    ##
     # :method: name
     # :call-seq:
     #   name -> string
     #
     # The name (mnemonic) of this run.
+
+    ##
+    # :method: pending?
+    # :call-seq:
+    #   pending? -> boolean
+    #
+    # Is this run in the queue?
 
     ##
     # :method: root_ancestor

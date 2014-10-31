@@ -13,6 +13,7 @@ TavernaPlayer.setup do |config|
   config.server_retry_interval = 10
 
   # Taverna Server connection configuration.
+  #config.server_connection_error_retries = 5
   #config.server_connection[:verify_peer] = true
   #config.server_connection[:ca_file] = "/etc/certs/my-cert.crt"
   #config.server_connection[:ca_path] = "/etc/certs/"

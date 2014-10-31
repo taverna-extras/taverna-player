@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013 The University of Manchester, UK.
+# Copyright (c) 2013, 2014 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -11,12 +11,6 @@
 #------------------------------------------------------------------------------
 
 Rails.application.routes.draw do
-
   root :to => "home#index"
-
-  resources :workflows, :only => :index do
-    resources :runs, :controller => "TavernaPlayer::Runs", :except => :edit
-  end
-
   mount TavernaPlayer::Engine, :at => "/"
 end

@@ -39,6 +39,7 @@ RDoc::Task.new(:rdoc) do |rdoc|
     "app/models/taverna_player/run.rb",
     "app/models/taverna_player/run_port.rb",
     "app/models/taverna_player/service_credential.rb",
+    "app/models/taverna_player/workflow.rb",
     "lib/taverna-player.rb",
     "lib/taverna_player/port_renderer.rb"
     ]
