@@ -5,8 +5,9 @@ rvm:
   - 2.1.2
   - rbx-2
   - ruby-head
-script:
+before_script:
   - RAILS_ENV=test bundle exec rake db:schema:load
+script:
   - bundle exec rake test
 matrix:
   allow_failures:
