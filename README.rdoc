@@ -579,6 +579,13 @@ Note that the same renderer callback is used for each one.
 === Rendering lists
 
 Taverna workflow inputs and output can be lists and rendering them requires a
+renderer too. The renderer you wish to use for displaying lists is set with
+the +list+ method:
+
+  renderers.list(:render_list)
+
+The default list renderer recurses into the list and calls the correct
+renderer for each leaf item when it gets to them.
 
 === Writing your own renderers
 
