@@ -4,7 +4,7 @@ Authors::     Robert Haines
 Contact::     mailto:support@mygrid.org.uk
 URL::         http://www.taverna.org.uk
 Licence::     BSD (See LICENCE or http://www.opensource.org/licenses/bsd-license.php)
-Copyright::   (c) 2013, 2014 The University of Manchester, UK
+Copyright::   (c) 2013-2015 The University of Manchester, UK
 
 {<img src="https://badge.fury.io/rb/taverna-player.svg" alt="Gem Version" />}[http://badge.fury.io/rb/taverna-player]
 {<img src="https://codeclimate.com/github/myGrid/taverna-player/badges/gpa.svg" />}[https://codeclimate.com/github/myGrid/taverna-player]
