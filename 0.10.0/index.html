@@ -116,7 +116,7 @@ src="https://codeclimate.com/github/myGrid/taverna-player/badges/gpa.svg"
 src="https://travis-ci.org/myGrid/taverna-player.svg?branch=master"
 alt="Build Status" /></a> <a
 href="https://coveralls.io/r/myGrid/taverna-player?branch=master"><img
-src="https://coveralls.io/repos/myGrid/taverna-player/badge.png?branch=master"
+src="https://coveralls.io/repos/myGrid/taverna-player/badge.svg?branch=master"
 alt="Coverage Status" /></a></p>
 
 <h2 id="label-Synopsis">Synopsis</h2>
@@ -763,7 +763,13 @@ renderers.add(&quot;image/bmp&quot;, :show_image)</pre>
 <h3 id="label-Rendering+lists">Rendering lists</h3>
 
 <p>Taverna workflow inputs and output can be lists and rendering them requires
-a</p>
+a renderer too. The renderer you wish to use for displaying lists is set
+with the <code>list</code> method:</p>
+
+<pre>renderers.list(:render_list)</pre>
+
+<p>The default list renderer recurses into the list and calls the correct
+renderer for each leaf item when it gets to them.</p>
 
 <h3 id="label-Writing+your+own+renderers">Writing your own renderers</h3>
 
