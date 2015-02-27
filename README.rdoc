@@ -4,12 +4,12 @@ Authors::     Robert Haines
 Contact::     mailto:support@mygrid.org.uk
 URL::         http://www.taverna.org.uk
 Licence::     BSD (See LICENCE or http://www.opensource.org/licenses/bsd-license.php)
-Copyright::   (c) 2013, 2014 The University of Manchester, UK
+Copyright::   (c) 2013-2015 The University of Manchester, UK
 
 {<img src="https://badge.fury.io/rb/taverna-player.svg" alt="Gem Version" />}[http://badge.fury.io/rb/taverna-player]
 {<img src="https://codeclimate.com/github/myGrid/taverna-player/badges/gpa.svg" />}[https://codeclimate.com/github/myGrid/taverna-player]
 {<img src="https://travis-ci.org/myGrid/taverna-player.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/myGrid/taverna-player]
-{<img src="https://coveralls.io/repos/myGrid/taverna-player/badge.png?branch=master" alt="Coverage Status" />}[https://coveralls.io/r/myGrid/taverna-player?branch=master]
+{<img src="https://coveralls.io/repos/myGrid/taverna-player/badge.svg?branch=master" alt="Coverage Status" />}[https://coveralls.io/r/myGrid/taverna-player?branch=master]
 
 == Synopsis
 
@@ -579,6 +579,13 @@ Note that the same renderer callback is used for each one.
 === Rendering lists
 
 Taverna workflow inputs and output can be lists and rendering them requires a
+renderer too. The renderer you wish to use for displaying lists is set with
+the +list+ method:
+
+  renderers.list(:render_list)
+
+The default list renderer recurses into the list and calls the correct
+renderer for each leaf item when it gets to them.
 
 === Writing your own renderers
 

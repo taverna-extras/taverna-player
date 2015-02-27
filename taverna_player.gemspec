@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-rails", "~> 3.0"
   s.add_dependency "paperclip", "~> 4.1"
   s.add_dependency "taverna-t2flow", "~> 0.5.1"
-  s.add_dependency "t2-server", "~> 1.2"
+  s.add_dependency "t2-server", "~> 1.3"
   s.add_dependency "delayed_job_active_record", "~> 4.0"
   s.add_dependency "daemons", "~> 1.1.9"
   s.add_dependency "rubyzip", "~> 1.1.4"
@@ -50,6 +50,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "coveralls"
   s.add_development_dependency "flexmock", "~> 1.3"
+  s.add_development_dependency "test-unit", "~> 3.0"
 
   s.require_path = "lib"
 end

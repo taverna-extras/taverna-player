@@ -1,5 +1,14 @@
 = Changes log for Taverna Player
 
+== Version 0.11.0
+
+* Clean up Travis configuration for cleaner output.
+* Fix cut-off sentence in README.
+* Use the latest t2-server gem.
+* Add test-unit dependency to test in newer rubies.
+* Don't include URL helpers at the top level.
+* Test ruby 2.1.5 as it is the latest in the 2.1 line.
+
 == Version 0.10.0
 
 * Use the latest t2-server client library.
