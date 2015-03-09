@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- test/*`.split("\n")
 
-  s.add_dependency "rails", "~> 4.0.2"
+  s.add_dependency "rails", "~> 4.1.9"
   s.add_dependency "jquery-rails", "~> 3.0"
   s.add_dependency "paperclip", "~> 4.1"
   s.add_dependency "t2-server", "~> 1.1"
