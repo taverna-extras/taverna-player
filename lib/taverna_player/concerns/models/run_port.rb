@@ -163,7 +163,7 @@ module TavernaPlayer
         end
 
         def value=(v)
-          self[:value] = v.force_encoding("BINARY")
+          self[:value] = v.dup.force_encoding("BINARY")
         end
 
         def path(*indices)
