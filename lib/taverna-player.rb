@@ -20,6 +20,7 @@ require "rails_autolink"
 require "t2-server"
 require "tmpdir"
 require "zip"
+require "responders"
 
 # Grab everything in the taverna_player directory using the require_all gem.
 require_rel "taverna_player"

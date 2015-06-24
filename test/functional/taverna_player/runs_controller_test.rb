@@ -110,7 +110,7 @@ module TavernaPlayer
     end
 
     test "should get index and be overridden" do
-      get :index, :use_route => :taverna_player
+      get :index
       assert_response :success, "Response was not success"
       assert_not_nil assigns(:runs), "Did not assign a valid runs instance"
       assert_not_nil assigns(:override)
@@ -119,7 +119,7 @@ module TavernaPlayer
     end
 
     test "should get new and not be overridden" do
-      get :new, :workflow_id => @workflow1, :use_route => :taverna_player
+      get :new, :workflow_id => @workflow1
       assert_response :success, "Response was not success"
       refute assigns(:override)
       assert_template({ :layout => "application" },
@@ -127,15 +127,14 @@ module TavernaPlayer
     end
 
     test "should get new embedded" do
-      get :new, :workflow_id => @workflow1, :embedded => "true",
-        :use_route => :taverna_player
+      get :new, :workflow_id => @workflow1, :embedded => "true"
       assert_response :success, "Response was not success"
       assert_template({ :layout => "taverna_player/embedded" },
         "Did not render with the correct layout")
     end
 
     test "should show run with no interactions" do
-      get :show, :id => @run1, :use_route => :taverna_player
+      get :show, :id => @run1
       assert_response :success, "Response was not success"
       refute assigns(:interaction), "No interactions for this run"
       assert_template({ :layout => "application" },
@@ -143,7 +142,7 @@ module TavernaPlayer
     end
 
     test "should show run with an undisplayed interaction" do
-      get :show, :id => @run4, :use_route => :taverna_player
+      get :show, :id => @run4
       assert_response :success, "Response was not success"
       assert assigns(:interaction), "Should have an interaction for this run"
       assert assigns(:new_interaction), "Should have new interaction flag"
@@ -152,7 +151,7 @@ module TavernaPlayer
     end
 
     test "should show run with a displayed interaction" do
-      get :show, :id => @run5, :use_route => :taverna_player
+      get :show, :id => @run5
       assert_response :success, "Response was not success"
       assert assigns(:interaction), "Should have an interaction for this run"
       refute assigns(:new_interaction), "Should not have new interaction flag"
@@ -161,7 +160,7 @@ module TavernaPlayer
     end
 
     test "should show run embedded ignoring replied interaction" do
-      get :show, :id => @run3, :use_route => :taverna_player
+      get :show, :id => @run3
       assert_response :success, "Response was not success"
       refute assigns(:interaction), "Should not show replied interaction"
       refute assigns(:new_interaction), "Should not have new interaction flag"
@@ -258,7 +257,7 @@ module TavernaPlayer
       @request.env["HTTP_REFERER"] = "/runs"
       assert_no_difference(["Run.count", "RunPort::Output.count"],
         "Run count and output port count changed") do
-          delete :destroy, :id => @run1, :use_route => :taverna_player
+          delete :destroy, :id => @run1
       end
 
       assert_equal "Run must be cancelled before deletion.", flash[:alert],
@@ -282,7 +281,7 @@ module TavernaPlayer
       @request.env["HTTP_REFERER"] = "/runs"
       assert_no_difference(["Run.count", "Delayed::Job.count"],
         "Run and Delayed::Job count changed") do
-          delete :destroy, :id => @run8, :use_route => :taverna_player
+          delete :destroy, :id => @run8
       end
 
       assert_equal "Run must be cancelled before deletion.", flash[:alert],
@@ -295,7 +294,7 @@ module TavernaPlayer
       @request.env["HTTP_REFERER"] = "/runs"
       assert_difference(["Run.count", "Delayed::Job.count"], -1,
         "Run and Delayed::Job count did not reduce") do
-          delete :destroy, :id => @run9, :use_route => :taverna_player
+          delete :destroy, :id => @run9
       end
 
       assert_response :redirect, "Response was not a redirect"
@@ -304,7 +303,7 @@ module TavernaPlayer
 
     test "should cancel run and redirect to index via browser" do
       @request.env["HTTP_REFERER"] = "/runs"
-      put :cancel, :id => @run1, :use_route => :taverna_player
+      put :cancel, :id => @run1
 
       assert_response :redirect, "Response was not a redirect"
       assert_redirected_to runs_path, "Did not redirect correctly"
@@ -312,7 +311,7 @@ module TavernaPlayer
 
     test "should cancel run and redirect to show via browser" do
       @request.env["HTTP_REFERER"] = "/runs/#{@run1.id}"
-      put :cancel, :id => @run1, :use_route => :taverna_player
+      put :cancel, :id => @run1
 
       assert_response :redirect, "Response was not a redirect"
       assert_redirected_to run_path(@run1), "Did not redirect correctly"
@@ -328,7 +327,7 @@ module TavernaPlayer
       assert_difference(["Run.count", "RunPort::Input.count",
         "RunPort::Output.count", "Interaction.count"], -1,
         "Counts of objects did not reduce by 1") do
-          delete :destroy, :id => @run3, :use_route => :taverna_player
+          delete :destroy, :id => @run3
       end
 
       assert_response :redirect, "Response was not a redirect"

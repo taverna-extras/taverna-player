@@ -15,6 +15,7 @@ require 'test_helper'
 module TavernaPlayer
   class JobQueueControllerTest < ActionController::TestCase
     setup do
+      @controller = TavernaPlayer::JobQueueController.new
       @routes = TavernaPlayer::Engine.routes
     end
 
