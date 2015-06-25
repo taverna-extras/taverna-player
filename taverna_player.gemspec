@@ -45,12 +45,11 @@ Gem::Specification.new do |s|
   s.add_dependency "require_all", "~> 1.3.1"
   s.add_dependency "pmrpc-rails", "~> 1.0.0"
   s.add_dependency 'responders', '~> 2.0'
-  s.add_dependency 'test-unit', '~> 3.1.2'
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "coveralls"
   s.add_development_dependency "flexmock", "~> 1.3"
-  s.add_development_dependency "test-unit"
+  s.add_development_dependency 'test-unit', '~> 3.1.2'
 
   s.require_path = "lib"
 end
