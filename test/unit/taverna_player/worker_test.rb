@@ -42,6 +42,10 @@ class WorkerTest < ActiveSupport::TestCase
 
     @run = taverna_player_runs(:seven)
     @worker = TavernaPlayer::Worker.new(@run)
+
+    # Reset ENV vars
+    ENV.delete("TAVERNA_URI")
+    ENV.delete("TAVERNA_CREDENTIALS")
   end
 
   test "max attempts should be 1" do
