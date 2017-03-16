@@ -19,9 +19,8 @@ class HomeControllerTest < ActionController::TestCase
 
     # Check the home page iframe URI is not escaped. Can only test this here
     # because the helpers are not escaped unless called from within a view.
-    assert_select "iframe" do
-      assert_select ":match('src', ?)", /^(?!.*&amp;).*$/
-    end
+    assert_select "iframe", count: 1
+    assert_select "iframe[src=?]", /^(?!.*&amp;).*$/
   end
 
 end
