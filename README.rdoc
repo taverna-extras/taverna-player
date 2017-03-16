@@ -4,12 +4,12 @@ Authors::     Robert Haines
 Contact::     mailto:support@mygrid.org.uk
 URL::         http://www.taverna.org.uk
 Licence::     BSD (See LICENCE or http://www.opensource.org/licenses/bsd-license.php)
-Copyright::   (c) 2013, 2014 The University of Manchester, UK
+Copyright::   (c) 2013-2015 The University of Manchester, UK
 
 {<img src="https://badge.fury.io/rb/taverna-player.svg" alt="Gem Version" />}[http://badge.fury.io/rb/taverna-player]
-{<img src="https://codeclimate.com/github/myGrid/taverna-player.png" />}[https://codeclimate.com/github/myGrid/taverna-player]
+{<img src="https://codeclimate.com/github/myGrid/taverna-player/badges/gpa.svg" />}[https://codeclimate.com/github/myGrid/taverna-player]
 {<img src="https://travis-ci.org/myGrid/taverna-player.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/myGrid/taverna-player]
-{<img src="https://coveralls.io/repos/myGrid/taverna-player/badge.png?branch=master" alt="Coverage Status" />}[https://coveralls.io/r/myGrid/taverna-player?branch=master]
+{<img src="https://coveralls.io/repos/myGrid/taverna-player/badge.svg?branch=master" alt="Coverage Status" />}[https://coveralls.io/r/myGrid/taverna-player?branch=master]
 
 == Synopsis
 
@@ -22,9 +22,8 @@ Taverna Player handles all aspects of running a workflow including:
 * Presenting workflow interactions to the user
 * Gathering and download of workflow outputs
 
-It, purposefully, does not:
-* Manage workflows
-* Manage users
+It, purposefully, does not manage users and its default workflow model is
+intentionally oversimplified.
 
 == Prerequisites
 
@@ -109,9 +108,10 @@ Mount the Taverna Player engine in your <tt>config/routes.rb</tt>. For example:
 
   mount TavernaPlayer::Engine, :at => "/"
 
-Taverna Player provides three resources with paths:
+Taverna Player provides four resources with paths:
 
 * <tt>/runs/*</tt>
+* <tt>/workflows/*</tt>
 * <tt>/service_credentials/*</tt>
 * <tt>/job_queue</tt>
 
@@ -129,11 +129,18 @@ set (for example):
 And the resource paths would become:
 
 * <tt>/runs/*</tt>
+* <tt>/workflows/*</tt>
 * <tt>/admin/service_credentials/*</tt>
 * <tt>/admin/job_queue</tt>
 
-You can also nest the Taverna Player runs resources within your workflows
-resources if you wish, like this:
+The supplied workflow model also nests the run resources within it:
+
+* <tt>/workflows</tt>
+* <tt>/workflows/{workflow-id}/runs/*</tt>
+
+If you override the default workflow model (see below for details) you can
+also nest the Taverna Player runs resources within your workflows resources if
+you wish, like this (within your application's <tt>config/routes.rb</tt>):
 
   resources :workflows do
     resources :runs, :controller => "TavernaPlayer::Runs", :except => :edit
@@ -198,13 +205,13 @@ so that they take precedence over the default ones. You can delete any that you
 do not need to customize but there are no penalties for leaving them there.
 There is more information on overriding controllers below.
 
-If you need to override the Taverna Player Run model, to add columns to the
-table for example, you can copy a customizable stub with:
+If you need to override any Taverna Player models, to add columns to a table
+for example, you can copy customizable stubs with:
 
   rails generate taverna_player:models
 
-The stub is copied to the <tt>app/models/taverna_player</tt> directory so that
-it takes precedence over the default one. There is more information on
+The stubs are copied to the <tt>app/models/taverna_player</tt> directory so
+that they take precedence over the defaults. There is more information on
 overriding models below.
 
 If you want to use pre- and post-run callbacks you can setup some basic stubs
@@ -252,6 +259,10 @@ called "file_name" then the following will configure this correctly:
   config.workflow_model_proxy("Workflow") do |proxy|
     proxy.file_method_name = :file_name
   end
+
+Taverna Player has a very simple internal workflow model
+(TavernaPlayer::Workflow) that you can extend (see below) or replace with the
+above code.
 
 Secondly, Taverna Player needs to know where your Taverna Server is and how to
 authenticate to it:
@@ -302,7 +313,19 @@ that make use of interactions (so you have users watching the workflows
 running) then it should probably be set lower.
 
 There are a number of options for configuring the connection to the Taverna
-Server. These are actually provided by the underlying
+Server. The first specifies how many times an initial connection to Taverna
+Server will be retried if there are any low level network errors.
+
+  config.server_connection_error_retries = 5
+
+These can be events such as timeouts, broken connections, refused connections
+or anything else out of our control. If such an error is detected Taverna
+Player will back off for the amount of time specified by
+<tt>config.server_retry_interval</tt> before retrying. If the maximum number of
+retries is reached and there is still an error then the run will fail; the
+network error message will be recorded as the reason for the run's failure.
+
+The rest of the connection options are actually provided by the underlying
 {t2-server client library}[https://rubygems.org/gems/t2-server] and surfaced
 here for extra control. They are
 {documented in more detail}[http://mygrid.github.io/t2-server-gem/] elsewhere
@@ -396,7 +419,9 @@ You can override the following core components:
 * RunPort (model)
 * RunPort::Input (model)
 * RunPort::Output (model)
+* Workflow (model)
 * RunsController
+* WorkflowController
 * ServiceCredentialsController
 * JobQueueController
 
@@ -467,7 +492,7 @@ An example callback that just prints out the run's name and workflow id would
 be:
 
   def player_run_callback(run)
-    w = Workflow.find(run.workflow_id)
+    w = TavernaPlayer::Workflow.find(run.workflow_id)
     puts "Callback called for run '#{run.name}' of workflow '#{w.id}'"
   end
 
@@ -554,6 +579,13 @@ Note that the same renderer callback is used for each one.
 === Rendering lists
 
 Taverna workflow inputs and output can be lists and rendering them requires a
+renderer too. The renderer you wish to use for displaying lists is set with
+the +list+ method:
+
+  renderers.list(:render_list)
+
+The default list renderer recurses into the list and calls the correct
+renderer for each leaf item when it gets to them.
 
 === Writing your own renderers
 

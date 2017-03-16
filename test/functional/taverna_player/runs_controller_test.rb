@@ -23,8 +23,8 @@ module TavernaPlayer
       @run8 = taverna_player_runs(:eight)
       @run9 = taverna_player_runs(:nine)
       @int = taverna_player_interactions(:one)
-      @workflow1 = workflows(:one)
-      @workflow3 = workflows(:three)
+      @workflow1 = taverna_player_workflows(:one)
+      @workflow3 = taverna_player_workflows(:three)
       @routes = TavernaPlayer::Engine.routes
     end
 

@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013, 2014 The University of Manchester, UK.
+# Copyright (c) 2013-2015 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -14,6 +14,8 @@ require 'test_helper'
 
 module TavernaPlayer
   class RunsHelperTest < ActionView::TestCase
+    include TavernaPlayer::Engine.routes.url_helpers
+
     setup do
       @int1 = taverna_player_interactions(:one)
       @int2 = taverna_player_interactions(:two)

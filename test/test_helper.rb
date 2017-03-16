@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013, 2014 The University of Manchester, UK.
+# Copyright (c) 2013-2015 The University of Manchester, UK.
 #
 # BSD Licenced. See LICENCE.rdoc for details.
 #
@@ -28,7 +28,6 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures", __FILE__)
 
 class ActiveSupport::TestCase
-  include TavernaPlayer::Engine.routes.url_helpers
   include ActionDispatch::TestProcess
   fixtures :all
 end

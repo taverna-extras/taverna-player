@@ -50,23 +50,11 @@ module TavernaPlayer
 
       begin
         server = T2Server::Server.new(@server, conn_params)
-        wkf = File.read(@workflow)
+        workflow = File.read(@workflow)
+        run = create_run(server, workflow, credentials)
 
-        # Try and create the run bearing in mind that the server might be at
-        # the limit of runs that it can hold at once.
-        begin
-          run = server.create_run(wkf, credentials)
-        rescue T2Server::ServerAtCapacityError
-          status_message("full")
-
-          if cancelled?
-            cancel
-            return
-          end
-
-          sleep(TavernaPlayer.server_retry_interval)
-          retry
-        end
+        # If run is nil here then we could have failed or have been cancelled.
+        return if run.nil?
 
         status_message("initialized")
 
@@ -121,65 +109,7 @@ module TavernaPlayer
             return
           end
 
-          run.notifications(:requests).each do |note|
-            if @run.has_parent?
-              next if note.has_reply? || note.is_notification?
-              int = Interaction.find_by_run_id_and_serial(@run.parent_id, note.serial)
-              new_int = Interaction.find_or_initialize_by(:run_id => @run.id, :serial => note.serial)
-              if new_int.new_record?
-                note.reply(int.feed_reply, int.data)
-                new_int.displayed = true
-                new_int.replied = true
-                new_int.feed_reply = int.feed_reply
-                new_int.data = int.data
-                new_int.save
-              end
-            else
-              int = Interaction.find_or_initialize_by(:run_id => @run.id, :serial => note.serial)
-
-              # Need to catch this here in case some other process has replied.
-              if note.has_reply? && !int.replied?
-                int.replied = true
-                int.save
-              end
-
-              unless int.replied?
-                if int.page.blank?
-                  page = server.read(note.uri, "text/html", credentials)
-
-                  INTERACTION_REGEX.match(page) do
-                    page_uri = $1
-
-                    if page_uri.starts_with?(server.uri.to_s)
-                      page = server.read(URI.parse(page_uri), "text/html", credentials)
-                      int.page = page.gsub("#{run.interactions_uri.to_s}/pmrpc.js",
-                        "/assets/taverna_player/application.js")
-                    else
-                      int.page_uri = page_uri
-                    end
-                  end
-                end
-
-                if note.is_notification? && !int.new_record?
-                  int.replied = true
-                end
-
-                if int.data.blank?
-                  int.data = note.input_data.force_encoding("UTF-8")
-                end
-
-                if !int.feed_reply.blank? && !int.data.blank?
-                  note.reply(int.feed_reply, int.data)
-
-                  int.replied = true
-                end
-
-                int.save
-              end
-
-              waiting = true unless int.replied?
-            end
-          end
+          waiting = interactions(run, credentials)
 
           status_message(waiting ? "interact" : "running")
         end
@@ -218,6 +148,108 @@ module TavernaPlayer
       end
 
       T2Server::HttpBasic.new(user, pass)
+    end
+
+    # Try and create the run bearing in mind that the server might be at
+    # the limit of runs that it can hold at once.
+    def create_run(server, workflow, credentials)
+      retries ||= TavernaPlayer.server_connection_error_retries
+      server.create_run(workflow, credentials)
+    rescue T2Server::ServerAtCapacityError
+      status_message("full")
+
+      if cancelled?
+        cancel
+        return
+      end
+
+      sleep(TavernaPlayer.server_retry_interval)
+      retry
+    rescue T2Server::ConnectionError => ce
+      status_message("network-error")
+
+      if cancelled?
+        cancel
+        return
+      end
+
+      sleep(TavernaPlayer.server_retry_interval)
+      unless retries.zero?
+        retries -= 1
+        retry
+      end
+
+      # If we're out of retries, fail the run.
+      failed(ce)
+    end
+
+    def interactions(run, credentials)
+      wait = false
+
+      run.notifications(:requests).each do |note|
+        if @run.has_parent?
+          next if note.has_reply? || note.is_notification?
+
+          int = Interaction.find_by_run_id_and_serial(@run.parent_id, note.serial)
+          new_int = Interaction.find_or_initialize_by_run_id_and_serial(@run.id, note.serial)
+
+          if new_int.new_record?
+            note.reply(int.feed_reply, int.data)
+            new_int.displayed = true
+            new_int.replied = true
+            new_int.feed_reply = int.feed_reply
+            new_int.data = int.data
+            new_int.save
+          end
+        else
+          int = Interaction.find_or_initialize_by_run_id_and_serial(@run.id, note.serial)
+
+          # Need to catch this here in case some other process has replied.
+          if note.has_reply? && !int.replied?
+            int.replied = true
+            int.save
+          end
+
+          unless int.replied?
+            if int.page.blank?
+              server = run.server
+              page = server.read(note.uri, "text/html", credentials)
+
+              INTERACTION_REGEX.match(page) do
+                page_uri = $1
+
+                if page_uri.starts_with?(server.uri.to_s)
+                  page = server.read(URI.parse(page_uri), "text/html", credentials)
+                  int.page = page.gsub("#{run.interactions_uri.to_s}/pmrpc.js",
+                  "/assets/taverna_player/application.js")
+                else
+                  int.page_uri = page_uri
+                end
+              end
+            end
+
+            # If this is a pure notification that we've already seen then
+            # set it as replied as we don't want it blocking a proper
+            # interaction.
+            int.replied = true if note.is_notification? && !int.new_record?
+
+            if int.data.blank?
+              int.data = note.input_data.force_encoding("UTF-8")
+            end
+
+            if !int.feed_reply.blank? && !int.data.blank?
+              note.reply(int.feed_reply, int.data)
+              int.replied = true
+            end
+
+            int.save
+          end
+
+          wait = true unless int.replied?
+        end
+      end
+
+      wait
     end
 
     # Run the specified callback and return false on error so that we know to
