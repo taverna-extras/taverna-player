@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140226143013) do
+ActiveRecord::Schema.define(version: 20140917170017) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0
@@ -102,6 +102,15 @@ ActiveRecord::Schema.define(version: 20140226143013) do
   end
 
   add_index "taverna_player_service_credentials", ["uri"], name: "index_taverna_player_service_credentials_on_uri"
+
+  create_table "taverna_player_workflows", force: :cascade do |t|
+    t.string   "title"
+    t.string   "author"
+    t.text     "description"
+    t.string   "file"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "name"

@@ -18,7 +18,7 @@ module TavernaPlayer
         extend ActiveSupport::Concern
 
         included do
-          attr_accessible :author, :description, :file, :title
+          # attr_accessible :author, :description, :file, :title
 
           has_many :runs, :class_name => "TavernaPlayer::Run"
         end # included

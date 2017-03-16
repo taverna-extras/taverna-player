@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
   s.test_files  = `git ls-files -- test/*`.split("\n")
 
   s.add_dependency "rails", "~> 4.2.1"
+  s.add_dependency "jbuilder", "~> 2.0"
   s.add_dependency "jquery-rails", "~> 3.0"
   s.add_dependency "paperclip", "~> 4.1"
   s.add_dependency "taverna-t2flow", "~> 0.5.1"
