@@ -13,6 +13,7 @@
 module TavernaPlayer
   class Worker
     include TavernaPlayer::Concerns::Callback
+    include TavernaPlayer::Concerns::Utils
     include TavernaPlayer::Concerns::Zip
 
     attr_reader :run
@@ -69,7 +70,12 @@ module TavernaPlayer
             unless input.file.blank?
               run.input_port(input.name).file = input.file.path
             else
-              run.input_port(input.name).value = input.value
+              if is_string_list?(input.value)
+                run.input_port(input.name).value =
+                  parse_string_into_array(input.value)
+              else
+                run.input_port(input.name).value = input.value
+              end
             end
           end
         end

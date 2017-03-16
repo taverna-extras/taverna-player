@@ -43,4 +43,49 @@ class UtilsTest < ActiveSupport::TestCase
     assert_equal 2, list_depth([0, [1], [2]]), "Should have depth 2."
     assert_equal 10, list_depth([[[[[[[[[[]]]]]]]]]]), "Should have depth 10."
   end
+
+  test "string looks like list" do
+    refute is_string_list?(""), "Should not be detected as a list"
+    refute is_string_list?("["), "Should not be detected as a list"
+    refute is_string_list?("]"), "Should not be detected as a list"
+    refute is_string_list?("]["), "Should not be detected as a list"
+    refute is_string_list?("[[]"), "Should not be detected as a list"
+    refute is_string_list?("[]]"), "Should not be detected as a list"
+    refute is_string_list?("1"), "Should not be detected as a list"
+    assert is_string_list?("[]"), "Should be detected as a list"
+    assert is_string_list?(" \n[]"), "Should be detected as a list"
+    assert is_string_list?("[] \n"), "Should be detected as a list"
+    assert is_string_list?("[1]"), "Should be detected as a list"
+    assert is_string_list?("[1, 2, 3]"), "Should be detected as a list"
+    assert is_string_list?("[a a]"), "Should be detected as a list"
+  end
+
+  test "is string list method does not mangle inputs" do
+    original = "[] "
+    test = original.dup
+    is_string_list?(test)
+    assert_equal original, test, "Input string was modified"
+  end
+
+  test "parse string into list" do
+    assert_equal [], parse_string_into_array("[]"),
+      "String not parsed correctly"
+    assert_equal ["a"], parse_string_into_array("[a]"),
+      "String not parsed correctly"
+    assert_equal ["1", "2", "3"], parse_string_into_array("[1, 2, 3]"),
+      "String not parsed correctly"
+    assert_equal ["1", "2", "3"], parse_string_into_array(" \n[1, 2, 3]"),
+      "String not parsed correctly"
+    assert_equal ["1", "2", "3"], parse_string_into_array("[1, 2, 3] \n"),
+      "String not parsed correctly"
+    assert_equal ["1 3"], parse_string_into_array("[1 3]"),
+      "String not parsed correctly"
+  end
+
+  test "parse string into list method does not mangle inputs" do
+    original = "[1, 2, 3] "
+    test = original.dup
+    parse_string_into_array(test)
+    assert_equal original, test, "Input string was modified"
+  end
 end
