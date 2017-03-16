@@ -34,7 +34,7 @@ class WorkerTest < ActiveSupport::TestCase
       config.run_cancelled_callback = @noop_callback
       config.run_failed_callback = @noop_callback
       config.current_user_callback =
-        Proc.new { User.find(ActiveRecord::Fixtures.identify(:test_user)) }
+        Proc.new { User.find(ActiveRecord::FixtureSet.identify(:test_user)) }
     end
 
     # Stuff we can't test yet in TavernaPlayer::Worker.
