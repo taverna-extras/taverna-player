@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
   s.add_dependency "t2-server", "~> 1.3"
   s.add_dependency "delayed_job_active_record", "~> 4.0"
   s.add_dependency "daemons", "~> 1.1.9"
-  s.add_dependency "rubyzip", "~> 1.1.4"
+  s.add_dependency "rubyzip", "~> 1.2.1"
   s.add_dependency "coderay", "~> 1.1"
   s.add_dependency "rails_autolink", "~> 1.1.0"
   s.add_dependency "require_all", "~> 1.3.1"
